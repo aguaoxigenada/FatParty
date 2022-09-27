@@ -21,7 +21,7 @@ void UGrabber::BeginPlay()
 
 	// Chequeo por si se quiere comprobar que se tiene el mismo physicshandle que el blueprint
 	// GetPhysicsHandle() busca el componente de Physics Handle y lo asigna a esta variable
-	UPhysicsHandleComponent *PhysicsHandle = GetPhysicsHandle();
+	/*UPhysicsHandleComponent *PhysicsHandle = GetPhysicsHandle();
 
 	if (PhysicsHandle != nullptr)
 	{
@@ -32,6 +32,7 @@ void UGrabber::BeginPlay()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("NoPointer!"));
 	}
+	*/
 }
 
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)

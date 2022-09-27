@@ -38,7 +38,7 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
             // Le quita las fisicas al objeto que se coloco dentro del trigger.
             Component->SetSimulatePhysics(false);
         }
-        // Pone al Actor que se colo en el trigger como parte del componente de trigger.
+        // Pone al Actor que se coloco en el trigger como parte del componente de trigger.
         Actor->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
         Mover->SetShouldMove(true);
     }

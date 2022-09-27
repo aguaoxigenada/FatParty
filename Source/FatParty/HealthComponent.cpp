@@ -30,7 +30,7 @@ void UHealthComponent::BeginPlay()
 	// Este evento se activa desde el projectil.  Linea 59.
 	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent::DamageTaken);
 	
-	ToonTanksGameMode = Cast<AFatPartyGameMode>(UGameplayStatics::GetGameMode(this));
+	FatPartyGameMode = Cast<AFatPartyGameMode>(UGameplayStatics::GetGameMode(this));
 }
 
 
@@ -54,9 +54,9 @@ void UHealthComponent::DamageTaken(AActor* DamagedActor, float Damage, const UDa
 
 	Health -= Damage;
 	
-	if(Health <= 0 && ToonTanksGameMode)
+	if(Health <= 0 && FatPartyGameMode)
 	{
-		ToonTanksGameMode->ActorDied(DamagedActor);
+		FatPartyGameMode->ActorDied(DamagedActor);
 	}
 
 	//UE_LOG(LogTemp, Warning, TEXT("Health: %f of %s"), Health, *DamagedActor->GetName());
