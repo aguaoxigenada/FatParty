@@ -96,6 +96,8 @@ void ATank::Move(float Value)
 	DeltaLocation.X = Value * Speed * UGameplayStatics::GetWorldDeltaSeconds(this);
 	AddActorLocalOffset(DeltaLocation, true);
 
+	//AddMovementInput(DeltaLocation);
+
 	//UE_LOG(LogTemp, Warning, TEXT("this is the value: %f"), Value);
 }
 

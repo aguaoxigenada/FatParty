@@ -30,6 +30,9 @@ protected:
 
 	UFUNCTION()
 		void OverlapLaunchPad(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION()
+		void OnOverlapLaunchPad(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
 	/* Total impulse added to the character on overlap
 	Marked 'EditInstanceOnly' to allow in-level editing of this property per instance. */
 	UPROPERTY(EditInstanceOnly, Category = "DashPad")
