@@ -3,6 +3,7 @@
 #include "Grabber.h"
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
+#include "Tank.h"
 
 // Sets default values for this component's properties
 UGrabber::UGrabber()
@@ -18,6 +19,12 @@ UGrabber::UGrabber()
 void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
+
+	ATank* player = Cast<ATank>(GetOwner());
+	if (player)
+	{
+		player->SetTankGrabber(this);
+	}
 
 	// Chequeo por si se quiere comprobar que se tiene el mismo physicshandle que el blueprint
 	// GetPhysicsHandle() busca el componente de Physics Handle y lo asigna a esta variable
@@ -76,10 +83,16 @@ void UGrabber::Grab()
 		HitComponent->SetSimulatePhysics(true);
 		HitComponent->WakeAllRigidBodies();
 
-		AActor* HitActor = HitResult.GetActor();
-		HitActor->Tags.Add("Grabbed");
+		ATank* player = Cast<ATank>(GetOwner());
+		if (player)
+		{
+			player->ActorGrabbed = HitResult.GetActor();
+		}
+		AActor* ActorGrabbed = nullptr;
+		ActorGrabbed = HitResult.GetActor();
+		ActorGrabbed->Tags.Add("Grabbed");
 
-		HitActor->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		ActorGrabbed->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
 		// Como se tiene el physics handle, el objeto queda agarrado por esta funcion y luego en tick permite su movimiento.
 		PhysicsHandle->GrabComponentAtLocationWithRotation(
@@ -108,6 +121,11 @@ void UGrabber::Release()
 	
 	if (IsGrabbed && HasComponent)  // primero el puntero de IsGrabed
 	{
+		ATank* player = Cast<ATank>(GetOwner());
+		if (player)
+		{
+			player->ActorGrabbed = nullptr;
+		}
 		HasComponent->GetOwner()->Tags.Remove("Grabbed");
 		IsGrabbed->ReleaseComponent();
 	}

@@ -4,6 +4,9 @@
 #include "Projectile.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Tank.h"
+#include "Thrower.h"
+#include "Grabber.h"
 
 ABasePawn::ABasePawn()
 {
@@ -64,6 +67,28 @@ void ABasePawn::HandleDestruction()
 
 void ABasePawn::Fire()
 {
+	ATank* Tank = Cast<ATank>(UGameplayStatics::GetPlayerPawn(this, 0));
+	UThrower* playerThrower = nullptr;
+	if (Tank->ActorGrabbed == nullptr)
+	{
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+			ProjectileClass,
+			ProjectileSpawnPoint->GetComponentLocation(),
+			ProjectileSpawnPoint->GetComponentRotation());
+
+		//  Se utiliza para que el projectile sea su propio Actor al ser disparado y no forme parte del tanque / torreta.
+		Projectile->SetOwner(this);
+	}
+
+
+	if (Tank)
+	{
+		playerThrower = Cast<UThrower>(Tank->TankThrower);
+		if (Tank->ActorGrabbed != nullptr && playerThrower)
+		{
+			playerThrower->Throw();
+		}
+	}
 
 // Funcion para disparar.
 
@@ -71,11 +96,11 @@ void ABasePawn::Fire()
 // No es buena practica usarlo, pero si es util cuando no se esta seguro lo que retorna, para luego modificarlo.
 
 /* En este caso retorna  AProjectile*/ 
-	auto Projectile = GetWorld()->SpawnActor<AProjectile>(
-		ProjectileClass,
-		ProjectileSpawnPoint->GetComponentLocation(),
-		ProjectileSpawnPoint->GetComponentRotation());
+	//si el player no esta agarrando algo 
 
-//  Se utiliza para que el projectile sea su propio Actor al ser disparado y no forme parte del tanque / torreta.
-	Projectile->SetOwner(this); 
+
+
+
+
+
 }

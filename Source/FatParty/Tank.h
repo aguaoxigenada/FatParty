@@ -6,9 +6,9 @@
 #include "BasePawn.h"
 #include "Tank.generated.h"
 
-/**
- * 
- */
+class UGrabber;
+class UThrower;
+
 UCLASS()
 class FATPARTY_API ATank : public ABasePawn
 {
@@ -28,7 +28,19 @@ public:
 
 	APlayerController* GetTankPlayerController() const { return TankPlayerController; }
 
+	void SetTankGrabber(UGrabber* grabber);
+
+	void SetTankThrower(UThrower* thrower);
+
+
+
+	AActor* ActorGrabbed = nullptr;
+	UGrabber* TankGrabber = nullptr;
+	UThrower* TankThrower = nullptr;
+
+
 	bool bAlive = true;
+
 	
 protected:
 	// Called when the game starts or when spawned
@@ -52,5 +64,6 @@ private:
 	void MoveSides(float Value);
 
 	APlayerController* TankPlayerController;
+
 
 };

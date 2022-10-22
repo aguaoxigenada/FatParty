@@ -15,13 +15,15 @@ public:
 	// Sets default values for this pawn's properties
 	ABasePawn();
 	void HandleDestruction();
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Turret Components", meta = (AllowPrivateAccess = "true"))
+		UStaticMeshComponent* TurretMesh;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly,  Category = "Turret Components")
 	UStaticMeshComponent* BaseMesh;  // Viene incluida como el actor no necesita el forward declaration
 
 	void RotateTurret(FVector LookAtTarget);
-	void Fire();
+    void Fire();
 	
 private:
 	
@@ -31,8 +33,7 @@ private:
 	// Forward declaration:  Sirve para poder poner un componente sin su include y sin sus dependencias.  Sirve para declararlo y no utilizarlo como include.
 	// Como buena practica es mejor utilizar el Forward declaration en los archivos .h y en el .cpp si incluir el archivo necesario.
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Turret Components", meta = (AllowPrivateAccess = "true"))
-	UStaticMeshComponent* TurretMesh;
+	
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Turret Components", meta = (AllowPrivateAccess = "true"))	
 	USceneComponent* ProjectileSpawnPoint;

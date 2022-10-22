@@ -25,6 +25,8 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	
+
 	// Hace que sea visible en blueprint
 	UFUNCTION(BlueprintCallable) 
 	void Grab();

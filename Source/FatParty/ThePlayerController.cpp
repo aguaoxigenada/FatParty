@@ -9,6 +9,7 @@ void AThePlayerController::SetPlayerEnabledState(bool bPlayerEnabled)
 
     if (bPlayerEnabled)
     {
+
         GetPawn()->EnableInput(this);
     }
     else

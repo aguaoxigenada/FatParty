@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
+#include "Grabber.h"
 
 
 // Sets default values
@@ -36,6 +37,16 @@ void ATank::HandleDestruction()
     SetActorHiddenInGame(true);
 	SetActorTickEnabled(false);
 	bAlive = false;
+}
+
+void ATank::SetTankGrabber(UGrabber* grabber)
+{
+	TankGrabber = grabber;
+}
+
+void ATank::SetTankThrower(UThrower* thrower)
+{
+	TankThrower = thrower;
 }
 
 void ATank::Tick(float DeltaTime)
@@ -69,6 +80,8 @@ void ATank::BeginPlay()
 {
 	Super::BeginPlay();         //tipo de * que se quiere // tipo de pointer actual
 	TankPlayerController = Cast<APlayerController>(GetController());	
+
+	
 								// object         // pointer
 						  // Retorna APlayerController*  pointer.
 	//Casting changes the value of type of one pointer to another pointer type.
