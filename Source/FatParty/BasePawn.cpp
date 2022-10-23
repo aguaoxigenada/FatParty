@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "BasePawn.h"
 #include "Projectile.h"
 #include "Components/CapsuleComponent.h"
@@ -12,8 +10,7 @@ ABasePawn::ABasePawn()
 {
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	
-	// Aca se crea la base del Tanque y de la Torreta, ambos comparten todo esto
+
 	CapsuleComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule Collider"));
 	RootComponent = CapsuleComp;
 
@@ -97,10 +94,6 @@ void ABasePawn::Fire()
 
 /* En este caso retorna  AProjectile*/ 
 	//si el player no esta agarrando algo 
-
-
-
-
 
 
 }

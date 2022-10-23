@@ -25,21 +25,6 @@ void UGrabber::BeginPlay()
 	{
 		player->SetTankGrabber(this);
 	}
-
-	// Chequeo por si se quiere comprobar que se tiene el mismo physicshandle que el blueprint
-	// GetPhysicsHandle() busca el componente de Physics Handle y lo asigna a esta variable
-	/*UPhysicsHandleComponent *PhysicsHandle = GetPhysicsHandle();
-
-	if (PhysicsHandle != nullptr)
-	{
-		FString HandleName = PhysicsHandle->GetName();
-		UE_LOG(LogTemp, Warning, TEXT("Component name is: %s"), *HandleName);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("NoPointer!"));
-	}
-	*/
 }
 
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
@@ -83,10 +68,10 @@ void UGrabber::Grab()
 		HitComponent->SetSimulatePhysics(true);
 		HitComponent->WakeAllRigidBodies();
 
-		ATank* player = Cast<ATank>(GetOwner());
-		if (player)
+		ATank* Player = Cast<ATank>(GetOwner());
+		if (Player)
 		{
-			player->ActorGrabbed = HitResult.GetActor();
+			Player->ActorGrabbed = HitResult.GetActor();
 		}
 		AActor* ActorGrabbed = nullptr;
 		ActorGrabbed = HitResult.GetActor();

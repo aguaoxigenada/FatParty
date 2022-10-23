@@ -6,8 +6,6 @@
 #include "Components/ActorComponent.h"
 #include "Thrower.generated.h"
 
-
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class FATPARTY_API UThrower : public UActorComponent
 {

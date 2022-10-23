@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -18,18 +16,19 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Turret Components", meta = (AllowPrivateAccess = "true"))
 		UStaticMeshComponent* TurretMesh;
 
+	// Meta sirve para que las variables privadas puedan ser expuestas en el editor.
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Turret Components", meta = (AllowPrivateAccess = "true")) 
+	class UCapsuleComponent* CapsuleComp;
 protected:
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly,  Category = "Turret Components")
-	UStaticMeshComponent* BaseMesh;  // Viene incluida como el actor no necesita el forward declaration
+	UStaticMeshComponent* BaseMesh;
 
 	void RotateTurret(FVector LookAtTarget);
     void Fire();
 	
 private:
 	
-	// Meta sirve para que las variables privadas puedan ser expuestas en el editor.
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Turret Components", meta = (AllowPrivateAccess = "true")) 
-	class UCapsuleComponent* CapsuleComp;
 	// Forward declaration:  Sirve para poder poner un componente sin su include y sin sus dependencias.  Sirve para declararlo y no utilizarlo como include.
 	// Como buena practica es mejor utilizar el Forward declaration en los archivos .h y en el .cpp si incluir el archivo necesario.
 	
