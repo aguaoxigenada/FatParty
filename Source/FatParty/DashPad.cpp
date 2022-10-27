@@ -15,9 +15,7 @@ ADashPad::ADashPad()
 	MeshComp->SetupAttachment(RootComponent);
 
 	OverlapComp->OnComponentBeginOverlap.AddUniqueDynamic(this, &ADashPad::OverlapLaunchPad);
-	
-	LaunchStrength = 1500;
-	LaunchPitchAngle = 35.0f;
+
 
 }
 
@@ -27,7 +25,7 @@ void ADashPad::OverlapLaunchPad(UPrimitiveComponent* OverlappedComponent, AActor
 	FRotator LaunchDirection = GetActorRotation();
 	LaunchDirection.Pitch += LaunchPitchAngle;
 	FVector LaunchVelocity = LaunchDirection.Vector() * LaunchStrength;
-	 
+
 	
 	Player = Cast<ATank>(OtherActor);
 
@@ -38,7 +36,7 @@ void ADashPad::OverlapLaunchPad(UPrimitiveComponent* OverlappedComponent, AActor
 		FVector ImpulseDirection = FVector(PlayerForward.X, 0, 1);
 		Player->bHadJumped = true;
 		ObjectToThrow->SetSimulatePhysics(true);
-		ObjectToThrow->AddImpulse(ImpulseDirection * 50000);
+		ObjectToThrow->AddImpulse(LaunchVelocity);
 		GetWorldTimerManager().SetTimer(HasJumped, this, &ADashPad::Jumped, TimeInAir, false);
 
 		// Spawn FX
