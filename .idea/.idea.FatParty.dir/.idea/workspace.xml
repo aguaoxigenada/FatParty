@@ -4,9 +4,7 @@
     <projectFile>FatParty.uproject</projectFile>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="140529c2-0c9f-45b4-a493-86da4a44bb6b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Pawns/BP_Tank.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Pawns/BP_Tank.uasset" afterDir="false" />
-    </list>
+    <list default="true" id="140529c2-0c9f-45b4-a493-86da4a44bb6b" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -85,7 +83,7 @@
       <workItem from="1666840480568" duration="695000" />
       <workItem from="1666871165404" duration="1194000" />
       <workItem from="1666880747009" duration="637000" />
-      <workItem from="1666886171764" duration="771000" />
+      <workItem from="1666886171764" duration="1365000" />
     </task>
     <servers />
   </component>
