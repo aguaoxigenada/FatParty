@@ -1,0 +1,35 @@
+#pragma once
+
+#include "CoreMinimal.h"
+#include "FatParty/Characters/BaseCharacter.h"
+#include "Tower.generated.h"
+
+UCLASS()
+class FATPARTY_API ATower : public ABaseCharacter
+{
+	GENERATED_BODY()
+
+public:
+
+	virtual void Tick(float DeltaTime) override;
+	void HandleDestruction();
+
+protected:
+	virtual void BeginPlay() override;
+
+private:
+
+	class AKnightCharacter* KnightCharacter;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Combat")
+	float FireRange = 300.f;
+
+	FTimerHandle FireRateTimerHandle;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Combat")
+	float FireRate = 2.f;
+	
+	void CheckFireCondition();
+
+	bool InFireRange();
+};
