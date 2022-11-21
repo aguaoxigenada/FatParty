@@ -10,13 +10,11 @@ void AThePlayerController::SetPlayerEnabledState(bool bPlayerEnabled)
 
     if (bPlayerEnabled)
     {
-      //  GetPawn()->EnableInput(this);
         GetCharacter()->EnableInput(this);
     }
     else
     {
         GetCharacter()->DisableInput(this);
-    	//  GetPawn()->DisableInput(this);
     }
     // bShowMouseCursor viene de la clase PlayerController, sirve para habilitar / deshabilitar el mouse.
     bShowMouseCursor = bPlayerEnabled;

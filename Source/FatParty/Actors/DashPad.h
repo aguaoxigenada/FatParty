@@ -4,7 +4,11 @@
 #include "GameFramework/Actor.h"
 #include "DashPad.generated.h"
 
+<<<<<<<< HEAD:Source/FatParty/Actors/DashPad.h
 class AKnightCharacter;
+========
+class ATank;
+>>>>>>>> 579a589ba8f5dd3702e4383e2a6ed81465074d09:Source/FatParty/DashPad.h
 class UStaticMeshComponent;
 class UBoxComponent;
 class UArrowComponent;
@@ -49,6 +53,10 @@ private:
 
 	void Jumped();
 
+<<<<<<<< HEAD:Source/FatParty/Actors/DashPad.h
 	AKnightCharacter* Player = nullptr;
+========
+	ATank* Player = nullptr;
+>>>>>>>> 579a589ba8f5dd3702e4383e2a6ed81465074d09:Source/FatParty/DashPad.h
 
 };
