@@ -1,11 +1,13 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "FatPartyGameMode.generated.h"
 
+
+class ATank;
+class AKnightCharacter;
+class AThePlayerController;
 
 UCLASS()
 class FATPARTY_API AFatPartyGameMode : public AGameModeBase
@@ -27,11 +29,12 @@ public:
 
 	void ActorDied(AActor* DeadActor);
 
+	class ABaseCharacter* BaseCharacter;
+
 private:
-
-	class ATank* Tank;
-	class AThePlayerController* ToonTanksPlayerController;
-
+	AKnightCharacter* KnightCharacter;
+	AThePlayerController* KnightPlayerController;
+	ATank* Tank;
 	float StartDelay = 3.f;
 
 	void HandleGameStart();	

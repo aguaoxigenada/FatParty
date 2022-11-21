@@ -1,28 +1,28 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BasePawn.h"
-#include "Tank.generated.h"
+#include "BaseCharacter.h"
+#include "KnightCharacter.generated.h"
 
 class UGrabber;
 class UThrower;
 
 UCLASS()
-class FATPARTY_API ATank : public ABasePawn
+class FATPARTY_API AKnightCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 	
 	
 public:
 	// Sets default values for this pawn's properties
-	ATank();
+	AKnightCharacter();
 	
 		// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void Tick(float DeltaTime) override;
 	void HandleDestruction();
 
-	APlayerController* GetTankPlayerController() const { return TankPlayerController; }
+	APlayerController* GetTankPlayerController() const { return KnightPlayerController; }
 
 	void SetTankGrabber(UGrabber* grabber);
 	void SetTankThrower(UThrower* thrower);
@@ -43,12 +43,6 @@ protected:
 
 
 private:
-	UPROPERTY(VisibleAnywhere, Category = "Components") 
-	class USpringArmComponent* SpringArm;
-
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	class UCameraComponent* Camera;
-
 	UPROPERTY(EditAnywhere, Category = "Movement")
 	float Speed = 400.f;
 
@@ -61,7 +55,7 @@ private:
 	void Jump();
 	void StopJump();
 
-	APlayerController* TankPlayerController;
+	APlayerController* KnightPlayerController;
 
 	bool CanJump(FHitResult& OutHitResult) const;
 	float MaxDistance = 100.f;

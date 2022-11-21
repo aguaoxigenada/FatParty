@@ -1,45 +1,22 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "Grabber.h"
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
-#include "Tank.h"
+#include "FatParty/Characters/KnightCharacter.h"
 
-// Sets default values for this component's properties
 UGrabber::UGrabber()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
 }
 
-// Called when the game starts
 void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ATank* player = Cast<ATank>(GetOwner());
-	if (player)
+	AKnightCharacter* Player = Cast<AKnightCharacter>(GetOwner());
+	if (Player)
 	{
-		player->SetTankGrabber(this);
+		Player->SetTankGrabber(this);
 	}
-
-	// Chequeo por si se quiere comprobar que se tiene el mismo physicshandle que el blueprint
-	// GetPhysicsHandle() busca el componente de Physics Handle y lo asigna a esta variable
-	/*UPhysicsHandleComponent *PhysicsHandle = GetPhysicsHandle();
-
-	if (PhysicsHandle != nullptr)
-	{
-		FString HandleName = PhysicsHandle->GetName();
-		UE_LOG(LogTemp, Warning, TEXT("Component name is: %s"), *HandleName);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("NoPointer!"));
-	}
-	*/
 }
 
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
@@ -83,10 +60,10 @@ void UGrabber::Grab()
 		HitComponent->SetSimulatePhysics(true);
 		HitComponent->WakeAllRigidBodies();
 
-		ATank* player = Cast<ATank>(GetOwner());
-		if (player)
+		AKnightCharacter* Player = Cast<AKnightCharacter>(GetOwner());
+		if (Player)
 		{
-			player->ActorGrabbed = HitResult.GetActor();
+			Player->ActorGrabbed = HitResult.GetActor();
 		}
 		AActor* ActorGrabbed = nullptr;
 		ActorGrabbed = HitResult.GetActor();
@@ -121,7 +98,7 @@ void UGrabber::Release()
 	
 	if (IsGrabbed && HasComponent)  // primero el puntero de IsGrabed
 	{
-		ATank* player = Cast<ATank>(GetOwner());
+		AKnightCharacter* player = Cast<AKnightCharacter>(GetOwner());
 		if (player)
 		{
 			player->ActorGrabbed = nullptr;

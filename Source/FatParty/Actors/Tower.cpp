@@ -1,9 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "Tower.h"
-#include "Tank.h"
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
+#include "FatParty/Characters/KnightCharacter.h"
 
 void ATower::Tick(float DeltaTime)
 {
@@ -11,7 +9,7 @@ void ATower::Tick(float DeltaTime)
 
     if (InFireRange())
     {
-        RotateTurret(Tank->GetActorLocation());
+        RotateTurret(KnightCharacter->GetActorLocation());
     }
 }
 
@@ -19,19 +17,19 @@ void ATower::BeginPlay()
 {
     Super::BeginPlay();
 
-    Tank = Cast<ATank>(UGameplayStatics::GetPlayerPawn(this, 0));
+    KnightCharacter = Cast<AKnightCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
 
     GetWorldTimerManager().SetTimer(FireRateTimerHandle, this, &ATower::CheckFireCondition, FireRate, true);
 }
 
 void ATower::CheckFireCondition()
 {
-    if(Tank == nullptr)
+    if(KnightCharacter == nullptr)
     {
         return;
     }
 
-    if (InFireRange() && Tank->bAlive)
+    if (InFireRange() && KnightCharacter->bAlive)
     {
         Fire();
     }
@@ -45,9 +43,9 @@ void ATower::HandleDestruction()
 
 bool ATower::InFireRange()
 {
-    if (Tank)
+    if (KnightCharacter)
     {
-        float Distance = FVector::Dist(GetActorLocation(), Tank->GetActorLocation());
+        float Distance = FVector::Dist(GetActorLocation(), KnightCharacter->GetActorLocation());
         if (Distance <= FireRange)
         {
             return true;

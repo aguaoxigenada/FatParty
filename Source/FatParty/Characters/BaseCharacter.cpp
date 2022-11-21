@@ -1,21 +1,23 @@
-#include "BasePawn.h"
-#include "Components/CapsuleComponent.h"
+#include "BaseCharacter.h"
 #include "Kismet/GameplayStatics.h"
-#include "Tank.h"
-#include "Actors/Projectile.h"
-#include "Components/Thrower.h"
+#include "KnightCharacter.h"
+#include "Camera/CameraComponent.h"
+#include "FatParty/Actors/Projectile.h"
+#include "FatParty/Components/Thrower.h"
+#include "GameFramework/SpringArmComponent.h"
 
-
-ABasePawn::ABasePawn()
+ABaseCharacter::ABaseCharacter()
 {
-	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	CapsuleComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule Collider"));
-	RootComponent = CapsuleComp;
-
+	
 	BaseMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Base Mesh"));
-	BaseMesh->SetupAttachment(CapsuleComp);
+	BaseMesh->SetupAttachment(RootComponent);
+
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
+	SpringArm->SetupAttachment(RootComponent);
+
+	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	Camera->SetupAttachment(SpringArm);
 
 	TurretMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Turret Mesh"));
 	TurretMesh->SetupAttachment(BaseMesh);
@@ -24,7 +26,8 @@ ABasePawn::ABasePawn()
 	ProjectileSpawnPoint->SetupAttachment(TurretMesh);
 }
 
-void ABasePawn::RotateTurret(FVector LookAtTarget)
+
+void ABaseCharacter::RotateTurret(FVector LookAtTarget)
 {
 	// Distancia entre el Tanque y la Torreta
 	FVector ToTarget = LookAtTarget - TurretMesh->GetComponentLocation();
@@ -41,7 +44,7 @@ void ABasePawn::RotateTurret(FVector LookAtTarget)
 			25.f));
 }
 
-void ABasePawn::HandleDestruction()
+void ABaseCharacter::HandleDestruction()
 {
 	// 1. Chequeo de Seguridad que existe el puntero en todos los ifs.
 	// 2. Se crean particulas al morir, sonido y movimiento de camara.
@@ -62,9 +65,9 @@ void ABasePawn::HandleDestruction()
 	}
 }
 
-void ABasePawn::Fire()
+void ABaseCharacter::Fire()
 {
-	ATank* Tank = Cast<ATank>(UGameplayStatics::GetPlayerPawn(this, 0));
+	AKnightCharacter* Tank = Cast<AKnightCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
 	UThrower* playerThrower = nullptr;
 	if (Tank->ActorGrabbed == nullptr)
 	{
@@ -86,14 +89,5 @@ void ABasePawn::Fire()
 			playerThrower->Throw();
 		}
 	}
-
-// Funcion para disparar.
-
-// auto setea automaticamente el tipo de objeto, es util usarlo cuando no se esta seguro que retorna un puntero.
-// No es buena practica usarlo, pero si es util cuando no se esta seguro lo que retorna, para luego modificarlo.
-
-/* En este caso retorna  AProjectile*/ 
-	//si el player no esta agarrando algo 
-
 
 }

@@ -1,10 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "FatPartyGameMode.h"
+
+#include "FatParty/Tank.h"
 #include "Kismet/GameplayStatics.h"
-#include "Tank.h"
-#include "Tower.h"
-#include "ThePlayerController.h"
+#include "FatParty/Actors/Tower.h"
+#include "FatParty/Characters/KnightCharacter.h"
+#include "FatParty/Controllers/ThePlayerController.h"
 
 void AFatPartyGameMode::ActorDied(AActor *DeadActor)
 {
@@ -12,13 +12,13 @@ void AFatPartyGameMode::ActorDied(AActor *DeadActor)
 
     // Se revisa desde el modo de juego si murio el personaje o si murieron todas las torretas
 
-    if (DeadActor == Tank)
+    if (DeadActor == KnightCharacter)
     {
         // HandleDestruction() se encuentra en BasePawn.
-        Tank->HandleDestruction();  
-        if (ToonTanksPlayerController)
+        KnightCharacter->HandleDestruction();
+        if (KnightPlayerController)
         {
-            ToonTanksPlayerController->SetPlayerEnabledState(false);
+            KnightPlayerController->SetPlayerEnabledState(false);
         }
         GameOver(false);
 
@@ -48,24 +48,25 @@ void AFatPartyGameMode::HandleGameStart()
     // Calcula y retorna la cantidad de torres actual en el escenario
     TargetTowers = GetTargetTowerCount();
     // UE_LOG(LogTemp, Warning, TEXT("Amount of Towers: %d"), TargetTowers);
-
+    
     // Se hace el cast para recibir un puntero de tipo ATank en vez de uno APawn. 
-    Tank = Cast<ATank>(UGameplayStatics::GetPlayerPawn(this, 0)); 
-    ToonTanksPlayerController = Cast<AThePlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+  //  KnightCharacter = Cast<AKnightCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
+    Tank = Cast<ATank>(UGameplayStatics::GetPlayerPawn(this, 0));
+    KnightPlayerController = Cast<AThePlayerController>(UGameplayStatics::GetPlayerController(this, 0));
 
     // Llama al evento creado en el EventGraph
     StartGame();
 
-    if (ToonTanksPlayerController)
+    if (KnightPlayerController)
     {
-        ToonTanksPlayerController->SetPlayerEnabledState(false);
+        KnightPlayerController->SetPlayerEnabledState(false);
 
         // Se necesita para poder usar el FTimerDelegate
         FTimerHandle PlayerEnableTimerHandle;
         
         // El delegate permite crear un objeto, que puede anexar a una funcion directamente.
         FTimerDelegate PlayerEnableTimerDelegate = FTimerDelegate::CreateUObject(
-            ToonTanksPlayerController,                               // clase a utilizar
+            KnightPlayerController,                               // clase a utilizar
             &AThePlayerController::SetPlayerEnabledState,            // funcion de la clase
             true                                                     // parametro pasado a la clase
         );

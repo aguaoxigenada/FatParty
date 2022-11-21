@@ -1,20 +1,19 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/ActorComponent.h"
-#include "Mover.generated.h"
+#include "Components/BoxComponent.h"
+#include "Mover.h"
+#include "TriggerComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class FATPARTY_API UMover : public UActorComponent
+class FATPARTY_API UTriggerComponent : public UBoxComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UMover();
+	UTriggerComponent();  // constructor
 
 protected:
 	// Called when the game starts
@@ -23,18 +22,15 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	
+
 	UFUNCTION(BlueprintCallable)
-	void SetShouldMove(bool ShouldMove);
+	void SetMover(UMover* Mover); 
 
 private:
 	UPROPERTY(EditAnywhere)
-	FVector MoveOffset;
+	FName AcceptableActorTag;	
 
-	UPROPERTY(EditAnywhere)
-	float MoveTime = 4;
-
-	bool ShouldMove = false;
-
-	FVector OriginalLocation;		
+	UMover* Mover; 
+	AActor* GetAcceptableActor() const;
+	
 };

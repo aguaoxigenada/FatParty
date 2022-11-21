@@ -1,24 +1,24 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
-#include "BasePawn.generated.h"
+#include "GameFramework/Character.h"
+#include "BaseCharacter.generated.h"
 
 UCLASS()
-class FATPARTY_API ABasePawn : public APawn
+class FATPARTY_API ABaseCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this pawn's properties
-	ABasePawn();
+	ABaseCharacter();
 	void HandleDestruction();
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Turret Components", meta = (AllowPrivateAccess = "true"))
 		UStaticMeshComponent* TurretMesh;
 
 	// Meta sirve para que las variables privadas puedan ser expuestas en el editor.
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Turret Components", meta = (AllowPrivateAccess = "true")) 
-	class UCapsuleComponent* CapsuleComp;
+	// UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Turret Components", meta = (AllowPrivateAccess = "true")) 
+	// class UCapsuleComponent* CapsuleComp;
 protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly,  Category = "Turret Components")
@@ -32,7 +32,11 @@ private:
 	// Forward declaration:  Sirve para poder poner un componente sin su include y sin sus dependencias.  Sirve para declararlo y no utilizarlo como include.
 	// Como buena practica es mejor utilizar el Forward declaration en los archivos .h y en el .cpp si incluir el archivo necesario.
 	
-	
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+		class USpringArmComponent* SpringArm;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+		class UCameraComponent* Camera;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Turret Components", meta = (AllowPrivateAccess = "true"))	
 	USceneComponent* ProjectileSpawnPoint;
