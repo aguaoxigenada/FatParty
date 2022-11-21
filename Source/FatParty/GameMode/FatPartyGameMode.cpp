@@ -1,4 +1,6 @@
 #include "FatPartyGameMode.h"
+
+#include "FatParty/Tank.h"
 #include "Kismet/GameplayStatics.h"
 #include "FatParty/Actors/Tower.h"
 #include "FatParty/Characters/KnightCharacter.h"
@@ -48,7 +50,8 @@ void AFatPartyGameMode::HandleGameStart()
     // UE_LOG(LogTemp, Warning, TEXT("Amount of Towers: %d"), TargetTowers);
     
     // Se hace el cast para recibir un puntero de tipo ATank en vez de uno APawn. 
-    KnightCharacter = Cast<AKnightCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
+  //  KnightCharacter = Cast<AKnightCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
+    Tank = Cast<ATank>(UGameplayStatics::GetPlayerPawn(this, 0));
     KnightPlayerController = Cast<AThePlayerController>(UGameplayStatics::GetPlayerController(this, 0));
 
     // Llama al evento creado en el EventGraph

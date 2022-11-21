@@ -60,11 +60,7 @@ void UGrabber::Grab()
 		HitComponent->SetSimulatePhysics(true);
 		HitComponent->WakeAllRigidBodies();
 
-<<<<<<<< HEAD:Source/FatParty/Components/Grabber.cpp
 		AKnightCharacter* Player = Cast<AKnightCharacter>(GetOwner());
-========
-		ATank* Player = Cast<ATank>(GetOwner());
->>>>>>>> 579a589ba8f5dd3702e4383e2a6ed81465074d09:Source/FatParty/Grabber.cpp
 		if (Player)
 		{
 			Player->ActorGrabbed = HitResult.GetActor();

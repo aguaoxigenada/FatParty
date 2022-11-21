@@ -5,6 +5,7 @@
 #include "FatPartyGameMode.generated.h"
 
 
+class ATank;
 class AKnightCharacter;
 class AThePlayerController;
 
@@ -33,6 +34,7 @@ public:
 private:
 	AKnightCharacter* KnightCharacter;
 	AThePlayerController* KnightPlayerController;
+	ATank* Tank;
 	float StartDelay = 3.f;
 
 	void HandleGameStart();	

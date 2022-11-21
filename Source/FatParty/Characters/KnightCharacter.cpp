@@ -18,9 +18,9 @@ void AKnightCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &AKnightCharacter::Turn);
 
 	PlayerInputComponent->BindAxis(TEXT("MoveSides"), this, &AKnightCharacter::MoveSides);
-	//PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &AKnightCharacter::Jump);
-	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &AKnightCharacter::Fire);
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &AKnightCharacter::Jump);
+	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &AKnightCharacter::Fire);
+	//PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &AKnightCharacter::Jump);
 }
 
 void AKnightCharacter::HandleDestruction()
@@ -58,6 +58,7 @@ void AKnightCharacter::Tick(float DeltaTime)
 		// DrawDebugSphere(GetWorld(), HitResult.ImpactPoint,25.f,	12,	FColor::Blue,false,	-1.f);
 	}
 
+	
 	FHitResult HitResult;
 	bCanJump = CanJump(HitResult);
 
@@ -75,9 +76,9 @@ void AKnightCharacter::Tick(float DeltaTime)
 	{
 		GetCapsuleComponent()->SetSimulatePhysics(true);
 	}
+	
 
-
-	UE_LOG(LogTemp, Warning, TEXT("The boolean value is %s"), (bCanJump ? TEXT("true") : TEXT("false")));
+	// UE_LOG(LogTemp, Warning, TEXT("The boolean value is %s"), (bCanJump ? TEXT("true") : TEXT("false")));
 }
 
 void AKnightCharacter::CanRotateCam()
@@ -123,6 +124,7 @@ void AKnightCharacter::Turn(float Value)
 
 void AKnightCharacter::Jump()
 {
+
 	if(bCanJump)
 	{
 		GetCapsuleComponent()->SetSimulatePhysics(true);
