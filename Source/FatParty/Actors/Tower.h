@@ -1,11 +1,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "FatParty/Characters/BaseCharacter.h"
+#include "FatParty/FatPartyCharacter.h"
 #include "Tower.generated.h"
 
 UCLASS()
-class FATPARTY_API ATower : public ABaseCharacter
+class FATPARTY_API ATower : public AFatPartyCharacter
 {
 	GENERATED_BODY()
 
@@ -13,6 +13,8 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 	void HandleDestruction();
+
+	virtual void Fire() override;
 
 protected:
 	virtual void BeginPlay() override;

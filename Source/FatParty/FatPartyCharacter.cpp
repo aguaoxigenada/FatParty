@@ -1,39 +1,31 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #include "FatPartyCharacter.h"
-#include "Animation/AnimInstance.h"
+#include "Actors/Projectile.h"
 #include "Camera/CameraComponent.h"
-#include "Components/CapsuleComponent.h"
-#include "Components/InputComponent.h"
+#include "Characters/KnightCharacter.h"
+#include "Components/Thrower.h"
 #include "GameFramework/InputSettings.h"
-
-/*NO SE ESTA UTILIZANDO ESTA CLASE, ES LA QUE VIENE POR DEFECTO EN LOS THIRD PERSON */
-
-//////////////////////////////////////////////////////////////////////////
-// AFatPartyCharacter
+#include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 AFatPartyCharacter::AFatPartyCharacter()
 {
-	// Set size for collision capsule
-	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
+	PrimaryActorTick.bCanEverTick = true;
 
-	// set our turn rates for input
-	TurnRateGamepad = 45.f;
+	BaseMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Base Mesh"));
+	BaseMesh->SetupAttachment(RootComponent);
 
-	// Create a CameraComponent	
-	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
-	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
-	FirstPersonCameraComponent->SetRelativeLocation(FVector(-39.56f, 1.75f, 64.f)); // Position the camera
-	FirstPersonCameraComponent->bUsePawnControlRotation = true;
+	TurretMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Turret Mesh"));
+	TurretMesh->SetupAttachment(BaseMesh);
 
-	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
-	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
-	Mesh1P->SetOnlyOwnerSee(true);
-	Mesh1P->SetupAttachment(FirstPersonCameraComponent);
-	Mesh1P->bCastDynamicShadow = false;
-	Mesh1P->CastShadow = false;
-	Mesh1P->SetRelativeRotation(FRotator(1.9f, -19.19f, 5.2f));
-	Mesh1P->SetRelativeLocation(FVector(-0.5f, -4.4f, -155.7f));
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
+	SpringArm->SetupAttachment(RootComponent);
+
+	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	Camera->SetupAttachment(SpringArm);
+
+
+	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>(TEXT("Spawn Pont"));
+	ProjectileSpawnPoint->SetupAttachment(TurretMesh);
 
 }
 
@@ -44,73 +36,68 @@ void AFatPartyCharacter::BeginPlay()
 
 }
 
-//////////////////////////////////////////////////////////////////////////// Input
 
-void AFatPartyCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+void AFatPartyCharacter::HandleDestruction()
 {
-	// Set up gameplay key bindings
-	check(PlayerInputComponent);
+	// 1. Chequeo de Seguridad que existe el puntero en todos los ifs.
+	// 2. Se crean particulas al morir, sonido y movimiento de camara.
 
-	// Bind jump events
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	if (DeathParticles)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(this, DeathParticles, GetActorLocation(), GetActorRotation());
+	}
 
-	// Bind fire event
-	PlayerInputComponent->BindAction("PrimaryAction", IE_Pressed, this, &AFatPartyCharacter::OnPrimaryAction);
+	if (DeathSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation());
+	}
 
-	// Enable touchscreen input
-	EnableTouchscreenMovement(PlayerInputComponent);
-
-	// Bind movement events
-	PlayerInputComponent->BindAxis("Move Forward / Backward", this, &AFatPartyCharacter::MoveForward);
-	PlayerInputComponent->BindAxis("Move Right / Left", this, &AFatPartyCharacter::MoveRight);
-
-	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
-	// "Mouse" versions handle devices that provide an absolute delta, such as a mouse.
-	// "Gamepad" versions are for devices that we choose to treat as a rate of change, such as an analog joystick
-	PlayerInputComponent->BindAxis("Turn Right / Left Mouse", this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("Look Up / Down Mouse", this, &APawn::AddControllerPitchInput);
-	PlayerInputComponent->BindAxis("Turn Right / Left Gamepad", this, &AFatPartyCharacter::TurnAtRate);
-	PlayerInputComponent->BindAxis("Look Up / Down Gamepad", this, &AFatPartyCharacter::LookUpAtRate);
+	if (DeathCameraShakeClass)
+	{
+		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(DeathCameraShakeClass);
+	}
 }
 
-void AFatPartyCharacter::OnPrimaryAction()
+void AFatPartyCharacter::Fire()
 {
-	// Trigger the OnItemUsed Event
-	OnUseItem.Broadcast();
+	
+
 }
 
-void AFatPartyCharacter::BeginTouch(const ETouchIndex::Type FingerIndex, const FVector Location)
+void AFatPartyCharacter::RotateTurret(FVector LookAtTarget)
 {
-	if (TouchItem.bIsPressed == true)
-	{
-		return;
-	}
-	if ((FingerIndex == TouchItem.FingerIndex) && (TouchItem.bMoved == false))
-	{
-		OnPrimaryAction();
-	}
-	TouchItem.bIsPressed = true;
-	TouchItem.FingerIndex = FingerIndex;
-	TouchItem.Location = Location;
-	TouchItem.bMoved = false;
+	// Distancia entre el Tanque y la Torreta
+	FVector ToTarget = LookAtTarget - TurretMesh->GetComponentLocation();
+
+	// La posicion del FRotator hacia donde debe de mirar la Torreta
+	FRotator LookAtRotation = FRotator(0.f, ToTarget.Rotation().Yaw, 0.f);
+
+	// Rotacion de la torreta desde su posicion actual hacia LookAtRotation.
+	TurretMesh->SetWorldRotation(
+		FMath::RInterpTo(
+			TurretMesh->GetComponentRotation(),
+			LookAtRotation,
+			UGameplayStatics::GetWorldDeltaSeconds(this),
+			25.f));
 }
 
-void AFatPartyCharacter::EndTouch(const ETouchIndex::Type FingerIndex, const FVector Location)
+void AFatPartyCharacter::Turn(float Value)
 {
-	if (TouchItem.bIsPressed == false)
-	{
-		return;
-	}
-	TouchItem.bIsPressed = false;
+	//FRotator DeltaRotation = FRotator::ZeroRotator;
+	FRotator DeltaRotation = FRotator(0.0f, 0.0f, 0.0f);
+
+	// Yaw = Value * DeltaTime * TurnRate
+	DeltaRotation.Yaw = Value * TurnRate * UGameplayStatics::GetWorldDeltaSeconds(this);
+
+	AddActorLocalRotation(DeltaRotation, true);
+
 }
 
 void AFatPartyCharacter::MoveForward(float Value)
 {
 	if (Value != 0.0f)
 	{
-		// add movement in that direction
-		AddMovementInput(GetActorForwardVector(), Value);
+		AddMovementInput(GetActorForwardVector(), Value * Speed);
 	}
 }
 
@@ -118,32 +105,7 @@ void AFatPartyCharacter::MoveRight(float Value)
 {
 	if (Value != 0.0f)
 	{
-		// add movement in that direction
-		AddMovementInput(GetActorRightVector(), Value);
+		AddMovementInput(GetActorRightVector(), Value * Speed);
 	}
 }
 
-void AFatPartyCharacter::TurnAtRate(float Rate)
-{
-	// calculate delta for this frame from the rate information
-	AddControllerYawInput(Rate * TurnRateGamepad * GetWorld()->GetDeltaSeconds());
-}
-
-void AFatPartyCharacter::LookUpAtRate(float Rate)
-{
-	// calculate delta for this frame from the rate information
-	AddControllerPitchInput(Rate * TurnRateGamepad * GetWorld()->GetDeltaSeconds());
-}
-
-bool AFatPartyCharacter::EnableTouchscreenMovement(class UInputComponent* PlayerInputComponent)
-{
-	if (FPlatformMisc::SupportsTouchInput() || GetDefault<UInputSettings>()->bUseMouseForTouch)
-	{
-		PlayerInputComponent->BindTouch(EInputEvent::IE_Pressed, this, &AFatPartyCharacter::BeginTouch);
-		PlayerInputComponent->BindTouch(EInputEvent::IE_Released, this, &AFatPartyCharacter::EndTouch);
-
-		return true;
-	}
-	
-	return false;
-}

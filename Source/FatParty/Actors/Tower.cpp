@@ -1,4 +1,5 @@
 #include "Tower.h"
+#include "Projectile.h"
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
 #include "FatParty/Characters/KnightCharacter.h"
@@ -53,4 +54,15 @@ bool ATower::InFireRange()
     }
 
     return false;
+}
+
+void ATower::Fire()
+{
+    AProjectile* Projectile = GetWorld()->SpawnActor<AProjectile>(
+        ProjectileClass,
+        ProjectileSpawnPoint->GetComponentLocation(),
+        ProjectileSpawnPoint->GetComponentRotation());
+
+	//  Se utiliza para que el projectile sea su propio Actor al ser disparado y no forme parte del tanque / torreta.
+	Projectile->SetOwner(this);
 }

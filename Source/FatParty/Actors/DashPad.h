@@ -44,7 +44,6 @@ protected:
 		UParticleSystem* ActivateLaunchPadEffect;
 
 private:
-	FTimerHandle HasJumped;
 	float TimeInAir = 0.3f;
 
 	void Jumped();

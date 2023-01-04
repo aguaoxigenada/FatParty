@@ -15,7 +15,7 @@ void UGrabber::BeginPlay()
 	AKnightCharacter* Player = Cast<AKnightCharacter>(GetOwner());
 	if (Player)
 	{
-		Player->SetTankGrabber(this);
+		Player->SetGrabber(this);
 	}
 }
 

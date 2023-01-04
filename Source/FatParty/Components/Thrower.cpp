@@ -16,14 +16,12 @@ void UThrower::Throw()
 		ObjectToThrow = Player->ActorGrabbed;
 		if (ObjectToThrow) 
 		{
-			Player->TankGrabber->Release();
+			Player->PlayerGrabber->Release();
 			UPrimitiveComponent* TargetObject = Cast<UPrimitiveComponent>(ObjectToThrow->GetRootComponent());
 			//FVector Forward = player->GetActorForwardVector();
 			FVector Forward = Player->TurretMesh->GetForwardVector();
 			TargetObject->AddImpulse(Forward * ThrowForce * TargetObject->GetMass());
 		}
-		
-
 	}
 }
 
@@ -34,7 +32,7 @@ void UThrower::BeginPlay()
 	AKnightCharacter* Player = Cast<AKnightCharacter>(GetOwner());
 	if (Player)
 	{
-		Player->SetTankThrower(this);
+		Player->SetThrower(this);
 
 	}
 	

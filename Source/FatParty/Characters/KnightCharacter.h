@@ -1,14 +1,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BaseCharacter.h"
+#include "FatParty/FatPartyCharacter.h"
 #include "KnightCharacter.generated.h"
 
 class UGrabber;
 class UThrower;
 
 UCLASS()
-class FATPARTY_API AKnightCharacter : public ABaseCharacter
+class FATPARTY_API AKnightCharacter : public AFatPartyCharacter
 {
 	GENERATED_BODY()
 	
@@ -24,40 +24,31 @@ public:
 
 	APlayerController* GetTankPlayerController() const { return KnightPlayerController; }
 
-	void SetTankGrabber(UGrabber* grabber);
-	void SetTankThrower(UThrower* thrower);
+	void SetGrabber(UGrabber* Grabber);
+	void SetThrower(UThrower* Thrower);
 	void Turn(float Value);
 
 	AActor* ActorGrabbed = nullptr;
-	UGrabber* TankGrabber = nullptr;
-	UThrower* TankThrower = nullptr;
+	UGrabber* PlayerGrabber = nullptr;
+	UThrower* PlayerThrower = nullptr;
 	
 	bool bAlive = true;
 	bool bHadJumped = false;
 	float Distance = 0.f;
-	
+
 	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void Fire() override;
+	
+
 
 private:
-	UPROPERTY(EditAnywhere, Category = "Movement")
-	float Speed = 400.f;
-
-	UPROPERTY(EditAnywhere, Category = "Movement")
-	float TurnRate = 100.f;
-
-	void Move(float Value);
-	void MoveSides(float Value);
-	void CanRotateCam();
-	void Jump();
-	void StopJump();
 
 	APlayerController* KnightPlayerController;
 
-	bool CanJump(FHitResult& OutHitResult) const;
 	float MaxDistance = 100.f;
 	float SphereRadius = 3.f;
 	bool bCanJump;
@@ -67,5 +58,4 @@ private:
 
 	FTimerHandle StopTheJump;
 	float StopTime = 0.5f;
-
 };

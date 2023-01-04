@@ -25,38 +25,20 @@ void ADashPad::OverlapLaunchPad(UPrimitiveComponent* OverlappedComponent, AActor
 	FRotator LaunchDirection = GetActorRotation();
 	LaunchDirection.Pitch += LaunchPitchAngle;
 	FVector LaunchVelocity = LaunchDirection.Vector() * LaunchStrength;
-	 
-	
+
 	Player = Cast<AKnightCharacter>(OtherActor);
 
 	if (Player)
 	{
-		ObjectToThrow = Cast<UPrimitiveComponent>(Player->GetRootComponent());
-		FVector PlayerForward = Player->GetActorForwardVector();
-		FVector ImpulseDirection = FVector(PlayerForward.X, 0, 1);
-		Player->bHadJumped = true;
-		ObjectToThrow->SetSimulatePhysics(true);
-		ObjectToThrow->AddImpulse(ImpulseDirection * 50000);
-		GetWorldTimerManager().SetTimer(HasJumped, this, &ADashPad::Jumped, TimeInAir, false);
+		Player->LaunchCharacter(FVector(0,0,500), false, true);
 
 		// Spawn FX
 		//UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ActivateLaunchPadEffect, GetActorLocation());
 	}
 	else if (OtherComp && OtherComp->IsSimulatingPhysics())
 	{
-		//OtherComp->AddImpulse(LaunchVelocity, NAME_None, true);
-
 		// Spawn FX
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ActivateLaunchPadEffect, GetActorLocation());
 	}
-
 }
-
-void ADashPad::Jumped()
-{
-	Player->bHadJumped = false;
-}
-
-
-
 
