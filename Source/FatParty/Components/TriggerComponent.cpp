@@ -10,28 +10,31 @@ UTriggerComponent::UTriggerComponent()
 void UTriggerComponent::BeginPlay()
 {
     Super::BeginPlay();
+    SetMover(ChoosenMover.Get());
+  
 }
 
 void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
 {
     Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-    if (Mover == nullptr)
-    {
-        return;
-    }
+    if (Mover == nullptr) return;
+    
+    AActor* Actor = GetAcceptableActor();
 
-    AActor *Actor = GetAcceptableActor();
     if (Actor != nullptr)
     {
+        CheckedPlayer = CheckIfActorIsPlayer(Actor);
+
         UPrimitiveComponent *Component = Cast<UPrimitiveComponent>(Actor->GetRootComponent());
-        if (Component != nullptr)
+        if (Component != nullptr && !CheckedPlayer)
         {   
             // Le quita las fisicas al objeto que se coloco dentro del trigger.
             Component->SetSimulatePhysics(false);
+            Actor->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
         }
         // Pone al Actor que se coloco en el trigger como parte del componente de trigger.
-        Actor->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
+        
         Mover->SetShouldMove(true);
     }
     else
@@ -40,12 +43,34 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
     }
 }
 
-void UTriggerComponent::SetMover(UMover *NewMover)
+bool UTriggerComponent::CheckIfActorIsPlayer(AActor* Player)
+{
+    if(Player == nullptr) return false;
+
+    bIsPlayer = Player->ActorHasTag("ThePlayer");
+    return bIsPlayer;
+}
+
+void UTriggerComponent::SetMover(AActor* TheMover)
 {
     // Mover viene desde el include en TriggerComponent.h
     // Esta funcion se utiliza en Blueprint, SecretWall la tiene.
 
-    Mover = NewMover;
+    if (TheMover == nullptr) return;
+
+    TArray<UActorComponent*> Components;
+
+	TheMover->GetComponents(Components);
+
+    for(UActorComponent *Comp : Components)
+	{
+		UMover* thisComp = Cast<UMover>(Comp);
+		if( thisComp )
+		{
+			//This is the mover component
+            Mover = thisComp;
+		}
+	}
 }
 
 AActor *UTriggerComponent::GetAcceptableActor() const
@@ -61,13 +86,15 @@ AActor *UTriggerComponent::GetAcceptableActor() const
         // A cada uno de los actores, revisa primero si el Tag es el "Aceptable"
         // Luego al Actor agarrado le pone el Tag de Grabbed.
 
-        bool HasAcceptableTag = Actor->ActorHasTag(AcceptableActorTag);
-        bool IsGrabbed = Actor->ActorHasTag("Grabbed");
+        bool bHasAcceptableTag = Actor->ActorHasTag(AcceptableActorTag);
+        bool bIsGrabbed = Actor->ActorHasTag("Grabbed");
 
-        if (HasAcceptableTag && !IsGrabbed)
+    	if (bHasAcceptableTag && !bIsGrabbed)
         {
             return Actor;
         }
     }
     return nullptr;
 }
+
+

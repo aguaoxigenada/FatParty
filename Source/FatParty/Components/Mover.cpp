@@ -12,6 +12,7 @@ void UMover::BeginPlay()
 	Super::BeginPlay();
 
 	OriginalLocation = GetOwner()->GetActorLocation();
+
 }
 
 void UMover::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)

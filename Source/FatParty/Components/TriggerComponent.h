@@ -12,25 +12,27 @@ class FATPARTY_API UTriggerComponent : public UBoxComponent
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
-	UTriggerComponent();  // constructor
+	
+	UTriggerComponent();  
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-	UFUNCTION(BlueprintCallable)
-	void SetMover(UMover* Mover); 
-
-private:
-	UPROPERTY(EditAnywhere)
-	FName AcceptableActorTag;	
-
-	UMover* Mover; 
 	AActor* GetAcceptableActor() const;
-	
+
+	UPROPERTY(EditInstanceOnly)
+		FName AcceptableActorTag;	
+private:
+	UMover* Mover; 
+
+	bool CheckIfActorIsPlayer(AActor* Player);
+	bool bIsPlayer;
+	bool CheckedPlayer;
+
+	UPROPERTY(EditInstanceOnly)
+		TWeakObjectPtr<AActor> ChoosenMover;
+
+	void SetMover(AActor* TheMover); 
+
 };

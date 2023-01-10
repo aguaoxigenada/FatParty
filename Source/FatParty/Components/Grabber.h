@@ -14,30 +14,28 @@ class FATPARTY_API UGrabber : public USceneComponent
 public:	
 	UGrabber();
 
-protected:
-	virtual void BeginPlay() override;
-
-public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable) 
-	void Grab();
+		void Grab();
 	
 	UFUNCTION(BlueprintCallable) 
-	void Release();
+		void Release();
 
 	UPhysicsHandleComponent* GetPhysicsHandle() const;
 
+protected:
+	virtual void BeginPlay() override;
 
 private:
 	UPROPERTY(EditAnywhere)
-	float MaxGrabDistance = 400;
+		float MaxGrabDistance = 400;
 
 	UPROPERTY(EditAnywhere)
-	float GrabRadius = 1; 
+		float GrabRadius = 1; 
 
 	UPROPERTY(EditAnywhere)
-	float HoldDistance = 200; 
+		float HoldDistance = 100; 
 
 	bool GetGrabbableInReach(FHitResult &OutHitResult) const;
 };

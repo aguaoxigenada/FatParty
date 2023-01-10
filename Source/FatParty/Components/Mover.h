@@ -23,14 +23,20 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	
 	UFUNCTION(BlueprintCallable)
-	void SetShouldMove(bool ShouldMove);
+		void SetShouldMove(bool ShouldMove);
 
 private:
 	UPROPERTY(EditAnywhere)
-	FVector MoveOffset;
+		FVector MoveOffset;
 
 	UPROPERTY(EditAnywhere)
-	float MoveTime = 4;
+		float MoveTime = 4;
+
+	//UPROPERTY(EditAnywhere)
+		//TSubclassOf<AActor*> MeshToMove;
+
+	UPROPERTY(EditAnywhere)
+		UStaticMeshComponent* MeshToMove;
 
 	bool ShouldMove = false;
 
