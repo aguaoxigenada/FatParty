@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -13,16 +11,11 @@ class FATPARTY_API UPlatformMovement : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
 	UPlatformMovement();
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Movement Platform")
@@ -32,15 +25,22 @@ private:
 		float MoveDistance = 100;
 
 	UPROPERTY(EditAnywhere, Category = "Rotation")
-		FRotator RotationVelocity;
+		float RotationDistance = 50;
+
+	UPROPERTY(EditAnywhere, Category = "Rotation")
+		FVector RotationVelocity = FVector(50, 0, 0);
 
 	FVector StartLocation;
+	FRotator StartRotation;
+	FRotator TargetRotation;
+
+	bool bStartingOver = true;
 
 	void MovePlatform(float DeltaTime);
 	void RotatePlatform(float DeltaTime);
 
 	bool ShouldPlatformReturn() const;
+	bool ShouldRotationReturn() const;
 	float GetDistanceMoved() const;
-
-		
+	float GetDistanceRotated() const;
 };

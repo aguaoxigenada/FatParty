@@ -1,7 +1,6 @@
 #include "Mover.h"
 #include "Math/UnrealMathUtility.h"
 
-// Sets default values for this component's properties
 UMover::UMover()
 {
 	PrimaryComponentTick.bCanEverTick = true;

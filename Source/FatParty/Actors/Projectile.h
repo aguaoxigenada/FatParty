@@ -21,32 +21,32 @@ protected:
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Combat")
-	UStaticMeshComponent *ProjectileMesh;
+		UStaticMeshComponent *ProjectileMesh;
 
 	UPROPERTY(VisibleAnywhere, Category = "Combat")
-	class UProjectileMovementComponent *ProjectileMovementComponent;
+		class UProjectileMovementComponent *ProjectileMovementComponent;
 	
 	UFUNCTION()
-	void OnHit(UPrimitiveComponent *HitComp, AActor *OtherActor, UPrimitiveComponent *OtherComp, FVector NormalImpulse, const FHitResult &Hit);
+		void OnHit(UPrimitiveComponent *HitComp, AActor *OtherActor, UPrimitiveComponent *OtherComp, FVector NormalImpulse, const FHitResult &Hit);
 	
 	UPROPERTY(EditAnywhere)
-	float Damage = 50.f;
+		float Damage = 50.f;
 	
 	UPROPERTY(EditAnywhere, Category = "Combat")
-	class UParticleSystem* HitParticles;
+		class UParticleSystem* HitParticles;
 
 	UPROPERTY(VisibleAnywhere, Category = "Combat")
-	class UParticleSystemComponent* ParticleComponent;
+		class UParticleSystemComponent* ParticleComponent;
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
-	USoundBase* LaunchSound;
+		USoundBase* LaunchSound;
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
-	USoundBase* HitSound;
+		USoundBase* HitSound;
 	// cuando se hace un forward declaration sirve para todos los mismos tipos de variable.
 	
 	UPROPERTY(EditAnywhere, Category = "Combat")
-	TSubclassOf<class UCameraShakeBase>HitCameraShakeClass;
+		TSubclassOf<class UCameraShakeBase>HitCameraShakeClass;
 	
 public:
 	// Called every frame

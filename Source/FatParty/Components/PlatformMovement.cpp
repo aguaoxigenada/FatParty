@@ -2,7 +2,6 @@
 
 UPlatformMovement::UPlatformMovement()
 {
-
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
@@ -11,7 +10,8 @@ void UPlatformMovement::BeginPlay()
 {
 	Super::BeginPlay();
 	StartLocation = GetOwner()->GetActorLocation();
-	
+	StartRotation = GetOwner()->GetActorRotation();
+	TargetRotation = StartRotation;
 }
 
 void UPlatformMovement::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -43,16 +43,56 @@ void UPlatformMovement::MovePlatform(float DeltaTime)
 
 void UPlatformMovement::RotatePlatform(float DeltaTime)
 {
-	GetOwner()->AddActorLocalRotation(RotationVelocity * DeltaTime);
+	if (ShouldRotationReturn())
+	{
+		if(bStartingOver)
+		{
+			StartRotation = StartRotation + GetOwner()->GetActorRotation();
+		}
+		else
+		{
+			StartRotation = GetOwner()->GetActorRotation();
+		}
+
+		GetOwner()->AddActorLocalRotation(StartRotation * DeltaTime);
+		RotationVelocity = RotationVelocity * -1;
+		bStartingOver = !bStartingOver;
+	}
+
+	else 
+	{
+		FRotator CurrentLocation = GetOwner()->GetActorRotation();
+		CurrentLocation.Pitch = (RotationVelocity.X * DeltaTime);
+		GetOwner()->AddActorLocalRotation(CurrentLocation);		
+	}
 }
 
 bool UPlatformMovement::ShouldPlatformReturn() const
 {
+	//float Distance = GetDistanceMoved();
+	//float Offset = MoveDistance;
+	//UE_LOG(LogTemp, Warning, TEXT("Distance is: %f"), Distance);
+	//UE_LOG(LogTemp, Warning, TEXT("MoveDistance is: %f"), Offset);
 	return GetDistanceMoved() > MoveDistance;
 }
+
+bool UPlatformMovement::ShouldRotationReturn() const
+{
+	//float Distance = GetDistanceRotated();
+	//float Offset = RotationDistance;
+	//UE_LOG(LogTemp, Warning, TEXT("Distance is: %f"), Distance);
+	//UE_LOG(LogTemp, Warning, TEXT("Rotation Offset is: %f"), Offset);
+	return GetDistanceRotated() >= RotationDistance;
+}
+
 
 float UPlatformMovement::GetDistanceMoved() const
 {
 	return FVector::Dist(StartLocation, GetOwner()->GetActorLocation());
+}
+
+float UPlatformMovement::GetDistanceRotated() const
+{
+	return abs(StartRotation.Pitch - GetOwner()->GetActorRotation().Pitch);
 }
 

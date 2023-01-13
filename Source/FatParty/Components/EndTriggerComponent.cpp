@@ -23,7 +23,7 @@ void UEndTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	            Component->SetSimulatePhysics(false);
 	            Actor->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
 
-	            EndGame();
+	            WonGame();
 	            bGameEnded = true;
 	        }
 	    }  

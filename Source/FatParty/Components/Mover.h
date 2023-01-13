@@ -13,32 +13,23 @@ class FATPARTY_API UMover : public UActorComponent
 public:	
 
 	UMover();
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	
+	UFUNCTION()
+		void SetShouldMove(bool ShouldMove);
 
 protected:
 
 	virtual void BeginPlay() override;
 
-public:	
-
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	
-	UFUNCTION(BlueprintCallable)
-		void SetShouldMove(bool ShouldMove);
-
-private:
 	UPROPERTY(EditAnywhere)
 		FVector MoveOffset;
 
 	UPROPERTY(EditAnywhere)
 		float MoveTime = 4;
 
-	//UPROPERTY(EditAnywhere)
-		//TSubclassOf<AActor*> MeshToMove;
-
-	UPROPERTY(EditAnywhere)
-		UStaticMeshComponent* MeshToMove;
-
 	bool ShouldMove = false;
 
-	FVector OriginalLocation;		
+	FVector OriginalLocation;	
+	
 };

@@ -10,11 +10,6 @@
 
 UFatPartyGameInstance::UFatPartyGameInstance(const FObjectInitializer &ObjectInitializer)
 {
-	//ConstructorHelpers::FClassFinder<APlatformTrigger>PlayerTriggerBPClass(TEXT("/Game/PuzzlePlatforms/BP_PlatformTrigger"));
-	//if(!ensure(PlayerTriggerBPClass.Class!=nullptr)) return;
-
-	//UE_LOG(LogTemp, Warning, TEXT("Found Class %s"), *PlayerTriggerBPClass.Class->GetName());  //* star is used to get the inner string :D
-
 	ConstructorHelpers::FClassFinder<UUserWidget>MainMenuBP_Class(TEXT("/Game/Blueprints/UI/WBP_MainMenu"));
 	if(!ensure(MainMenuBP_Class.Class!=nullptr)) return;
 	
@@ -70,9 +65,8 @@ void UFatPartyGameInstance::Host()
 	UWorld* World = GetWorld();
 	if(!ensure(World != nullptr)) return;
 
-	// podrias obtener el ip / hamachi ip y hacerlo tambien.
 
-	World->ServerTravel("/Game/Maps/Dungeon_01?listen?ip=25.14.116.251");  // aca iria lo de hamachi si lo quiero hacer listener 192.168.1.10   25.14.116.251
+	World->ServerTravel("/Game/Maps/Dungeon_01?listen?ip=25.14.116.251?port=7777");  // aca iria lo de hamachi si lo quiero hacer listener 192.168.1.10   25.14.116.251
 }
 
 void UFatPartyGameInstance::LoadGameMenu()
@@ -91,7 +85,6 @@ void UFatPartyGameInstance::RestartLevel()
 	FString LevelURL = GetWorld()->GetAddressURL();
 
 	World->ServerTravel(LevelURL, ETravelType::TRAVEL_Absolute);
-	//UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 }
 
 void UFatPartyGameInstance::QuitGame()
