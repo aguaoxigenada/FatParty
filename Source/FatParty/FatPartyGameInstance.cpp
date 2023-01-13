@@ -66,7 +66,7 @@ void UFatPartyGameInstance::Host()
 	if(!ensure(World != nullptr)) return;
 
 
-	World->ServerTravel("/Game/Maps/Dungeon_01?listen?ip=25.14.116.251?port=7777");  // aca iria lo de hamachi si lo quiero hacer listener 192.168.1.10   25.14.116.251
+	World->ServerTravel("/Game/Maps/Dungeon_01?listen?ip=25.14.116.251");  // aca iria lo de hamachi si lo quiero hacer listener 192.168.1.10   25.14.116.251
 }
 
 void UFatPartyGameInstance::LoadGameMenu()
