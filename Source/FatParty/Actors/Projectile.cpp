@@ -39,7 +39,7 @@ void AProjectile::Tick(float DeltaTime)
 void AProjectile::OnHit(UPrimitiveComponent *HitComp, AActor *OtherActor, UPrimitiveComponent *OtherComp, FVector NormalImpulse, const FHitResult &Hit)
 {
 
-	auto MyOwner = GetOwner();  // el auto esta bueno cuando no se sabe muy bien que tipo es el que viene :D
+	auto MyOwner = GetOwner(); 
 	if (MyOwner == nullptr)
 	{
 		Destroy();

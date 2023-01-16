@@ -19,11 +19,13 @@ protected:
 private:
 
 	UPROPERTY(EditAnywhere)
-	float MaxHealth = 100.f;
-	float Health = 0.f;
+		float MaxHealth = 100.f;
+
+	UPROPERTY(EditAnywhere)
+		float Health = 0.f;
 
 	UFUNCTION()
-	void DamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* Instigator, AActor* DamageCauser);
+		void DamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* Instigator, AActor* DamageCauser);
 
 	class AFatPartyGameMode* FatPartyGameMode;
 	

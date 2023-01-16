@@ -1,11 +1,7 @@
 #include "FatPartyGameInstance.h"
-#include "Engine/WorldComposition.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Blueprint/UserWidget.h"
-//#include "PlatformTrigger.h"
-#include "Kismet/GameplayStatics.h"
-#include "MenuSystem/InGameMenu.h"
-#include "MenuSystem/MenuWidget.h"
+#include "UI/MenuSystem/InGameMenu.h"
 
 
 UFatPartyGameInstance::UFatPartyGameInstance(const FObjectInitializer &ObjectInitializer)

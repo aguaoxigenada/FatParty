@@ -42,11 +42,12 @@ void UArrowMover::BeginPlay()
 
 bool UArrowMover::ShouldArrowReturn() const
 {
-	float Distance = GetDistanceMoved();
+	/*
+	 float Distance = GetDistanceMoved();
 	float Offset = MoveOffset.Length();
 	UE_LOG(LogTemp, Warning, TEXT("Distance is: %f"), Distance);
 	UE_LOG(LogTemp, Warning, TEXT("MoveOffset is: %f"), Offset);
-
+	 */
 	return GetDistanceMoved() >= MoveOffset.Length();
 }
 

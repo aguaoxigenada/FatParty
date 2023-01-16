@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
-#include "MenuSystem/MenuInterface.h"
+#include "UI/MenuSystem/MenuInterface.h"
 #include "FatPartyGameInstance.generated.h"
 
 class UMenuWidget;

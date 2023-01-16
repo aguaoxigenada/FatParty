@@ -1,6 +1,6 @@
 #include "EndTriggerComponent.h"
 #include "FatParty/FatPartyGameInstance.h"
-#include "FatParty/MenuSystem/InGameMenu.h"
+#include "FatParty/UI/MenuSystem/InGameMenu.h"
 
 UEndTriggerComponent::UEndTriggerComponent()
 {
