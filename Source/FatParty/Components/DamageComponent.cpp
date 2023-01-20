@@ -1,5 +1,4 @@
 #include "DamageComponent.h"
-
 #include "Kismet/GameplayStatics.h"
 
 UDamageComponent::UDamageComponent()

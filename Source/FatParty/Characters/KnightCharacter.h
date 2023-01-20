@@ -14,13 +14,11 @@ class FATPARTY_API AKnightCharacter : public AFatPartyCharacter
 	
 	
 public:
-	// Sets default values for this pawn's properties
 	AKnightCharacter();
-	
-		// Called to bind functionality to input
+
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void Tick(float DeltaTime) override;
-	void HandleDestruction();
+	virtual void HandleDestruction() override;
 
 	APlayerController* GetTankPlayerController() const { return KnightPlayerController; }
 
@@ -35,16 +33,11 @@ public:
 	bool bAlive = true;
 	bool bHadJumped = false;
 	float Distance = 0.f;
-
-	
+		
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
 	virtual void Fire() override;
 	
-
-
 private:
 
 	APlayerController* KnightPlayerController;

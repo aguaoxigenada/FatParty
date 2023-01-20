@@ -4,6 +4,10 @@
 #include "Components/ActorComponent.h"
 #include "HealthComponent.generated.h"
 
+class UHudWidget;
+class AFatPartyGameMode;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerDamaged);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class FATPARTY_API UHealthComponent : public UActorComponent
@@ -12,6 +16,13 @@ class FATPARTY_API UHealthComponent : public UActorComponent
 
 public:	
 	UHealthComponent();
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	UFUNCTION(BlueprintCallable)
+		float GetHealth();
+
+	UPROPERTY()
+		FOnPlayerDamaged OnPlayerDamaged;
 
 protected:
 	virtual void BeginPlay() override;
@@ -23,15 +34,12 @@ private:
 
 	UPROPERTY(EditAnywhere)
 		float Health = 0.f;
-
+	
 	UFUNCTION()
 		void DamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* Instigator, AActor* DamageCauser);
 
-	class AFatPartyGameMode* FatPartyGameMode;
-	
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	UHudWidget* HudWidget;
 
-		
+	AFatPartyGameMode* FatPartyGameMode;
+			
 };

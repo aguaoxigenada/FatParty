@@ -39,7 +39,7 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Interaction")
 	FOnUseItem OnUseItem;
 
-	void HandleDestruction();
+	virtual void HandleDestruction();
 	virtual void Fire();
 	void MoveForward(float Val);
 	void MoveRight(float Val);

@@ -1,6 +1,9 @@
 #include "HealthComponent.h"
+
+#include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "FatParty/GameMode/FatPartyGameMode.h"
+#include "FatParty/UI/HudWidget.h"
 
 UHealthComponent::UHealthComponent()
 {
@@ -21,6 +24,7 @@ void UHealthComponent::BeginPlay()
 	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent::DamageTaken);
 	
 	FatPartyGameMode = Cast<AFatPartyGameMode>(UGameplayStatics::GetGameMode(this));
+
 }
 
 
@@ -28,6 +32,11 @@ void UHealthComponent::BeginPlay()
 void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+}
+
+float UHealthComponent::GetHealth()
+{
+	return Health;
 }
 
 void UHealthComponent::DamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* Instigator, AActor* DamageCauser)
@@ -43,7 +52,9 @@ void UHealthComponent::DamageTaken(AActor* DamagedActor, float Damage, const UDa
 	if(Damage <= 0.f) return;
 
 	Health -= Damage;
-	
+
+	OnPlayerDamaged.Broadcast();
+
 	if(Health <= 0 && FatPartyGameMode)
 	{
 		FatPartyGameMode->ActorDied(DamagedActor);
