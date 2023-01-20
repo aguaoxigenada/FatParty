@@ -38,7 +38,7 @@ void UEndTriggerComponent::WonGame()
     GameInstance->LoadInGameMenu();
     UInGameMenu* InGameMenu = Cast<UInGameMenu>(GameInstance->GetInGameMenu());
         
-    InGameMenu->EndLevelScreen();  
+    InGameMenu->EndLevelScreen(true);  
 }
 
 

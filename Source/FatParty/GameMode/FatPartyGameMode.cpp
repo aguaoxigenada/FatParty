@@ -18,7 +18,7 @@ void AFatPartyGameMode::ActorDied(AActor *DeadActor)
         {
             KnightPlayerController->SetPlayerEnabledState(false);
         }
-        GameOver(false);
+        //GameOver(false);
 
     }
     else if (ATower *DestroyedTower = Cast<ATower>(DeadActor))

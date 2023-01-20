@@ -48,7 +48,7 @@ void AAI_CharacterBase::OnSphereComponentAttackOverlapped(UPrimitiveComponent* O
 
 	if (OtherActor->IsA<AFatPartyCharacter>())
 	{
-		UGameplayStatics::ApplyDamage(OtherActor, 100, MyOwnerInstigator, this, DamageTypeClass);
+		UGameplayStatics::ApplyDamage(OtherActor, Attack_Damage, MyOwnerInstigator, this, DamageTypeClass);
 
 	}
 }

@@ -30,10 +30,13 @@ void UInGameMenu::CancelMenu()
 	Teardown();	
 }
 
-void UInGameMenu::EndLevelScreen()
+void UInGameMenu::EndLevelScreen(bool bWon)
 {
 	if(!ensure(InGameMenuSwitcher!=nullptr)) return;
-	InGameMenuSwitcher->SetActiveWidget(LevelPassed);	
+	if(bWon)
+		InGameMenuSwitcher->SetActiveWidget(LevelPassed);
+	else 
+		InGameMenuSwitcher->SetActiveWidget(LevelLost);	
 }
 
 

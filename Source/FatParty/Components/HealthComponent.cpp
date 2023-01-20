@@ -1,9 +1,11 @@
 #include "HealthComponent.h"
 
 #include "Blueprint/WidgetBlueprintLibrary.h"
+#include "FatParty/FatPartyGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "FatParty/GameMode/FatPartyGameMode.h"
 #include "FatParty/UI/HudWidget.h"
+#include "FatParty/UI/MenuSystem/InGameMenu.h"
 
 UHealthComponent::UHealthComponent()
 {
@@ -24,6 +26,7 @@ void UHealthComponent::BeginPlay()
 	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent::DamageTaken);
 	
 	FatPartyGameMode = Cast<AFatPartyGameMode>(UGameplayStatics::GetGameMode(this));
+	GameInstance = Cast<UFatPartyGameInstance>(GetWorld()->GetGameInstance());
 
 }
 
@@ -54,10 +57,18 @@ void UHealthComponent::DamageTaken(AActor* DamagedActor, float Damage, const UDa
 	Health -= Damage;
 
 	OnPlayerDamaged.Broadcast();
-
-	if(Health <= 0 && FatPartyGameMode)
+	
+	if(Health <= 0 && FatPartyGameMode && bPlayerAlive)
 	{
 		FatPartyGameMode->ActorDied(DamagedActor);
+
+		if(GameInstance == nullptr) return;
+
+	    GameInstance->LoadInGameMenu();
+	    UInGameMenu* InGameMenu = Cast<UInGameMenu>(GameInstance->GetInGameMenu());
+	        
+	    InGameMenu->EndLevelScreen(false);
+		bPlayerAlive = false;
 	}
 
 	//UE_LOG(LogTemp, Warning, TEXT("Health: %f of %s"), Health, *DamagedActor->GetName());

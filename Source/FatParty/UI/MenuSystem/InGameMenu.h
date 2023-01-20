@@ -13,7 +13,7 @@ class FATPARTY_API UInGameMenu : public UMenuWidget
 	GENERATED_BODY()
 
 public:
-	void EndLevelScreen();
+	void EndLevelScreen(bool bWon);
 
 protected:
 	virtual bool Initialize();

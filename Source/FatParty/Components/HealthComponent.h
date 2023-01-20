@@ -4,6 +4,7 @@
 #include "Components/ActorComponent.h"
 #include "HealthComponent.generated.h"
 
+class UFatPartyGameInstance;
 class UHudWidget;
 class AFatPartyGameMode;
 
@@ -39,7 +40,9 @@ private:
 		void DamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* Instigator, AActor* DamageCauser);
 
 	UHudWidget* HudWidget;
-
+	UFatPartyGameInstance* GameInstance;
 	AFatPartyGameMode* FatPartyGameMode;
+
+	bool bPlayerAlive = true;
 			
 };
