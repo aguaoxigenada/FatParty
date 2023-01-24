@@ -1,37 +1,25 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "FatParty/FatPartyCharacter.h"
+#include "FatParty/LongDistanceEnemies/LongDistanceEnemies.h"
 #include "Tower.generated.h"
 
 UCLASS()
-class FATPARTY_API ATower : public AFatPartyCharacter
+class FATPARTY_API ATower : public ALongDistanceEnemies
 {
 	GENERATED_BODY()
 
 public:
-
+	ATower();
 	virtual void Tick(float DeltaTime) override;
-	void HandleDestruction();
-
-	virtual void Fire() override;
+	virtual void RotateToCharacter(FVector LookAtTarget) override;
+	virtual void HandleDestruction() override;
 
 protected:
-	virtual void BeginPlay() override;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Turret Components")
+		UStaticMeshComponent* BaseMesh;
 
-private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Turret Components", meta = (AllowPrivateAccess = "true"))
+		UStaticMeshComponent* TurretMesh;
 
-	class AKnightCharacter* KnightCharacter;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Combat")
-	float FireRange = 300.f;
-
-	FTimerHandle FireRateTimerHandle;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Combat")
-	float FireRate = 2.f;
-	
-	void CheckFireCondition();
-
-	bool InFireRange();
 };

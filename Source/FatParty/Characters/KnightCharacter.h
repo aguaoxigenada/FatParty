@@ -29,8 +29,7 @@ public:
 	AActor* ActorGrabbed = nullptr;
 	UGrabber* PlayerGrabber = nullptr;
 	UThrower* PlayerThrower = nullptr;
-	
-	bool bAlive = true;
+
 	bool bHadJumped = false;
 	float Distance = 0.f;
 		
@@ -39,7 +38,6 @@ protected:
 	virtual void Fire() override;
 	
 private:
-
 	APlayerController* KnightPlayerController;
 
 	float MaxDistance = 100.f;

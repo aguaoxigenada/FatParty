@@ -27,6 +27,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Turret Components", meta = (AllowPrivateAccess = "true"))
 		UStaticMeshComponent* TurretMesh;
 
+	bool bAlive = true;
+
 protected:
 	virtual void BeginPlay();
 
@@ -41,6 +43,7 @@ public:
 
 	virtual void HandleDestruction();
 	virtual void Fire();
+	void RotateToCharacter(FVector LookAtTarget);
 	void MoveForward(float Val);
 	void MoveRight(float Val);
 
@@ -57,9 +60,6 @@ protected:
 	// Permite seleccionar cualquier objeto que utilice AProjectile desde el editor y usarlo como el projectil.
 	UPROPERTY(EditDefaultsOnly, Category = "Combat")
 		TSubclassOf<class AProjectile> ProjectileClass;
-	
-	void RotateTurret(FVector LookAtTarget);
-	
 
 private:
 	UPROPERTY(EditAnywhere, Category = "TurnRate")

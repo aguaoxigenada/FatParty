@@ -1,6 +1,7 @@
 #include "HealthComponent.h"
 
 #include "Blueprint/WidgetBlueprintLibrary.h"
+#include "FatParty/FatPartyCharacter.h"
 #include "FatParty/FatPartyGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "FatParty/GameMode/FatPartyGameMode.h"
@@ -62,15 +63,25 @@ void UHealthComponent::DamageTaken(AActor* DamagedActor, float Damage, const UDa
 	{
 		FatPartyGameMode->ActorDied(DamagedActor);
 
-		if(GameInstance == nullptr) return;
+		if(DamagedActor == Cast<AFatPartyCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0)))
+		{
+			if(GameInstance == nullptr) return;
+			FTimerHandle TimerHandleToOpenInGameMenu;
 
-	    GameInstance->LoadInGameMenu();
-	    UInGameMenu* InGameMenu = Cast<UInGameMenu>(GameInstance->GetInGameMenu());
-	        
-	    InGameMenu->EndLevelScreen(false);
-		bPlayerAlive = false;
+			GetWorld()->GetTimerManager().SetTimer(TimerHandleToOpenInGameMenu, this, &UHealthComponent::OpenInGameMenu, Delay, false );
+
+			bPlayerAlive = false;
+		}
+		
 	}
 
 	//UE_LOG(LogTemp, Warning, TEXT("Health: %f of %s"), Health, *DamagedActor->GetName());
 }
 
+void UHealthComponent::OpenInGameMenu()
+{
+	GameInstance->LoadInGameMenu();
+	UInGameMenu* InGameMenu = Cast<UInGameMenu>(GameInstance->GetInGameMenu());
+	        
+	InGameMenu->EndLevelScreen(false);
+}

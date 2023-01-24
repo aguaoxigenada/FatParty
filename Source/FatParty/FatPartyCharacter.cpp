@@ -23,7 +23,6 @@ AFatPartyCharacter::AFatPartyCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 
-
 	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>(TEXT("Spawn Pont"));
 	ProjectileSpawnPoint->SetupAttachment(TurretMesh);
 
@@ -56,6 +55,8 @@ void AFatPartyCharacter::HandleDestruction()
 	{
 		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(DeathCameraShakeClass);
 	}
+
+	bAlive = false;
 }
 
 void AFatPartyCharacter::Fire()
@@ -64,9 +65,9 @@ void AFatPartyCharacter::Fire()
 
 }
 
-void AFatPartyCharacter::RotateTurret(FVector LookAtTarget)
+void AFatPartyCharacter::RotateToCharacter(FVector LookAtTarget)   // hay que cambiar esto para que rote el body
 {
-	// Distancia entre el Tanque y la Torreta
+    // Distancia entre el Tanque y la Torreta
 	FVector ToTarget = LookAtTarget - TurretMesh->GetComponentLocation();
 
 	// La posicion del FRotator hacia donde debe de mirar la Torreta
