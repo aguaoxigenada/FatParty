@@ -21,8 +21,13 @@ void AAI_CharacterBase::ReciveDamage(float damage)
 
 AAI_CharacterBase::AAI_CharacterBase()
 {
+
+	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WeaponMesh"));
+
+	WeaponMesh->SetupAttachment(GetMesh(),"RightHandSocket");
+
 	SphereComponentAttack = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponentAttack"));
-	SphereComponentAttack->SetupAttachment(RootComponent);
+	SphereComponentAttack->SetupAttachment(WeaponMesh);
 
 	SphereComponentAttack->SetSphereRadius(100.f);
 

@@ -32,6 +32,8 @@ protected:
 		float Attack_Damage = 20.0f;
 
 	UPROPERTY(EditDefaultsOnly)
+		UStaticMeshComponent* WeaponMesh;
+	UPROPERTY(EditDefaultsOnly)
 		USphereComponent* SphereComponentAttack;
 	
 private:
