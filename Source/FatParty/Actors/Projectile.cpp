@@ -23,6 +23,12 @@ void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if(HasAuthority())
+	{
+		SetReplicates(true);
+		SetReplicateMovement(true);
+	}
+
 	ProjectileMesh->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
 
 	if (LaunchSound)

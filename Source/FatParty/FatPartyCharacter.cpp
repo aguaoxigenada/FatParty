@@ -33,6 +33,11 @@ void AFatPartyCharacter::BeginPlay()
 	// Call the base class  
 	Super::BeginPlay();
 
+	if(HasAuthority())
+	{
+		SetReplicates(true);
+		SetReplicateMovement(true);
+	}
 }
 
 
