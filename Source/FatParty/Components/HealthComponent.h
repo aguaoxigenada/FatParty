@@ -35,13 +35,16 @@ private:
 
 	UPROPERTY(EditAnywhere)
 		float Health = 0.f;
-	
+
+	UPROPERTY(EditAnywhere)
+		float Delay = 2.f;
 	UFUNCTION()
 		void DamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* Instigator, AActor* DamageCauser);
 
 	UHudWidget* HudWidget;
 	UFatPartyGameInstance* GameInstance;
 	AFatPartyGameMode* FatPartyGameMode;
+	void OpenInGameMenu();
 
 	bool bPlayerAlive = true;
 			

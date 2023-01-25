@@ -21,14 +21,15 @@ void AFatPartyGameMode::ActorDied(AActor *DeadActor)
         //GameOver(false);
 
     }
-    else if (ATower *DestroyedTower = Cast<ATower>(DeadActor))
+    else if (AFatPartyEnemy* DestroyedEnemy = Cast<AFatPartyEnemy>(DeadActor))
     {
-        DestroyedTower->HandleDestruction();
-        TargetTowers--;
+        DestroyedEnemy->HandleDestruction();
+
+    	/*TargetTowers--;
         if(TargetTowers == 0)
         {
             GameOver(true);
-        }
+        }*/    
     }
 }
 

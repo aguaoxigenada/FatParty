@@ -30,7 +30,6 @@ void AKnightCharacter::Fire()
 		Projectile->SetOwner(this);
 	}
 
-
 	if (KnightCharacter)
 	{
 		PlayerThrower = Cast<UThrower>(KnightCharacter->PlayerThrower);
@@ -62,7 +61,6 @@ void AKnightCharacter::HandleDestruction()
 	Super::HandleDestruction(); 
     SetActorHiddenInGame(true);
 	SetActorTickEnabled(false);
-	bAlive = false;
 }
 
 void AKnightCharacter::SetGrabber(UGrabber* Grabber)
@@ -87,7 +85,7 @@ void AKnightCharacter::Tick(float DeltaTime)
 			false,
 			HitResult);
 
-		RotateTurret(HitResult.ImpactPoint);
+		RotateToCharacter(HitResult.ImpactPoint);
 	
 		// DrawDebugSphere(GetWorld(), HitResult.ImpactPoint,25.f,	12,	FColor::Blue,false,	-1.f);
 	}

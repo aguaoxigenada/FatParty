@@ -24,14 +24,9 @@ protected:
 
 
 private:
-	//UPROPERTY(meta = (BindWidget))
-	//	UProgressBar* LifeBar;
-
 	UPROPERTY()
 		AFatPartyCharacter* Character;
 
 	UHealthComponent* HealthComp;
 
-	//float MaxLife = 100;
-	//float CurrentLife = MaxLife;
 };
