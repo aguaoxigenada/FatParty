@@ -4,6 +4,8 @@
 #include "DrawDebugHelpers.h"
 #include "FatParty/Actors/Projectile.h"
 #include "FatParty/Components/Thrower.h"
+#include "FatParty/Controllers/ThePlayerController.h"
+
 
 AKnightCharacter::AKnightCharacter()
 {
@@ -18,6 +20,7 @@ void AKnightCharacter::BeginPlay()
 
 void AKnightCharacter::Fire()
 {
+
 	AKnightCharacter* KnightCharacter = Cast<AKnightCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
 	if (KnightCharacter->ActorGrabbed == nullptr)
 	{
@@ -36,9 +39,12 @@ void AKnightCharacter::Fire()
 		if (KnightCharacter->ActorGrabbed != nullptr && PlayerThrower)
 		{
 			PlayerThrower->Throw();
+			PlayAnimMontage(AttackAnim);
 		}
 	}
 }
+
+
 
 void AKnightCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -52,7 +58,7 @@ void AKnightCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("MoveRight", this, &AFatPartyCharacter::MoveRight);
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &AFatPartyCharacter::Turn);
 
-	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &AFatPartyCharacter::Fire);
+	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &AKnightCharacter::CharacterAttack);
 
 }
 
@@ -88,5 +94,13 @@ void AKnightCharacter::Tick(float DeltaTime)
 		RotateToCharacter(HitResult.ImpactPoint);
 	
 		// DrawDebugSphere(GetWorld(), HitResult.ImpactPoint,25.f,	12,	FColor::Blue,false,	-1.f);
+
+		//CharacterMouseRotator();
 	}
+}
+
+void AKnightCharacter::CharacterAttack() 
+{
+	PlayAnimMontage(AttackAnim);
+
 }

@@ -72,16 +72,17 @@ void AFatPartyCharacter::Fire()
 
 void AFatPartyCharacter::RotateToCharacter(FVector LookAtTarget)   // hay que cambiar esto para que rote el body
 {
+	USkeletalMeshComponent* SkeletalMesh = GetMesh();
     // Distancia entre el Tanque y la Torreta
-	FVector ToTarget = LookAtTarget - TurretMesh->GetComponentLocation();
+	FVector ToTarget = LookAtTarget - SkeletalMesh->GetComponentLocation();
 
 	// La posicion del FRotator hacia donde debe de mirar la Torreta
 	FRotator LookAtRotation = FRotator(0.f, ToTarget.Rotation().Yaw, 0.f);
 
 	// Rotacion de la torreta desde su posicion actual hacia LookAtRotation.
-	TurretMesh->SetWorldRotation(
+	SkeletalMesh->SetWorldRotation(
 		FMath::RInterpTo(
-			TurretMesh->GetComponentRotation(),
+			SkeletalMesh->GetComponentRotation(),
 			LookAtRotation,
 			UGameplayStatics::GetWorldDeltaSeconds(this),
 			25.f));
