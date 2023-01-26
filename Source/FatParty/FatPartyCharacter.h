@@ -50,7 +50,7 @@ public:
 protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Turret Components")
-		UStaticMeshComponent* BaseMesh;
+		UStaticMeshComponent* WeaponMesh;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Turret Components", meta = (AllowPrivateAccess = "true"))
 		USceneComponent* ProjectileSpawnPoint;
@@ -82,5 +82,13 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 		TSubclassOf<class UCameraShakeBase> DeathCameraShakeClass;
+
+		/** Top down camera */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class UCameraComponent* TopDownCameraComponent;
+
+	/** Camera boom positioning the camera above the character */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class USpringArmComponent* CameraBoom;
 };
 

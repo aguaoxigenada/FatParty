@@ -1,8 +1,7 @@
 #include "FatPartyCharacter.h"
 #include "Actors/Projectile.h"
 #include "Camera/CameraComponent.h"
-#include "Characters/KnightCharacter.h"
-#include "Components/Thrower.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/InputSettings.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -11,20 +10,35 @@ AFatPartyCharacter::AFatPartyCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	BaseMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Base Mesh"));
-	BaseMesh->SetupAttachment(RootComponent);
+	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Base Mesh"));
+	WeaponMesh->SetupAttachment(RootComponent);
 
-	TurretMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Turret Mesh"));
-	TurretMesh->SetupAttachment(BaseMesh);
+	// Create a camera boom...
+	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
+	CameraBoom->SetupAttachment(RootComponent);
+	CameraBoom->SetUsingAbsoluteRotation(true); // Don't want arm to rotate when character does
+	CameraBoom->TargetArmLength = 800.f;
+	CameraBoom->SetRelativeRotation(FRotator(-60.f, 0.f, 0.f));
+	CameraBoom->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
 
-	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
-	SpringArm->SetupAttachment(RootComponent);
-
-	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-	Camera->SetupAttachment(SpringArm);
+	// Create a camera...
+	TopDownCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
+	TopDownCameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+	TopDownCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>(TEXT("Spawn Pont"));
-	ProjectileSpawnPoint->SetupAttachment(TurretMesh);
+	ProjectileSpawnPoint->SetupAttachment(WeaponMesh);
+	
+	// Don't rotate when the controller rotates. Let that just affect the camera.
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
+
+	// Configure character movement
+	GetCharacterMovement()->bOrientRotationToMovement = true;             // Character moves in the direction of input...	
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f);  // ...at this rotation rate
+	//GetCharacterMovement()->JumpZVelocity = 600.f;
+	GetCharacterMovement()->AirControl = 0.2f;
 
 }
 
@@ -70,10 +84,13 @@ void AFatPartyCharacter::Fire()
 
 }
 
+/*
+ 
+ */
 void AFatPartyCharacter::RotateToCharacter(FVector LookAtTarget)   // hay que cambiar esto para que rote el body
 {
 	USkeletalMeshComponent* SkeletalMesh = GetMesh();
-    // Distancia entre el Tanque y la Torreta
+    
 	FVector ToTarget = LookAtTarget - SkeletalMesh->GetComponentLocation();
 
 	// La posicion del FRotator hacia donde debe de mirar la Torreta
@@ -100,6 +117,7 @@ void AFatPartyCharacter::Turn(float Value)
 
 }
 
+/*
 void AFatPartyCharacter::MoveForward(float Value)
 {
 	if (Value != 0.0f)
@@ -115,4 +133,36 @@ void AFatPartyCharacter::MoveRight(float Value)
 		AddMovementInput(GetActorRightVector(), Value * Speed);
 	}
 }
+ */
+
+
+void AFatPartyCharacter::MoveForward(float Value)
+{
+	if ((Controller != nullptr) && (Value != 0.0f))
+	{
+		// find out which way is forward
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+		// get forward vector
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		AddMovementInput(Direction, Value);
+	}
+}
+
+void AFatPartyCharacter::MoveRight(float Value)
+{
+	if ((Controller != nullptr) && (Value != 0.0f))
+	{
+		// find out which way is right
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+		// get right vector 
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+		// add movement in that direction
+		AddMovementInput(Direction, Value);
+	}
+}
+
 
