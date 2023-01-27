@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "FatParty/FatPartyEnemy.h"
 #include "GameFramework/Character.h"
 #include "AI_CharacterBase.generated.h"
 
@@ -9,7 +10,7 @@ class USphereComponent;
 
 
 UCLASS()
-class FATPARTY_API AAI_CharacterBase : public ACharacter
+class FATPARTY_API AAI_CharacterBase : public AFatPartyEnemy
 {
 	GENERATED_BODY()
 
@@ -21,6 +22,8 @@ public:
 
 protected:
 
+	void HandleDestruction() override;
+
 	UPROPERTY(EditAnywhere, Category = AI)
 		UBehaviorTree* BehaviorTree = nullptr;
 
@@ -31,10 +34,14 @@ protected:
 	UPROPERTY(EditAnywhere, Category = AI_STATS)
 		float Attack_Damage = 20.0f;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
 		UStaticMeshComponent* WeaponMesh;
-	UPROPERTY(EditDefaultsOnly)
-		USphereComponent* SphereComponentAttack;
+	/*UPROPERTY(EditDefaultsOnly)
+		USphereComponent* SphereComponentAttack;*/
+
+	UFUNCTION(BlueprintCallable)
+		void TriggerOnAttack();
+
 	
 private:
 
@@ -44,4 +51,6 @@ private:
 		void OnSphereComponentAttackOverlapped(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	UFUNCTION()
 		void OnSphereComponentAttackEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+
 };

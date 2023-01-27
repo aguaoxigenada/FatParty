@@ -24,15 +24,22 @@ AAI_CharacterBase::AAI_CharacterBase()
 
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WeaponMesh"));
 
-	WeaponMesh->SetupAttachment(GetMesh(),"RightHandSocket");
+	WeaponMesh->SetupAttachment(GetMesh(),"Weapon_Root_RSocket");
 
-	SphereComponentAttack = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponentAttack"));
+	/*SphereComponentAttack = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponentAttack"));
 	SphereComponentAttack->SetupAttachment(WeaponMesh);
 
 	SphereComponentAttack->SetSphereRadius(100.f);
 
 	SphereComponentAttack->OnComponentBeginOverlap.AddUniqueDynamic(this, &AAI_CharacterBase::OnSphereComponentAttackOverlapped);
 	SphereComponentAttack->OnComponentEndOverlap.AddUniqueDynamic(this, &AAI_CharacterBase::OnSphereComponentAttackEndOverlap);
+*/
+}
+
+void AAI_CharacterBase::HandleDestruction()
+{
+	Super::HandleDestruction();
+	Destroy();
 }
 
 
@@ -63,3 +70,9 @@ void AAI_CharacterBase::OnSphereComponentAttackEndOverlap(UPrimitiveComponent* O
 {
 	FString s;
 }
+
+void AAI_CharacterBase::TriggerOnAttack()
+{
+	FString s;
+}
+
