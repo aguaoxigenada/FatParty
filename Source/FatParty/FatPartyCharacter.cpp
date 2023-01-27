@@ -54,6 +54,15 @@ void AFatPartyCharacter::BeginPlay()
 	}
 }
 
+void AFatPartyCharacter::SetGrabber(UGrabber* Grabber)
+{
+	PlayerGrabber = Grabber;
+}
+
+void AFatPartyCharacter::SetThrower(UThrower* Thrower)
+{
+	PlayerThrower = Thrower;
+}
 
 void AFatPartyCharacter::HandleDestruction()
 {

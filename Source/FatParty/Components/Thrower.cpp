@@ -9,7 +9,7 @@ UThrower::UThrower()
 
 void UThrower::Throw()
 {
-	AKnightCharacter* Player = Cast<AKnightCharacter>(GetOwner());
+	AFatPartyCharacter* Player = Cast<AFatPartyCharacter>(GetOwner());
 	AActor* ObjectToThrow = nullptr;
 	if (Player)
 	{
@@ -18,7 +18,6 @@ void UThrower::Throw()
 		{
 			Player->PlayerGrabber->Release();
 			UPrimitiveComponent* TargetObject = Cast<UPrimitiveComponent>(ObjectToThrow->GetRootComponent());
-			//FVector Forward = player->GetActorForwardVector();
 			FVector Forward = Player->TurretMesh->GetForwardVector();
 			TargetObject->AddImpulse(Forward * ThrowForce * TargetObject->GetMass());
 		}
@@ -33,9 +32,7 @@ void UThrower::BeginPlay()
 	if (Player)
 	{
 		Player->SetThrower(this);
-
 	}
-	
 }
 
 

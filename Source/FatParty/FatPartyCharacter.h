@@ -21,18 +21,18 @@ class AFatPartyCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
+	
+
+protected:
+	virtual void BeginPlay();
+
+public:
 	AFatPartyCharacter();
 	void Turn(float Value);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Turret Components", meta = (AllowPrivateAccess = "true"))
 		UStaticMeshComponent* TurretMesh;
 
-	bool bAlive = true;
-
-protected:
-	virtual void BeginPlay();
-
-public:
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float TurnRateGamepad;
@@ -41,11 +41,21 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Interaction")
 	FOnUseItem OnUseItem;
 
+	
 	virtual void HandleDestruction();
 	virtual void Fire();
 	void RotateToCharacter(FVector LookAtTarget);
 	void MoveForward(float Val);
 	void MoveRight(float Val);
+	void SetGrabber(UGrabber* Grabber);
+	void SetThrower(UThrower* Thrower);
+
+	AActor* ActorGrabbed = nullptr;
+	UGrabber* PlayerGrabber = nullptr;
+	UThrower* PlayerThrower = nullptr;
+	bool bAlive = true;
+
+
 
 protected:
 

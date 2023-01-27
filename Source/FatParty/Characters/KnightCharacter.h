@@ -26,21 +26,12 @@ public:
 	virtual void HandleDestruction() override;
 
 	APlayerController* GetTankPlayerController() const { return KnightPlayerController; }
-
-	void SetGrabber(UGrabber* Grabber);
-	void SetThrower(UThrower* Thrower);
-	void Turn(float Value);
-
-	AActor* ActorGrabbed = nullptr;
-	UGrabber* PlayerGrabber = nullptr;
-	UThrower* PlayerThrower = nullptr;
-
+	
 	bool bHadJumped = false;
 	float Distance = 0.f;
 		
 protected:
 	virtual void BeginPlay() override;
-	virtual void Fire() override;
 	
 private:
 	APlayerController* KnightPlayerController;
