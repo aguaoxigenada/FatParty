@@ -16,6 +16,11 @@ class FATPARTY_API AKnightCharacter : public AFatPartyCharacter
 public:
 	AKnightCharacter();
 
+	UPROPERTY(EditAnywhere)
+		UAnimMontage* AttackAnim = nullptr;
+
+	void CharacterAttack();
+
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void Tick(float DeltaTime) override;
 	virtual void HandleDestruction() override;

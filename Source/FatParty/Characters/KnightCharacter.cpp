@@ -4,6 +4,9 @@
 #include "DrawDebugHelpers.h"
 #include "FatParty/Actors/Projectile.h"
 #include "FatParty/Components/Thrower.h"
+#include "FatParty/Controllers/ThePlayerController.h"
+#include "Kismet/KismetMathLibrary.h"
+
 
 AKnightCharacter::AKnightCharacter()
 {
@@ -18,6 +21,7 @@ void AKnightCharacter::BeginPlay()
 
 void AKnightCharacter::Fire()
 {
+
 	AKnightCharacter* KnightCharacter = Cast<AKnightCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
 	if (KnightCharacter->ActorGrabbed == nullptr)
 	{
@@ -36,9 +40,12 @@ void AKnightCharacter::Fire()
 		if (KnightCharacter->ActorGrabbed != nullptr && PlayerThrower)
 		{
 			PlayerThrower->Throw();
+			PlayAnimMontage(AttackAnim);
 		}
 	}
 }
+
+
 
 void AKnightCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -52,7 +59,7 @@ void AKnightCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("MoveRight", this, &AFatPartyCharacter::MoveRight);
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &AFatPartyCharacter::Turn);
 
-	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &AFatPartyCharacter::Fire);
+	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &AKnightCharacter::CharacterAttack);
 
 }
 
@@ -77,6 +84,7 @@ void AKnightCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	
 	if(KnightPlayerController)
 	{
 		FHitResult HitResult;
@@ -84,9 +92,31 @@ void AKnightCharacter::Tick(float DeltaTime)
 			ECC_Visibility, 
 			false,
 			HitResult);
+	
+		/*
+			// Mouse position
+		AKnightCharacter* ArcherCharacter = Cast<AKnightCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
+		FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(ArcherCharacter->GetActorLocation(), HitResult.ImpactPoint);
+		//break rotation sacar el vector de yaw y mandarlo.
 
-		RotateToCharacter(HitResult.ImpactPoint);
+
+		//FRotator RotateTo = FRotator(0, LookAtRotation.Pitch, 0);
+
+		FVector RotateToVector =  FVector(0, LookAtRotation.Pitch, 0);
+
+		
+		*/
+	//	RotateToCharacter(HitResult.ImpactPoint);
 	
 		// DrawDebugSphere(GetWorld(), HitResult.ImpactPoint,25.f,	12,	FColor::Blue,false,	-1.f);
+
+		//CharacterMouseRotator();
 	}
+	
+}
+
+void AKnightCharacter::CharacterAttack() 
+{
+	PlayAnimMontage(AttackAnim);
+
 }
