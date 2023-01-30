@@ -58,6 +58,7 @@ void UHealthComponent::DamageTaken(AActor* DamagedActor, float Damage, const UDa
 	Health -= Damage;
 
 	OnPlayerDamaged.Broadcast();
+	OnObjectDamaged.Broadcast();
 	
 	if(Health <= 0 && FatPartyGameMode && bPlayerAlive)
 	{
@@ -71,8 +72,7 @@ void UHealthComponent::DamageTaken(AActor* DamagedActor, float Damage, const UDa
 			GetWorld()->GetTimerManager().SetTimer(TimerHandleToOpenInGameMenu, this, &UHealthComponent::OpenInGameMenu, Delay, false );
 
 			bPlayerAlive = false;
-		}
-		
+		}		
 	}
 
 	//UE_LOG(LogTemp, Warning, TEXT("Health: %f of %s"), Health, *DamagedActor->GetName());

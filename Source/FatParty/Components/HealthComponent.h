@@ -9,6 +9,7 @@ class UHudWidget;
 class AFatPartyGameMode;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerDamaged);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnObjectDamaged);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class FATPARTY_API UHealthComponent : public UActorComponent
@@ -24,6 +25,9 @@ public:
 
 	UPROPERTY()
 		FOnPlayerDamaged OnPlayerDamaged;
+
+	UPROPERTY()
+		FOnObjectDamaged OnObjectDamaged;
 
 protected:
 	virtual void BeginPlay() override;

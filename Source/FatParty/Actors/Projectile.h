@@ -14,7 +14,7 @@ class FATPARTY_API AProjectile : public AActor
 public:
 	// Sets default values for this actor's properties
 	AProjectile();
-
+	virtual void Tick(float DeltaTime) override;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -43,12 +43,7 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 		USoundBase* HitSound;
-	// cuando se hace un forward declaration sirve para todos los mismos tipos de variable.
 	
 	UPROPERTY(EditAnywhere, Category = "Combat")
 		TSubclassOf<class UCameraShakeBase>HitCameraShakeClass;
-	
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 };

@@ -1,4 +1,6 @@
 #include "FatPartyGameMode.h"
+
+#include "FatParty/Actors/DestructibleObject.h"
 #include "Kismet/GameplayStatics.h"
 #include "FatParty/Actors/Tower.h"
 #include "FatParty/Characters/KnightCharacter.h"
@@ -30,6 +32,10 @@ void AFatPartyGameMode::ActorDied(AActor *DeadActor)
         {
             GameOver(true);
         }*/    
+    }
+    else if(ADestructibleObject* DestroyedObject = Cast<ADestructibleObject>(DeadActor))
+    {
+	    DestroyedObject->HandleDestruction();
     }
 }
 
