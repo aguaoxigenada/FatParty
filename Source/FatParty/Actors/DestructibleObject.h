@@ -15,7 +15,7 @@ class FATPARTY_API ADestructibleObject : public AActor
 public:
 	ADestructibleObject();
 	void HandleDestruction();
-	//virtual void Tick(float DeltaTime) override;
+
 protected:
 	virtual void BeginPlay() override;
 

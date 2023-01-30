@@ -21,12 +21,6 @@ class AFatPartyCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-	
-
-protected:
-	virtual void BeginPlay();
-
-public:
 	AFatPartyCharacter();
 	void Turn(float Value);
 
@@ -41,14 +35,15 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Interaction")
 	FOnUseItem OnUseItem;
 
-	
 	virtual void HandleDestruction();
+	virtual void Tick(float DeltaTime) override;
 	virtual void Fire();
 	void RotateToCharacter(FVector LookAtTarget);
 	void MoveForward(float Val);
 	void MoveRight(float Val);
 	void SetGrabber(UGrabber* Grabber);
 	void SetThrower(UThrower* Thrower);
+	void StartJump();
 
 	AActor* ActorGrabbed = nullptr;
 	UGrabber* PlayerGrabber = nullptr;
@@ -57,7 +52,9 @@ public:
 
 
 
+
 protected:
+	virtual void BeginPlay();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Turret Components")
 		UStaticMeshComponent* WeaponMesh;
@@ -85,6 +82,9 @@ private:
 		class UCameraComponent* Camera;
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
+		float TimeToDie = 4.f;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
 		class UParticleSystem* DeathParticles;
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
@@ -100,5 +100,9 @@ private:
 	/** Camera boom positioning the camera above the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
+	
+	UCharacterMovementComponent* MovementComponent;
+
+	float JumpTime = 0.f;
 };
 

@@ -37,14 +37,13 @@ AFatPartyCharacter::AFatPartyCharacter()
 	// Configure character movement
 	GetCharacterMovement()->bOrientRotationToMovement = true;             // Character moves in the direction of input...	
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f);  // ...at this rotation rate
-	//GetCharacterMovement()->JumpZVelocity = 600.f;
 	GetCharacterMovement()->AirControl = 0.2f;
 
+	MovementComponent = GetCharacterMovement();
 }
 
 void AFatPartyCharacter::BeginPlay()
 {
-	// Call the base class  
 	Super::BeginPlay();
 
 	if(HasAuthority())
@@ -52,6 +51,29 @@ void AFatPartyCharacter::BeginPlay()
 		SetReplicates(true);
 		SetReplicateMovement(true);
 	}
+}
+
+void AFatPartyCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if(MovementComponent->IsFalling())
+	{
+		float ActualTime = UKismetSystemLibrary::GetGameTimeInSeconds(this);
+
+		if(ActualTime - JumpTime >= TimeToDie)
+		{
+			AController* MyOwnerInstigator = this->GetInstigatorController();
+			UClass* DamageTypeClass = UDamageType::StaticClass();
+			UGameplayStatics::ApplyDamage(this, 1000, MyOwnerInstigator, this, DamageTypeClass);
+		}
+	}
+}
+
+void AFatPartyCharacter::StartJump()
+{
+	JumpTime = UKismetSystemLibrary::GetGameTimeInSeconds(this);
+	Jump();
 }
 
 void AFatPartyCharacter::SetGrabber(UGrabber* Grabber)
@@ -93,9 +115,6 @@ void AFatPartyCharacter::Fire()
 
 }
 
-/*
- 
- */
 void AFatPartyCharacter::RotateToCharacter(FVector LookAtTarget)   // hay que cambiar esto para que rote el body
 {
 	USkeletalMeshComponent* SkeletalMesh = GetMesh();
@@ -125,25 +144,6 @@ void AFatPartyCharacter::Turn(float Value)
 	AddActorLocalRotation(DeltaRotation, true);
 
 }
-
-/*
-void AFatPartyCharacter::MoveForward(float Value)
-{
-	if (Value != 0.0f)
-	{
-		AddMovementInput(GetActorForwardVector(), Value * Speed);
-	}
-}
-
-void AFatPartyCharacter::MoveRight(float Value)
-{
-	if (Value != 0.0f)
-	{
-		AddMovementInput(GetActorRightVector(), Value * Speed);
-	}
-}
- */
-
 
 void AFatPartyCharacter::MoveForward(float Value)
 {
