@@ -1,13 +1,14 @@
 #include "HudWidget.h"
+#include "Components/TextBlock.h"
 #include "FatParty/FatPartyCharacter.h"
 #include "FatParty/Components/HealthComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 void UHudWidget::NativeOnInitialized()
 {
-	Super::OnInitialized();
-
 	Character = Cast<AFatPartyCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
+
+	HudTimer = (UTextBlock*)(WidgetTree->FindWidget(FName(TEXT("Timer"))));
 
 	if(AFatPartyCharacter* FatCharacter = Character ? Cast<AFatPartyCharacter>(Character) : nullptr)
 	{
@@ -28,8 +29,50 @@ void UHudWidget::NativeOnInitialized()
 
 	}
 
+	GameTimer();
 }
 
+void UHudWidget::GameTimer()
+{
+	FTimerDelegate GameOverTimerDelegate = FTimerDelegate::CreateUObject(
+		this,												   // Clase a utilizar
+		&UHudWidget::PlayerLost                                // Funcion de la clase
+														       // Parametro pasado a la clase (si se quiere)
+	);
+	
+	// Start Repeating function
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UHudWidget::RepeatingVisualTimer, 1.0f, true, 0.f);
+	
+	// Start GameOverTimer
+	GetWorld()->GetTimerManager().SetTimer(
+		GameOverTimerHandle,
+		GameOverTimerDelegate,                           
+		TimerCount,
+		false
+	);
+
+}
+
+void UHudWidget::RepeatingVisualTimer()
+{
+	if (HealthComp->GetHealth() <= 0/*|| PlayerWon*/ )
+	{
+		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+	}
+	
+	TimerCount--;
+
+	// Setear el timer al Texto
+	HudTimer->SetText(FText::FromString(FString::FromInt(TimerCount)));
+
+}
+
+void UHudWidget::PlayerLost()
+{
+	// kill player
+	UE_LOG(LogTemp, Warning, TEXT("PlayerShouldDie!"));
+
+}
 
 void UHudWidget::PlayerDamaged()
 {

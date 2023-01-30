@@ -51,8 +51,6 @@ public:
 	bool bAlive = true;
 
 
-
-
 protected:
 	virtual void BeginPlay();
 

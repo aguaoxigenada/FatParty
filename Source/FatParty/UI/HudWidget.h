@@ -2,8 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Blueprint/WidgetTree.h"
 #include "HudWidget.generated.h"
 
+class UTextBlock;
 class UHealthComponent;
 class AFatPartyCharacter;
 class UProgressBar;
@@ -22,11 +24,25 @@ public:
 protected:
 	virtual void NativeOnInitialized() override;
 
-
 private:
 	UPROPERTY()
 		AFatPartyCharacter* Character;
 
+	UPROPERTY()
+		UTextBlock* HudTimer;
+
+	UPROPERTY(EditAnywhere)
+		float TimerCount = 240;
+
+	void RepeatingVisualTimer();
+	void PlayerLost();
+	void GameTimer();
+
 	UHealthComponent* HealthComp;
+
+	FTimerHandle TimerHandle;
+	FTimerHandle GameOverTimerHandle;
+
+
 
 };
