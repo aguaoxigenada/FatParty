@@ -35,6 +35,11 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Interaction")
 	FOnUseItem OnUseItem;
 
+<<<<<<< Updated upstream
+=======
+
+	
+>>>>>>> Stashed changes
 	virtual void HandleDestruction();
 	virtual void Tick(float DeltaTime) override;
 	virtual void Fire();

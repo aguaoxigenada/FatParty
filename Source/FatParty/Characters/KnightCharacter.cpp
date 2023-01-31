@@ -3,17 +3,30 @@
 #include "Kismet/GameplayStatics.h"
 #include "FatParty/Components/Thrower.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Components/CapsuleComponent.h"
 
 
 AKnightCharacter::AKnightCharacter()
 {
 	//PrimaryActorTick.bCanEverTick = true;
+	Body = GetMesh();
+
+	Weapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Blade"));
+	Weapon->SetupAttachment(Body);
+
+	
+
+
+	HitPoint = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Hit Point"));
+	HitPoint->SetupAttachment(Weapon);
+
 }
 
 void AKnightCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	KnightPlayerController = Cast<APlayerController>(GetController());
+	Weapon->AttachToComponent(Body,FAttachmentTransformRules::KeepRelativeTransform, TEXT("RightHandSocket"));
 }
 
 

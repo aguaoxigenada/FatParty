@@ -19,6 +19,20 @@ public:
 	UPROPERTY(EditAnywhere)
 		UAnimMontage* AttackAnim = nullptr;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Weapon")
+		UStaticMeshComponent* Weapon = nullptr;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		USkeletalMeshComponent* Body = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		UCapsuleComponent* HitPoint = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool Holding = false;
+
+	
+
+
 	void CharacterAttack();
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
