@@ -74,6 +74,7 @@ void AFatPartyCharacter::StartJump()
 {
 	JumpTime = UKismetSystemLibrary::GetGameTimeInSeconds(this);
 	Jump();
+	PlayAnimMontage(JumpAnim);
 }
 
 void AFatPartyCharacter::SetGrabber(UGrabber* Grabber)

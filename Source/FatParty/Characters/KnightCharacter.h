@@ -19,6 +19,9 @@ public:
 	UPROPERTY(EditAnywhere)
 		UAnimMontage* AttackAnim = nullptr;
 
+	UPROPERTY(EditAnywhere)
+		float Damage = 50.f;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Weapon")
 		UStaticMeshComponent* Weapon = nullptr;
 
@@ -29,6 +32,9 @@ public:
 		UCapsuleComponent* HitPoint = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool Holding = false;
+
+	UFUNCTION()
+		void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 	
 

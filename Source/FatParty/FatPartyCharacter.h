@@ -22,6 +22,9 @@ class AFatPartyCharacter : public ACharacter
 
 public:
 	AFatPartyCharacter();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UAnimMontage* JumpAnim = nullptr;
+
 	void Turn(float Value);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Turret Components", meta = (AllowPrivateAccess = "true"))
@@ -35,11 +38,6 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Interaction")
 	FOnUseItem OnUseItem;
 
-<<<<<<< Updated upstream
-=======
-
-	
->>>>>>> Stashed changes
 	virtual void HandleDestruction();
 	virtual void Tick(float DeltaTime) override;
 	virtual void Fire();

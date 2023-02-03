@@ -27,6 +27,8 @@ void AKnightCharacter::BeginPlay()
 	Super::BeginPlay();
 	KnightPlayerController = Cast<APlayerController>(GetController());
 	Weapon->AttachToComponent(Body,FAttachmentTransformRules::KeepRelativeTransform, TEXT("RightHandSocket"));
+
+	Weapon->OnComponentHit.AddDynamic(this, &AKnightCharacter::OnHit);
 }
 
 
@@ -70,7 +72,23 @@ void AKnightCharacter::Tick(float DeltaTime)
 	
 }
 
-void AKnightCharacter::CharacterAttack() 
+void AKnightCharacter::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	auto MyOwner = GetOwner();
+	if (MyOwner == nullptr)
+	{
+		Destroy();
+		return;
+	}
+
+	AController* MyOwnerInstigator = MyOwner->GetInstigatorController();
+	UClass* DamageTypeClass = UDamageType::StaticClass();
+	if (OtherActor && OtherActor != this && OtherActor != MyOwner) {
+		UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwnerInstigator, this, DamageTypeClass);
+	}
+}
+
+void AKnightCharacter::CharacterAttack()
 {
 	AKnightCharacter* KnightCharacter = Cast<AKnightCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
 
