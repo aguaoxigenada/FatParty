@@ -17,8 +17,8 @@ AKnightCharacter::AKnightCharacter()
 	
 
 
-	HitPoint = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Hit Point"));
-	HitPoint->SetupAttachment(Weapon);
+	//HitPoint = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Hit Point"));
+	//HitPoint->SetupAttachment(Weapon);
 
 }
 

@@ -28,8 +28,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		USkeletalMeshComponent* Body = nullptr;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		UCapsuleComponent* HitPoint = nullptr;
+	/*UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		UCapsuleComponent* HitPoint = nullptr;*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool Holding = false;
 
