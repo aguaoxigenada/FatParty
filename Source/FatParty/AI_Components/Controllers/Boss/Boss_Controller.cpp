@@ -10,8 +10,11 @@
 #include "AIModule/Classes/BehaviorTree/Blackboard/BlackboardKeyType_Bool.h"
 #include "AIModule/Classes/BehaviorTree/BehaviorTreeComponent.h"
 #include "AIModule/Classes/BehaviorTree/Blackboard/BlackboardKeyType_Object.h"
-
-
+#include "AIModule/Classes/BehaviorTree/Blackboard/BlackboardKeyType_Int.h"
+#include "AIModule/Classes/BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
+#include "FatParty/AI_Components/AI_BossCharacter.h"
+#include "FatParty/Components/HealthComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 
 ABoss_Controller::ABoss_Controller() : Super()
@@ -29,13 +32,40 @@ ABoss_Controller::ABoss_Controller() : Super()
 	 PerceptionComponent->ConfigureSense(*SightConfig);
 	 PerceptionComponent->SetDominantSense(SightConfig->GetSenseImplementation());
 
+
+
 }
 
 void ABoss_Controller::BeginPlay()
 {
 	Super::BeginPlay();
+	ChangeBossState(1);
 	PerceptionComponent->OnTargetPerceptionUpdated.AddUniqueDynamic(this, &ABoss_Controller::OnTargetPerceptionUpdated);
+	
+	if (AAI_BossCharacter* BossCharacter = Cast<AAI_BossCharacter>(this->GetPawn()))
+	{;
+	BossCharacter->OnTakeAnyDamage.AddUniqueDynamic(this,&ABoss_Controller::OnTakeAnyDamage);
+
+	}
 }
+
+void ABoss_Controller::OnTakeAnyDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType,
+	AController* InstigatedBy, AActor* DamageCauser)
+{
+	if (AAI_BossCharacter* BossCharacter = Cast<AAI_BossCharacter>(this->GetPawn()))
+	{
+		if (BossCharacter->GetHealthComponent()->GetHealth() >= 60)
+		{
+			ChangeBossState(1);
+		}
+
+		if (BossCharacter->GetHealthComponent()->GetHealth() < 60)
+		{
+			ChangeBossState(2);
+		}
+	}
+}
+
 
 void ABoss_Controller::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 {
@@ -51,6 +81,10 @@ void ABoss_Controller::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stim
 
 			Lastposition = Stimulus.StimulusLocation;
 			TargetActor = Actor;
+			BehaviorTreeComponent->GetBlackboardComponent()->SetValue<UBlackboardKeyType_Object>("TargetActor", TargetActor.Get());
+			BehaviorTreeComponent->GetBlackboardComponent()->SetValue<UBlackboardKeyType_Bool>("bPlayerDetected", true);
+			BehaviorTreeComponent->GetBlackboardComponent()->SetValue<UBlackboardKeyType_Vector>("MoveToLocation", Lastposition);
+			//ChangeBossState(1);
 		}
 		else
 		{
@@ -73,7 +107,7 @@ void ABoss_Controller::OnPlayerLostFromSight()
 
 	TargetActor = nullptr;
 	BehaviorTreeComponent->GetBlackboardComponent()->SetValue<UBlackboardKeyType_Object>("TargetActor", nullptr);
-
+	
 }
 
 void ABoss_Controller::OnPlayerHasBeenDetected()
@@ -84,5 +118,33 @@ void ABoss_Controller::OnPlayerHasBeenDetected()
 	}
 
 	BehaviorTreeComponent->GetBlackboardComponent()->SetValue<UBlackboardKeyType_Object>("TargetActor", TargetActor.Get());
+
+
+}
+
+void ABoss_Controller::ChangeBossState(int stateValue)
+{
+	AAI_BossCharacter* BossCharacter = Cast<AAI_BossCharacter>(this->GetPawn());
+	if(BossCharacter)
+	{
+		if(stateValue != BossCharacter->BossStateValue)
+		{
+
+			BossCharacter->BossStateValue = stateValue;
+
+			BehaviorTreeComponent->GetBlackboardComponent()->SetValue<UBlackboardKeyType_Int>("BossPhase", stateValue);
+
+			if (stateValue == 1)
+			{
+				BossCharacter->GetCharacterMovement()->MaxWalkSpeed = 200.f;
+			}
+			else if (stateValue == 2)
+			{
+				BossCharacter->GetCharacterMovement()->MaxWalkSpeed = 400.f;
+			}
+		}
+
+	}
+	
 
 }

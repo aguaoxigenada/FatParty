@@ -27,12 +27,21 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+
+public:
+	UFUNCTION()
+		void OnTakeAnyDamage(AActor*  DamagedActor , float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+
+
 private:
 	UFUNCTION()
 		void OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
 
+
+
 	void OnPlayerLostFromSight();
 	void OnPlayerHasBeenDetected();
+	void ChangeBossState(int stateValue);
 
 	TWeakObjectPtr<AActor> TargetActor = nullptr;
 	FVector Lastposition = FVector();
