@@ -12,13 +12,13 @@ void AFatPartyGameMode::ActorDied(AActor *DeadActor)
 
     // Se revisa desde el modo de juego si murio el personaje o si murieron todas las torretas
 
-    if (DeadActor == KnightCharacter)
+    if (DeadActor == FatPartyCharacter)
     {
         // HandleDestruction() se encuentra en FatPartyCharacter.
-        KnightCharacter->HandleDestruction();
-        if (KnightPlayerController)
+        FatPartyCharacter->HandleDestruction();
+        if (PlayerController)
         {
-            KnightPlayerController->SetPlayerEnabledState(false);
+            PlayerController->SetPlayerEnabledState(false);
         }
         //GameOver(false);
 
@@ -52,22 +52,22 @@ void AFatPartyGameMode::HandleGameStart()
 {
     // Calcula y retorna la cantidad de torres actual en el escenario
     TargetTowers = GetTargetTowerCount();
-    KnightCharacter = Cast<AKnightCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
-    KnightPlayerController = Cast<AThePlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+    FatPartyCharacter = Cast<AFatPartyCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
+    PlayerController = Cast<AThePlayerController>(UGameplayStatics::GetPlayerController(this, 0));
 
     // Llama al evento creado en el EventGraph
     StartGame();
 
-    if (KnightPlayerController)
+    if (PlayerController)
     {
-        KnightPlayerController->SetPlayerEnabledState(false);
+        PlayerController->SetPlayerEnabledState(false);
 
         // Se necesita para poder usar el FTimerDelegate
         FTimerHandle PlayerEnableTimerHandle;
         
         // El delegate permite crear un objeto, que puede anexar a una funcion directamente.
         FTimerDelegate PlayerEnableTimerDelegate = FTimerDelegate::CreateUObject(
-            KnightPlayerController,                               // clase a utilizar
+            PlayerController,                               // clase a utilizar
             &AThePlayerController::SetPlayerEnabledState,            // funcion de la clase
             true                                                     // parametro pasado a la clase
         );

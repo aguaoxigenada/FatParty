@@ -4,9 +4,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "FatPartyGameMode.generated.h"
 
-
-class ATank;
-class AKnightCharacter;
+class AFatPartyCharacter;
 class AThePlayerController;
 
 UCLASS()
@@ -32,9 +30,9 @@ public:
 	class ABaseCharacter* BaseCharacter;
 
 private:
-	AKnightCharacter* KnightCharacter;
-	AThePlayerController* KnightPlayerController;
-	ATank* Tank;
+	AFatPartyCharacter* FatPartyCharacter;
+	AThePlayerController* PlayerController;
+
 	float StartDelay = 3.f;
 
 	void HandleGameStart();	
