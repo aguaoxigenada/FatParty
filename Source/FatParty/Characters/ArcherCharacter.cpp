@@ -32,7 +32,7 @@ void AArcherCharacter::Fire()
 
 		//  Se utiliza para que el projectile sea su propio Actor al ser disparado y no forme parte del tanque / torreta.
 		Projectile->SetOwner(this);
-	}
+	} 
 
 	if (ArcherCharacter)
 	{

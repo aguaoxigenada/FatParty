@@ -8,7 +8,7 @@ class UFatPartyGameInstance;
 class UHudWidget;
 class AFatPartyGameMode;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerDamaged);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHealthChange);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnObjectDamaged);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -19,12 +19,13 @@ class FATPARTY_API UHealthComponent : public UActorComponent
 public:	
 	UHealthComponent();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	void AddHealth(float HealthToAdd);
 
 	UFUNCTION(BlueprintCallable)
 		float GetHealth();
 
 	UPROPERTY()
-		FOnPlayerDamaged OnPlayerDamaged;
+		FOnHealthChange OnHealthChange;
 
 	UPROPERTY()
 		FOnObjectDamaged OnObjectDamaged;

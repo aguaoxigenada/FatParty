@@ -5,6 +5,7 @@
 #include "GameFramework/InputSettings.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "TimerManager.h"
 
 AFatPartyCharacter::AFatPartyCharacter()
 {
@@ -51,6 +52,17 @@ void AFatPartyCharacter::BeginPlay()
 		SetReplicates(true);
 		SetReplicateMovement(true);
 	}
+}
+
+void AFatPartyCharacter::StartExtraSpeedTimer()
+{
+	FTimerHandle TimerHandleToOpenInGameMenu;
+	GetWorldTimerManager().SetTimer(TimerHandleToOpenInGameMenu, this, &AFatPartyCharacter::StopExtraSpeed, TimeDelay, false );
+}
+
+void AFatPartyCharacter::StopExtraSpeed()
+{
+	MovementComponent->MaxWalkSpeed = 600;
 }
 
 void AFatPartyCharacter::Tick(float DeltaTime)

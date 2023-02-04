@@ -4,6 +4,9 @@
 #include "GameFramework/Actor.h"
 #include "DestructibleObject.generated.h"
 
+class ASpeedPowerUp;
+class ALifePowerUp;
+class ABasePowerUp;
 class UHealthComponent;
 class USoundBase;
 
@@ -15,6 +18,7 @@ class FATPARTY_API ADestructibleObject : public AActor
 public:
 	ADestructibleObject();
 	void HandleDestruction();
+	void SetObjectToDrop(ABasePowerUp* PickedItem);
 
 protected:
 	virtual void BeginPlay() override;
@@ -38,8 +42,15 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Object")
 		USoundBase* DeathSound;
 
+	UPROPERTY(EditAnywhere, Category = "Drop Object")
+		ABasePowerUp* ObjectToDrop;
+
+	UPROPERTY()
+		UClass* GenericBuildingClass;
+
 	UFUNCTION()
 		void HitMesh(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit );
+
 
 	float Velocity = 0.f;
 	UHealthComponent* HealthComp;

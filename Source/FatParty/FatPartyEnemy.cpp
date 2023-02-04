@@ -1,5 +1,4 @@
 #include "FatPartyEnemy.h"
-
 #include "Kismet/GameplayStatics.h"
 
 AFatPartyEnemy::AFatPartyEnemy()

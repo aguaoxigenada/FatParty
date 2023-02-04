@@ -25,7 +25,7 @@ void UHudWidget::NativeOnInitialized()
 			}
 		}
 
-		HealthComp->OnPlayerDamaged.AddDynamic(this, &UHudWidget::PlayerDamaged);
+		HealthComp->OnHealthChange.AddDynamic(this, &UHudWidget::PlayerDamaged);
 
 	}
 
@@ -69,9 +69,9 @@ void UHudWidget::RepeatingVisualTimer()
 
 void UHudWidget::PlayerLost()
 {
-	// kill player
-	UE_LOG(LogTemp, Warning, TEXT("PlayerShouldDie!"));
-
+	AController* MyOwnerInstigator = Character->GetInstigatorController();
+	UClass* DamageTypeClass = UDamageType::StaticClass();
+	UGameplayStatics::ApplyDamage(Character, 1000, MyOwnerInstigator, Character, DamageTypeClass);
 }
 
 void UHudWidget::PlayerDamaged()

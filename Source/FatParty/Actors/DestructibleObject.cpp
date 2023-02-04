@@ -1,6 +1,7 @@
 #include "DestructibleObject.h"
 #include "FatParty/FatPartyEnemy.h"
 #include "Kismet/GameplayStatics.h"
+#include "PowerUps/BasePowerUp.h"
 
 ADestructibleObject::ADestructibleObject()
 {
@@ -40,7 +41,22 @@ void ADestructibleObject::HandleDestruction()
 		UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation());
 	}
 
+	if(ObjectToDrop != nullptr)
+	{
+		GenericBuildingClass = ObjectToDrop->GetClass();
+		ABasePowerUp* BuildingToProspect =	GetWorld()->SpawnActor<ABasePowerUp>(GenericBuildingClass, this->GetActorLocation(), this->GetActorRotation());
+
+		if(BuildingToProspect == nullptr) return;
+
+		BuildingToProspect->SetOwner(this);
+	}
+
 	Destroy();
+}
+
+void ADestructibleObject::SetObjectToDrop(ABasePowerUp* PickedItem)
+{
+	ObjectToDrop = PickedItem;
 }
 
 

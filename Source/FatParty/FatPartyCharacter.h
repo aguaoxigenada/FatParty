@@ -4,6 +4,7 @@
 #include "GameFramework/Character.h"
 #include "FatPartyCharacter.generated.h"
 
+class ASpeedPowerUp;
 class UThrower;
 class UGrabber;
 class UInputComponent;
@@ -47,6 +48,7 @@ public:
 	void SetGrabber(UGrabber* Grabber);
 	void SetThrower(UThrower* Thrower);
 	void StartJump();
+	void StartExtraSpeedTimer();
 
 	AActor* ActorGrabbed = nullptr;
 	UGrabber* PlayerGrabber = nullptr;
@@ -101,9 +103,13 @@ private:
 	/** Camera boom positioning the camera above the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
-	
+
+	void StopExtraSpeed();
+
 	UCharacterMovementComponent* MovementComponent;
+	ASpeedPowerUp* SpeedComp;
 
 	float JumpTime = 0.f;
+	float TimeDelay = 3.f;
 };
 

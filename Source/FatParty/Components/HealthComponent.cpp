@@ -57,7 +57,7 @@ void UHealthComponent::DamageTaken(AActor* DamagedActor, float Damage, const UDa
 
 	Health -= Damage;
 
-	OnPlayerDamaged.Broadcast();
+	OnHealthChange.Broadcast();
 	OnObjectDamaged.Broadcast();
 	
 	if(Health <= 0 && FatPartyGameMode && bPlayerAlive)
@@ -84,4 +84,20 @@ void UHealthComponent::OpenInGameMenu()
 	UInGameMenu* InGameMenu = Cast<UInGameMenu>(GameInstance->GetInGameMenu());
 	        
 	InGameMenu->EndLevelScreen(false);
+}
+
+void UHealthComponent::AddHealth(float HealthToAdd)
+{
+	float NewHealth = Health + HealthToAdd;
+
+	if(NewHealth > MaxHealth)
+	{
+		Health = MaxHealth;
+	}
+	else
+	{
+		Health += HealthToAdd;
+	}
+
+	OnHealthChange.Broadcast();
 }
