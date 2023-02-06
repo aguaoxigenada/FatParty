@@ -12,6 +12,8 @@
 #include "AIModule/Classes/BehaviorTree/Blackboard/BlackboardKeyType_Object.h"
 #include "AIModule/Classes/BehaviorTree/Blackboard/BlackboardKeyType_Int.h"
 #include "AIModule/Classes/BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
+#include "BehaviorTree/Blackboard/BlackboardKeyType_Float.h"
+#include "FatParty/FatPartyCharacter.h"
 #include "FatParty/AI_Components/AI_BossCharacter.h"
 #include "FatParty/Components/HealthComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -33,6 +35,17 @@ ABoss_Controller::ABoss_Controller() : Super()
 	 PerceptionComponent->SetDominantSense(SightConfig->GetSenseImplementation());
 
 
+
+}
+
+void ABoss_Controller::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	if(currentBossState == 2)
+	{
+		HandleDistanceToPlayer();
+	}
 
 }
 
@@ -129,10 +142,10 @@ void ABoss_Controller::ChangeBossState(int stateValue)
 	{
 		if(stateValue != BossCharacter->BossStateValue)
 		{
-
+			currentBossState = stateValue;
+			BehaviorTreeComponent->GetBlackboardComponent()->SetValue<UBlackboardKeyType_Int>("BossPhase", currentBossState);
+		
 			BossCharacter->BossStateValue = stateValue;
-
-			BehaviorTreeComponent->GetBlackboardComponent()->SetValue<UBlackboardKeyType_Int>("BossPhase", stateValue);
 
 			if (stateValue == 1)
 			{
@@ -147,4 +160,16 @@ void ABoss_Controller::ChangeBossState(int stateValue)
 	}
 	
 
+}
+
+void ABoss_Controller::HandleDistanceToPlayer()
+{
+	AAI_BossCharacter* BossCharacter = Cast<AAI_BossCharacter>(this->GetPawn());
+	AFatPartyCharacter* PlayerRef = Cast<AFatPartyCharacter>(TargetActor);
+	if(PlayerRef && BossCharacter)
+	{
+		float distance = FMath::Abs( BossCharacter->GetDistanceTo(PlayerRef));
+		BehaviorTreeComponent->GetBlackboardComponent()->SetValue<UBlackboardKeyType_Float>("DistanceToTarget", distance);
+
+	}
 }

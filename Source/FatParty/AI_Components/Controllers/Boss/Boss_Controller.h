@@ -22,10 +22,12 @@ public:
 
 	ABoss_Controller();
 
-	
+	virtual void Tick(float DeltaSeconds) override;
 
 protected:
 	virtual void BeginPlay() override;
+
+	int currentBossState = 0;
 
 
 public:
@@ -42,6 +44,7 @@ private:
 	void OnPlayerLostFromSight();
 	void OnPlayerHasBeenDetected();
 	void ChangeBossState(int stateValue);
+	void HandleDistanceToPlayer();
 
 	TWeakObjectPtr<AActor> TargetActor = nullptr;
 	FVector Lastposition = FVector();
