@@ -107,7 +107,7 @@ void AKnightCharacter::CharacterAttack()
 		PlayerThrower = Cast<UThrower>(KnightCharacter->PlayerThrower);
 		if (KnightCharacter->ActorGrabbed != nullptr && PlayerThrower)
 		{
-			PlayerThrower->Throw();
+			PlayerThrower->Server_Throw();
 		}
 
 		else

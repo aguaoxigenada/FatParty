@@ -7,6 +7,16 @@ UThrower::UThrower()
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
+void UThrower::Server_Throw_Implementation()
+{
+	Multicast_Throw();
+}
+
+void UThrower::Multicast_Throw_Implementation()
+{
+	Throw();
+}
+
 void UThrower::Throw()
 {
 	AFatPartyCharacter* Player = Cast<AFatPartyCharacter>(GetOwner());

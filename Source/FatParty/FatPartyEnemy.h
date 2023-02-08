@@ -12,6 +12,11 @@ class FATPARTY_API AFatPartyEnemy : public ACharacter
 public:
 	AFatPartyEnemy();
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(Server, Unreliable)
+		void Server_HandleDestruction();
+	UFUNCTION(NetMulticast, Unreliable)
+		void Multicast_HandleDestruction();
 	virtual void HandleDestruction();
 
 protected:

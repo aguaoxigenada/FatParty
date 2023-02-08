@@ -15,6 +15,11 @@ void ADestructibleObject::BeginPlay()
 
 	ObjectMesh->OnComponentHit.AddDynamic(this, &ADestructibleObject::HitMesh);
 
+	if (HasAuthority())
+	{
+		SetReplicates(true);
+		SetReplicateMovement(true);
+	}
 }
 
 void ADestructibleObject::HitMesh(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,

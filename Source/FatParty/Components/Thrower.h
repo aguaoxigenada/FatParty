@@ -13,6 +13,11 @@ public:
 
 	UThrower();
 
+
+	UFUNCTION(Server, Unreliable)
+		void Server_Throw();
+	UFUNCTION(NetMulticast, Unreliable)
+		void Multicast_Throw();
 	UFUNCTION(BlueprintCallable)
 		void Throw();
 	UPROPERTY(EditAnywhere)

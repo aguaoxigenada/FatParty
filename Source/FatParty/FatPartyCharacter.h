@@ -39,7 +39,11 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Interaction")
 	FOnUseItem OnUseItem;
 
+
+
 	virtual void HandleDestruction();
+
+
 	virtual void Tick(float DeltaTime) override;
 	virtual void Fire();
 	void RotateToCharacter(FVector LookAtTarget);

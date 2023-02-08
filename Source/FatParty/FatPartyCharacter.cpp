@@ -109,6 +109,7 @@ void AFatPartyCharacter::SetThrower(UThrower* Thrower)
 	PlayerThrower = Thrower;
 }
 
+
 void AFatPartyCharacter::HandleDestruction()
 {
 	// 1. Chequeo de Seguridad que existe el puntero en todos los ifs.

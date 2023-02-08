@@ -13,15 +13,19 @@ void AFatPartyEnemy::Tick(float DeltaTime)
 
 }
 
+void AFatPartyEnemy::Server_HandleDestruction_Implementation()
+{
+	Multicast_HandleDestruction();
+}
+
 void AFatPartyEnemy::BeginPlay()
 {
     Super::BeginPlay();
 
 }
 
-void AFatPartyEnemy::HandleDestruction()
+void AFatPartyEnemy::Multicast_HandleDestruction_Implementation()
 {
-
 	if (DeathParticles)
 	{
 		UGameplayStatics::SpawnEmitterAtLocation(this, DeathParticles, GetActorLocation(), GetActorRotation());
@@ -36,6 +40,12 @@ void AFatPartyEnemy::HandleDestruction()
 	{
 		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(DeathCameraShakeClass);
 	}
+}
+
+void AFatPartyEnemy::HandleDestruction()
+{
+	Server_HandleDestruction();
+	
 }
 
 
