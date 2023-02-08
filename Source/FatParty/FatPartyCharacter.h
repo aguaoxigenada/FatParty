@@ -50,6 +50,13 @@ public:
 	void StartJump();
 	void StartExtraSpeedTimer();
 
+
+	UFUNCTION(Server, Unreliable)
+		void Server_PlayAnimation(UAnimMontage* AnimToPlay);
+	UFUNCTION(NetMulticast, Unreliable)
+		void Multicast_PlayAnimation(UAnimMontage* AnimToPlay);
+
+
 	AActor* ActorGrabbed = nullptr;
 	UGrabber* PlayerGrabber = nullptr;
 	UThrower* PlayerThrower = nullptr;

@@ -58,12 +58,18 @@ void AMinion_Controller::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus St
 				GetWorldTimerManager().ClearTimer(PlayerLostFromSight);
 			}
 
+			if(!PlayerHasBeenDetected.IsValid())
+			{
+				GetWorldTimerManager().SetTimer(PlayerHasBeenDetected, this, &AMinion_Controller::OnPlayerHasBeenDetected, 1.f, true);
+
+			}
+
 			Lastposition = Stimulus.StimulusLocation;
 			TargetActor = Actor;
-			BehaviorTreeComponent->GetBlackboardComponent()->SetValue<UBlackboardKeyType_Object>("TargetActor", TargetActor.Get());
-			BehaviorTreeComponent->GetBlackboardComponent()->SetValue<UBlackboardKeyType_Bool>("bPlayerDetected", true);
-			BehaviorTreeComponent->GetBlackboardComponent()->SetValue<UBlackboardKeyType_Vector>("MoveToLocation", Lastposition);
 
+		
+
+			
 		}
 		else
 		{
@@ -97,7 +103,14 @@ void AMinion_Controller::OnPlayerHasBeenDetected()
 		GetWorldTimerManager().ClearTimer(PlayerHasBeenDetected);
 	}
 
-	BehaviorTreeComponent->GetBlackboardComponent()->SetValue<UBlackboardKeyType_Object>("TargetActor", TargetActor.Get());
+	if (AFatPartyCharacter* PlayerCharacter = Cast<AFatPartyCharacter>(TargetActor.Get()))
+	{
+
+		BehaviorTreeComponent->GetBlackboardComponent()->SetValue<UBlackboardKeyType_Object>("TargetActor", TargetActor.Get());
+		BehaviorTreeComponent->GetBlackboardComponent()->SetValue<UBlackboardKeyType_Bool>("bPlayerDetected", true);
+		BehaviorTreeComponent->GetBlackboardComponent()->SetValue<UBlackboardKeyType_Vector>("MoveToLocation", Lastposition);
+
+	}
 
 }
 

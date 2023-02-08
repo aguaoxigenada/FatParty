@@ -45,7 +45,7 @@ void AKnightCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("MoveRight", this, &AFatPartyCharacter::MoveRight);
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &AFatPartyCharacter::Turn);
 
-	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &AKnightCharacter::CharacterAttack);
+	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &AKnightCharacter::Multicast_CharacterAttack);
 
 }
 
@@ -88,6 +88,16 @@ void AKnightCharacter::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, U
 	}
 }
 
+void AKnightCharacter::Server_CharacterAttack_Implementation()
+{
+	Multicast_CharacterAttack();
+}
+
+void AKnightCharacter::Multicast_CharacterAttack_Implementation()
+{
+	CharacterAttack();
+}
+
 void AKnightCharacter::CharacterAttack()
 {
 	AKnightCharacter* KnightCharacter = Cast<AKnightCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
@@ -101,6 +111,6 @@ void AKnightCharacter::CharacterAttack()
 		}
 
 		else
-			PlayAnimMontage(AttackAnim);
+			Server_PlayAnimation(AttackAnim);
 	}
 }

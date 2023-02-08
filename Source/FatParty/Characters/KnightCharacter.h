@@ -38,8 +38,12 @@ public:
 
 	
 
-
+	UFUNCTION(Server, Unreliable)
+	void Server_CharacterAttack();
+	UFUNCTION(NetMulticast, Unreliable)
+	void Multicast_CharacterAttack();
 	void CharacterAttack();
+	
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void Tick(float DeltaTime) override;

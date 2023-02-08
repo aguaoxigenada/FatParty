@@ -60,6 +60,16 @@ void AFatPartyCharacter::StartExtraSpeedTimer()
 	GetWorldTimerManager().SetTimer(TimerHandleToOpenInGameMenu, this, &AFatPartyCharacter::StopExtraSpeed, TimeDelay, false );
 }
 
+void AFatPartyCharacter::Multicast_PlayAnimation_Implementation(UAnimMontage* AnimToPlay)
+{
+	PlayAnimMontage(AnimToPlay);
+}
+
+void AFatPartyCharacter::Server_PlayAnimation_Implementation(UAnimMontage* AnimToPlay)
+{
+	Multicast_PlayAnimation(AnimToPlay);
+}
+
 void AFatPartyCharacter::StopExtraSpeed()
 {
 	MovementComponent->MaxWalkSpeed = 600;
