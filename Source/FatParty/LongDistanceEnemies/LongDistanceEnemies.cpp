@@ -7,7 +7,7 @@ void ALongDistanceEnemies::BeginPlay()
 {
     Super::BeginPlay();
 
-    FatPartyCharacter = Cast<AFatPartyCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
+    //FatPartyCharacter = Cast<AFatPartyCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
 
     GetWorldTimerManager().SetTimer(FireRateTimerHandle, this, &ALongDistanceEnemies::CheckFireCondition, FireRate, true);
 }

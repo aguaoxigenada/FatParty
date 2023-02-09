@@ -13,6 +13,7 @@ class FATPARTY_API ALongDistanceEnemies : public AFatPartyEnemy
 
 public:
 	virtual void RotateToCharacter(FVector LookAtTarget);
+	AFatPartyCharacter* FatPartyCharacter;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Turret Components", meta = (AllowPrivateAccess = "true"))
@@ -27,7 +28,7 @@ protected:
 	void SpawnProjectile();
 	bool InFireRange();
 
-	AFatPartyCharacter* FatPartyCharacter;
+
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Combat")
