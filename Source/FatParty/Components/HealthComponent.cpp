@@ -43,7 +43,7 @@ float UHealthComponent::GetHealth()
 	return Health;
 }
 
-void UHealthComponent::DamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* Instigator, AActor* DamageCauser)
+void UHealthComponent::DamageTaken_Implementation(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* Instigator, AActor* DamageCauser)
 {
 	/* Todos estos valores vienen desde el Projectil : */
 

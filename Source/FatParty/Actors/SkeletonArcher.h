@@ -17,7 +17,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void RotateToCharacter(FVector LookAtTarget) override;
 	virtual void HandleDestruction() override;
-	virtual void Fire() override;
+
+	UFUNCTION(NetMulticast, Reliable)
+		virtual void Fire() override;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Skeleton Components")

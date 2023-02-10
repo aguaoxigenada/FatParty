@@ -34,7 +34,7 @@ void ADestructibleObject::HitMesh(UPrimitiveComponent* HitComponent, AActor* Oth
 	}
 }
 
-void ADestructibleObject::HandleDestruction()
+void ADestructibleObject::HandleDestruction_Implementation()
 {
 	if (DeathParticles)
 	{

@@ -17,7 +17,10 @@ class FATPARTY_API ADestructibleObject : public AActor
 
 public:
 	ADestructibleObject();
-	void HandleDestruction();
+
+	UFUNCTION(NetMulticast, Reliable)
+		void HandleDestruction();
+
 	void SetObjectToDrop(ABasePowerUp* PickedItem);
 
 protected:
