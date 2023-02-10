@@ -76,11 +76,14 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Turret Components", meta = (AllowPrivateAccess = "true"))
 		USceneComponent* ProjectileSpawnPoint;
 
-	// TSubclassOf guarda la subclase elegida en el editor, como el blueprint BP_Projectile 
-	// En este caso sirve para tener una referencia del blueprint que usa la clase de AProjectile
-	// Permite seleccionar cualquier objeto que utilice AProjectile desde el editor y usarlo como el projectil.
 	UPROPERTY(EditDefaultsOnly, Category = "Combat")
 		TSubclassOf<class AProjectile> ProjectileClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool Holding = false;
+
+	UPROPERTY(EditAnywhere)
+		float Damage = 50.f;
 
 private:
 	UPROPERTY(EditAnywhere, Category = "TurnRate")

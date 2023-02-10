@@ -8,18 +8,11 @@
 
 AKnightCharacter::AKnightCharacter()
 {
-	//PrimaryActorTick.bCanEverTick = true;
 	Body = GetMesh();
 
 	Weapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Blade"));
 	Weapon->SetupAttachment(Body);
-
 	
-
-
-	//HitPoint = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Hit Point"));
-	//HitPoint->SetupAttachment(Weapon);
-
 }
 
 void AKnightCharacter::BeginPlay()
@@ -37,13 +30,11 @@ void AKnightCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	check(PlayerInputComponent);
-	//PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AFatPartyCharacter::StartJump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AFatPartyCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AFatPartyCharacter::MoveRight);
-	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &AFatPartyCharacter::Turn);
 
 	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &AKnightCharacter::Multicast_CharacterAttack);
 
@@ -83,7 +74,9 @@ void AKnightCharacter::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, U
 
 	AController* MyOwnerInstigator = MyOwner->GetInstigatorController();
 	UClass* DamageTypeClass = UDamageType::StaticClass();
-	if (OtherActor && OtherActor != this && OtherActor != MyOwner) {
+
+	if (OtherActor && OtherActor != this && OtherActor != MyOwner)
+	{
 		UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwnerInstigator, this, DamageTypeClass);
 	}
 }

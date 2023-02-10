@@ -36,12 +36,11 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 
 void UGrabber::Grab()
 {	
-	/* Esta funcion se llama siempre que se apreta el mouse, esta en el EventGraph del Tank. */
+	/* Esta funcion se llama siempre que se apreta el mouse, esta en el EventGraph. */
 
 	// Busca que el actor tenga un UPhysicsHandleComponent 
 	UPhysicsHandleComponent *PhysicsHandle = GetPhysicsHandle();
-	
-	// Chequeo de seguridad
+
 	if (PhysicsHandle == nullptr)
 	{
 		return;

@@ -19,19 +19,19 @@ public:
 	UPROPERTY(EditAnywhere)
 		UAnimMontage* AttackAnim = nullptr;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Weapon")
+		UStaticMeshComponent* Weapon = nullptr;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		USkeletalMeshComponent* Body = nullptr;
+
 	void CharacterAttack();
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void Tick(float DeltaTime) override;
 	virtual void HandleDestruction() override;
 
-	void SetGrabber(UGrabber* Grabber);
-	void SetThrower(UThrower* Thrower);
-	void Turn(float Value);
-
-	AActor* ActorGrabbed = nullptr;
-	UGrabber* PlayerGrabber = nullptr;
-	UThrower* PlayerThrower = nullptr;
+	APlayerController* GetKnightController() const { return ArcherPlayerController; }
 
 	bool bHadJumped = false;
 	float Distance = 0.f;

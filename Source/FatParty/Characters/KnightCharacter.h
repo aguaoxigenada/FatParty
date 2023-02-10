@@ -18,30 +18,23 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		UAnimMontage* AttackAnim = nullptr;
-
-	UPROPERTY(EditAnywhere)
-		float Damage = 50.f;
-
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Weapon")
 		UStaticMeshComponent* Weapon = nullptr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		USkeletalMeshComponent* Body = nullptr;
 
-	/*UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		UCapsuleComponent* HitPoint = nullptr;*/
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool Holding = false;
-
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
-
 	
 
 	UFUNCTION(Server, Unreliable)
-	void Server_CharacterAttack();
+		void Server_CharacterAttack();
+
 	UFUNCTION(NetMulticast, Unreliable)
-	void Multicast_CharacterAttack();
+		void Multicast_CharacterAttack();
+
 	void CharacterAttack();
 	
 
@@ -49,7 +42,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void HandleDestruction() override;
 
-	APlayerController* GetTankPlayerController() const { return KnightPlayerController; }
+	APlayerController* GetKnightController() const { return KnightPlayerController; }
 	
 	bool bHadJumped = false;
 	float Distance = 0.f;

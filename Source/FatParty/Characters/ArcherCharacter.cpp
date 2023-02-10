@@ -10,13 +10,18 @@
 
 AArcherCharacter::AArcherCharacter()
 {
-	//PrimaryActorTick.bCanEverTick = true;
+	Body = GetMesh();
+
+	Weapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Bow"));
+	Weapon->SetupAttachment(Body);
 }
 
 void AArcherCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	ArcherPlayerController = Cast<APlayerController>(GetController());
+
+	Weapon->AttachToComponent(Body,FAttachmentTransformRules::KeepRelativeTransform, TEXT("RightHandSocket"));
 }
 
 void AArcherCharacter::Fire()
@@ -30,7 +35,6 @@ void AArcherCharacter::Fire()
 			ProjectileSpawnPoint->GetComponentLocation(),
 			ProjectileSpawnPoint->GetComponentRotation());
 
-		//  Se utiliza para que el projectile sea su propio Actor al ser disparado y no forme parte del tanque / torreta.
 		Projectile->SetOwner(this);
 	} 
 
@@ -44,8 +48,6 @@ void AArcherCharacter::Fire()
 		}
 	}
 }
-
-
 
 void AArcherCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -70,22 +72,13 @@ void AArcherCharacter::HandleDestruction()
 	SetActorTickEnabled(false);
 }
 
-void AArcherCharacter::SetGrabber(UGrabber* Grabber)
-{
-	PlayerGrabber = Grabber;
-}
-
-void AArcherCharacter::SetThrower(UThrower* Thrower)
-{
-	PlayerThrower = Thrower;
-}
 
 void AArcherCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 	
-	if(ArcherPlayerController)
+	/*if(ArcherPlayerController)
 	{
 		FHitResult HitResult;
 		ArcherPlayerController->GetHitResultUnderCursor(
@@ -107,5 +100,5 @@ void AArcherCharacter::Tick(float DeltaTime)
 		// DrawDebugSphere(GetWorld(), HitResult.ImpactPoint,25.f,	12,	FColor::Blue,false,	-1.f);
 
 		//CharacterMouseRotator();
-	}	
+	}	*/
 }
