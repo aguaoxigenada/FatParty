@@ -6,6 +6,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
+#include "Net/UnrealNetwork.h"
 
 AFatPartyCharacter::AFatPartyCharacter()
 {
@@ -43,6 +44,12 @@ AFatPartyCharacter::AFatPartyCharacter()
 	MovementComponent = GetCharacterMovement();
 }
 
+void AFatPartyCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(AFatPartyCharacter, JumpTime);
+}
+
 void AFatPartyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -62,6 +69,7 @@ void AFatPartyCharacter::StartExtraSpeedTimer()
 
 void AFatPartyCharacter::Multicast_PlayAnimation_Implementation(UAnimMontage* AnimToPlay)
 {
+
 	PlayAnimMontage(AnimToPlay);
 }
 
@@ -81,7 +89,7 @@ void AFatPartyCharacter::Tick(float DeltaTime)
 
 	if(MovementComponent->IsFalling())
 	{
-		float ActualTime = UKismetSystemLibrary::GetGameTimeInSeconds(this);
+		ActualTime = UKismetSystemLibrary::GetGameTimeInSeconds(this);
 
 		if(ActualTime - JumpTime >= TimeToDie)
 		{
@@ -94,9 +102,14 @@ void AFatPartyCharacter::Tick(float DeltaTime)
 
 void AFatPartyCharacter::StartJump()
 {
-	JumpTime = UKismetSystemLibrary::GetGameTimeInSeconds(this);
 	Jump();
-	PlayAnimMontage(JumpAnim);
+	Server_UpdateJumpTime();
+	Server_PlayAnimation(JumpAnim);
+}
+
+void AFatPartyCharacter::Multicast_JumpAnimation_Implementation()
+{
+	StartJump();
 }
 
 void AFatPartyCharacter::SetGrabber(UGrabber* Grabber)
@@ -109,6 +122,11 @@ void AFatPartyCharacter::SetThrower(UThrower* Thrower)
 	PlayerThrower = Thrower;
 }
 
+
+void AFatPartyCharacter::Server_UpdateJumpTime_Implementation()
+{
+	JumpTime = UKismetSystemLibrary::GetGameTimeInSeconds(this);
+}
 
 void AFatPartyCharacter::HandleDestruction()
 {
@@ -139,23 +157,6 @@ void AFatPartyCharacter::Fire()
 
 }
 
-void AFatPartyCharacter::RotateToCharacter(FVector LookAtTarget)   // hay que cambiar esto para que rote el body
-{
-	USkeletalMeshComponent* SkeletalMesh = GetMesh();
-    
-	FVector ToTarget = LookAtTarget - SkeletalMesh->GetComponentLocation();
-
-	// La posicion del FRotator hacia donde debe de mirar la Torreta
-	FRotator LookAtRotation = FRotator(0.f, ToTarget.Rotation().Yaw, 0.f);
-
-	// Rotacion de la torreta desde su posicion actual hacia LookAtRotation.
-	SkeletalMesh->SetWorldRotation(
-		FMath::RInterpTo(
-			SkeletalMesh->GetComponentRotation(),
-			LookAtRotation,
-			UGameplayStatics::GetWorldDeltaSeconds(this),
-			25.f));
-}
 
 void AFatPartyCharacter::Turn(float Value)
 {

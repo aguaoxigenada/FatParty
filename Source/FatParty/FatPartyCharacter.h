@@ -39,13 +39,22 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Interaction")
 	FOnUseItem OnUseItem;
 
+	UFUNCTION(Server, Unreliable)
+		void Server_PlayAnimation(UAnimMontage* AnimToPlay);
 
+	UFUNCTION(NetMulticast, Unreliable)
+		void Multicast_PlayAnimation(UAnimMontage* AnimToPlay);
+
+	UFUNCTION(NetMulticast, Unreliable)
+		void Multicast_JumpAnimation();
+
+	UFUNCTION(Server,Unreliable)
+		void Server_UpdateJumpTime();
 
 	virtual void HandleDestruction();
-
-
 	virtual void Tick(float DeltaTime) override;
 	virtual void Fire();
+
 	void RotateToCharacter(FVector LookAtTarget);
 	void MoveForward(float Val);
 	void MoveRight(float Val);
@@ -53,13 +62,6 @@ public:
 	void SetThrower(UThrower* Thrower);
 	void StartJump();
 	void StartExtraSpeedTimer();
-
-
-	UFUNCTION(Server, Unreliable)
-		void Server_PlayAnimation(UAnimMontage* AnimToPlay);
-	UFUNCTION(NetMulticast, Unreliable)
-		void Multicast_PlayAnimation(UAnimMontage* AnimToPlay);
-
 
 	AActor* ActorGrabbed = nullptr;
 	UGrabber* PlayerGrabber = nullptr;
@@ -98,8 +100,14 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 		class UCameraComponent* Camera;
 
-	UPROPERTY(EditAnywhere, Category = "Combat")
+	UPROPERTY(VisibleAnywhere, Category = "Death By Fall")
 		float TimeToDie = 4.f;
+
+	UPROPERTY(Replicated,VisibleAnywhere, Category = "Death By Fall")
+		float JumpTime = 0.f;
+
+	UPROPERTY(VisibleAnywhere, Category = "Death By Fall")
+		float ActualTime;
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 		class UParticleSystem* DeathParticles;
@@ -123,7 +131,6 @@ private:
 	UCharacterMovementComponent* MovementComponent;
 	ASpeedPowerUp* SpeedComp;
 
-	float JumpTime = 0.f;
 	float TimeDelay = 3.f;
 };
 

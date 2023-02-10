@@ -30,7 +30,7 @@ void AKnightCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	check(PlayerInputComponent);
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AFatPartyCharacter::StartJump);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AFatPartyCharacter::Multicast_JumpAnimation);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AFatPartyCharacter::MoveForward);
@@ -47,7 +47,7 @@ void AKnightCharacter::HandleDestruction()
 	SetActorTickEnabled(false);
 }
 
-void AKnightCharacter::Tick(float DeltaTime)
+/*void AKnightCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
@@ -61,7 +61,7 @@ void AKnightCharacter::Tick(float DeltaTime)
 			HitResult);
 	}
 	
-}
+}*/
 
 void AKnightCharacter::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
@@ -81,11 +81,11 @@ void AKnightCharacter::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, U
 	}
 }
 
-void AKnightCharacter::Server_CharacterAttack_Implementation()
+/*void AKnightCharacter::Server_CharacterAttack_Implementation()
 {
 	Multicast_CharacterAttack();
 }
-
+*/
 void AKnightCharacter::Multicast_CharacterAttack_Implementation()
 {
 	CharacterAttack();

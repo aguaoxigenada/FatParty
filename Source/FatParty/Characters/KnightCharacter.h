@@ -28,10 +28,6 @@ public:
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 	
-
-	UFUNCTION(Server, Unreliable)
-		void Server_CharacterAttack();
-
 	UFUNCTION(NetMulticast, Unreliable)
 		void Multicast_CharacterAttack();
 
@@ -39,7 +35,7 @@ public:
 	
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	virtual void Tick(float DeltaTime) override;
+	//virtual void Tick(float DeltaTime) override;
 	virtual void HandleDestruction() override;
 
 	APlayerController* GetKnightController() const { return KnightPlayerController; }
