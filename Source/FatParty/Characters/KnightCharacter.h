@@ -11,8 +11,7 @@ UCLASS()
 class FATPARTY_API AKnightCharacter : public AFatPartyCharacter
 {
 	GENERATED_BODY()
-	
-	
+
 public:
 	AKnightCharacter();
 
@@ -36,7 +35,9 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	//virtual void Tick(float DeltaTime) override;
-	virtual void HandleDestruction() override;
+
+	UFUNCTION(NetMulticast, Unreliable)
+		virtual void HandleDestruction() override;
 
 	APlayerController* GetKnightController() const { return KnightPlayerController; }
 	

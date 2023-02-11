@@ -16,11 +16,10 @@ UFatPartyGameInstance::UFatPartyGameInstance(const FObjectInitializer &ObjectIni
 	InGameMenuClass = InGameMainMenuBP_Class.Class;	
 }
 
-void UFatPartyGameInstance::Init()  // Es necesario
+void UFatPartyGameInstance::Init()  
 {
 	Super::Init();
 
-	//UE_LOG(LogTemp, Warning, TEXT("Found Class %s"), *MenuClass->GetName());
 }
 
 
@@ -60,7 +59,6 @@ void UFatPartyGameInstance::Host()
 
 	UWorld* World = GetWorld();
 	if(!ensure(World != nullptr)) return;
-
 
 	World->ServerTravel("/Game/Maps/Dungeon_01?listen?ip=25.14.116.251");  // aca iria lo de hamachi si lo quiero hacer listener 192.168.1.10   25.14.116.251
 }

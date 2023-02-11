@@ -47,10 +47,13 @@ private:
 	UFUNCTION(NetMulticast, Reliable)
 		void DamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* Instigator, AActor* DamageCauser);
 
+	UFUNCTION(Client, Reliable)
+		void OpenInGameMenu();
+
 	UHudWidget* HudWidget;
 	UFatPartyGameInstance* GameInstance;
 	AFatPartyGameMode* FatPartyGameMode;
-	void OpenInGameMenu();
+	
 
 	bool bPlayerAlive = true;
 			

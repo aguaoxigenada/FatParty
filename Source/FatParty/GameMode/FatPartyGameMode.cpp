@@ -12,17 +12,15 @@ void AFatPartyGameMode::ActorDied(AActor *DeadActor)
 
     // Se revisa desde el modo de juego si murio el personaje o si murieron todas las torretas
 
-    if (DeadActor == FatPartyCharacter)
+    if (AFatPartyCharacter* DestroyedPlayer = Cast<AFatPartyCharacter>(DeadActor))
     {
-        // HandleDestruction() se encuentra en FatPartyCharacter.
-        FatPartyCharacter->HandleDestruction();
+        DestroyedPlayer->HandleDestruction();
         if (PlayerController)
         {
             PlayerController->SetPlayerEnabledState(false);
         }
-        //GameOver(false);
-
     }
+
     else if (AFatPartyEnemy* DestroyedEnemy = Cast<AFatPartyEnemy>(DeadActor))
     {
         DestroyedEnemy->HandleDestruction();
@@ -67,7 +65,7 @@ void AFatPartyGameMode::HandleGameStart()
         
         // El delegate permite crear un objeto, que puede anexar a una funcion directamente.
         FTimerDelegate PlayerEnableTimerDelegate = FTimerDelegate::CreateUObject(
-            PlayerController,                               // clase a utilizar
+            PlayerController,                                        // clase a utilizar
             &AThePlayerController::SetPlayerEnabledState,            // funcion de la clase
             true                                                     // parametro pasado a la clase
         );

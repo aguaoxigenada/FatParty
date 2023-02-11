@@ -40,7 +40,7 @@ void AKnightCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 }
 
-void AKnightCharacter::HandleDestruction()
+void AKnightCharacter::HandleDestruction_Implementation()
 {
 	Super::HandleDestruction(); 
     SetActorHiddenInGame(true);
@@ -81,11 +81,7 @@ void AKnightCharacter::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, U
 	}
 }
 
-/*void AKnightCharacter::Server_CharacterAttack_Implementation()
-{
-	Multicast_CharacterAttack();
-}
-*/
+
 void AKnightCharacter::Multicast_CharacterAttack_Implementation()
 {
 	CharacterAttack();

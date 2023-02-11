@@ -1,8 +1,6 @@
 #include "FatPartyCharacter.h"
-#include "Actors/Projectile.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "GameFramework/InputSettings.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
@@ -130,9 +128,6 @@ void AFatPartyCharacter::Server_UpdateJumpTime_Implementation()
 
 void AFatPartyCharacter::HandleDestruction()
 {
-	// 1. Chequeo de Seguridad que existe el puntero en todos los ifs.
-	// 2. Se crean particulas al morir, sonido y movimiento de camara.
-
 	if (DeathParticles)
 	{
 		UGameplayStatics::SpawnEmitterAtLocation(this, DeathParticles, GetActorLocation(), GetActorRotation());
@@ -158,7 +153,7 @@ void AFatPartyCharacter::Fire()
 }
 
 
-void AFatPartyCharacter::Turn(float Value)
+/*void AFatPartyCharacter::Turn(float Value)
 {
 	//FRotator DeltaRotation = FRotator::ZeroRotator;
 	FRotator DeltaRotation = FRotator(0.0f, 0.0f, 0.0f);
@@ -169,6 +164,7 @@ void AFatPartyCharacter::Turn(float Value)
 	AddActorLocalRotation(DeltaRotation, true);
 
 }
+*/
 
 void AFatPartyCharacter::MoveForward(float Value)
 {

@@ -1,12 +1,8 @@
 #include "ArcherCharacter.h"
-#include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 #include "FatParty/Actors/Projectile.h"
 #include "FatParty/Components/Thrower.h"
-#include "FatParty/Controllers/ThePlayerController.h"
-#include "Kismet/KismetMathLibrary.h"
-
 
 AArcherCharacter::AArcherCharacter()
 {
@@ -59,7 +55,7 @@ void AArcherCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AFatPartyCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AFatPartyCharacter::MoveRight);
-	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &AFatPartyCharacter::Turn);
+	//PlayerInputComponent->BindAxis(TEXT("Turn"), this, &AFatPartyCharacter::Turn);
 
 	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &AArcherCharacter::Fire);
 

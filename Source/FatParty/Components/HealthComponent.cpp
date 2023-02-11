@@ -64,7 +64,7 @@ void UHealthComponent::DamageTaken_Implementation(AActor* DamagedActor, float Da
 	{
 		FatPartyGameMode->ActorDied(DamagedActor);
 
-		if(DamagedActor == Cast<AFatPartyCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0)))
+		if(AFatPartyCharacter* DestroyedPlayer = Cast<AFatPartyCharacter>(DamagedActor))
 		{
 			if(GameInstance == nullptr) return;
 			FTimerHandle TimerHandleToOpenInGameMenu;
@@ -78,7 +78,7 @@ void UHealthComponent::DamageTaken_Implementation(AActor* DamagedActor, float Da
 	//UE_LOG(LogTemp, Warning, TEXT("Health: %f of %s"), Health, *DamagedActor->GetName());
 }
 
-void UHealthComponent::OpenInGameMenu()
+void UHealthComponent::OpenInGameMenu_Implementation()
 {
 	GameInstance->LoadInGameMenu();
 	UInGameMenu* InGameMenu = Cast<UInGameMenu>(GameInstance->GetInGameMenu());

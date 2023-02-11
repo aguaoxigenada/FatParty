@@ -21,6 +21,7 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 		void GetHealth();
+
 protected:
 	virtual void NativeOnInitialized() override;
 
@@ -42,7 +43,4 @@ private:
 
 	FTimerHandle TimerHandle;
 	FTimerHandle GameOverTimerHandle;
-
-
-
 };
