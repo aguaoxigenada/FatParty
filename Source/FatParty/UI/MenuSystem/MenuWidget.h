@@ -12,7 +12,7 @@ class FATPARTY_API UMenuWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	virtual void Setup();
+	virtual void Setup(bool IsHud);
 	virtual void Teardown();
 	virtual void SetMenuInterface(IMenuInterface* TheMenuInterface);
 

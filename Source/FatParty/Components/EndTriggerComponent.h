@@ -15,7 +15,9 @@ public:
 
 private:
 	bool bGameEnded = false;
-	void WonGame();
+
+	UFUNCTION(NetMulticast, Reliable)
+		void WonGame();
 
 };
 

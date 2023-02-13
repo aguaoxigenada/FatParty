@@ -1,22 +1,26 @@
 #include "MenuWidget.h"
 
-void UMenuWidget::Setup()
+void UMenuWidget::Setup(bool IsHud)
 {
 	this->AddToViewport();
 
-	UWorld* World = GetWorld();
-	if (!ensure(World != nullptr)) return;
+	if(!IsHud)
+	{
+		UWorld* World = GetWorld();
+		if (!ensure(World != nullptr)) return;
 
-	APlayerController* PlayerController = World->GetFirstPlayerController();
-	if (!ensure(PlayerController != nullptr)) return;
+		APlayerController* PlayerController = World->GetFirstPlayerController();
+		if (!ensure(PlayerController != nullptr)) return;
 
-	FInputModeUIOnly InputModeData;
-	InputModeData.SetWidgetToFocus(this->TakeWidget());
-	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+		FInputModeUIOnly InputModeData;
+		InputModeData.SetWidgetToFocus(this->TakeWidget());
+		InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 
-	PlayerController->SetInputMode(InputModeData);
+		PlayerController->SetInputMode(InputModeData);
 
-	PlayerController->bShowMouseCursor = true;
+		PlayerController->bShowMouseCursor = true;
+	}
+	
 }
 
 void UMenuWidget::Teardown()

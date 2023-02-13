@@ -3,6 +3,7 @@
 #include "FatParty/FatPartyCharacter.h"
 #include "FatParty/Components/HealthComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Net/UnrealNetwork.h"
 
 void UHudWidget::NativeOnInitialized()
 {

@@ -1,6 +1,7 @@
 #include "FatPartyGameInstance.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Blueprint/UserWidget.h"
+#include "UI/HudWidget.h"
 #include "UI/MenuSystem/InGameMenu.h"
 
 
@@ -12,8 +13,12 @@ UFatPartyGameInstance::UFatPartyGameInstance(const FObjectInitializer &ObjectIni
 	ConstructorHelpers::FClassFinder<UUserWidget>InGameMainMenuBP_Class(TEXT("/Game/Blueprints/UI/WBP_InGameMenu"));
 	if(!ensure(InGameMainMenuBP_Class.Class!=nullptr)) return;
 
+	ConstructorHelpers::FClassFinder<UUserWidget>InGameHudBP_Class(TEXT("/Game/Blueprints/UI/WBP_HUD"));
+	if(!ensure(InGameHudBP_Class.Class!=nullptr)) return;
+
 	MenuClass = MainMenuBP_Class.Class;
-	InGameMenuClass = InGameMainMenuBP_Class.Class;	
+	InGameMenuClass = InGameMainMenuBP_Class.Class;
+	HudClass = InGameHudBP_Class.Class;
 }
 
 void UFatPartyGameInstance::Init()  
@@ -30,7 +35,7 @@ void UFatPartyGameInstance::LoadMenu()
 	Menu = CreateWidget<UMenuWidget>(this, MenuClass);
 	if(!ensure(Menu !=nullptr)) return;
 
-	Menu->Setup();
+	Menu->Setup(false);
 	Menu->SetMenuInterface(this);  // esta ok el this, porque esta clase implementa la IMenuInterface
 }
 
@@ -40,9 +45,20 @@ void UFatPartyGameInstance::LoadInGameMenu()
 
 	InGameMenu = CreateWidget<UInGameMenu>(this, InGameMenuClass);
 	if(!ensure(InGameMenu !=nullptr)) return;
-
-	InGameMenu->Setup();
+	
+	InGameMenu->Setup(false);
 	InGameMenu->SetMenuInterface(this);
+}
+
+void UFatPartyGameInstance::LoadHUD()
+{
+	if(!ensure(HudClass !=nullptr)) return;
+	
+	PlayerHud = CreateWidget<UHudWidget>(this, HudClass);
+	if(!ensure(HudClass !=nullptr)) return;
+	
+	PlayerHud->Setup(true);
+	PlayerHud->SetMenuInterface(this);
 }
 
 void UFatPartyGameInstance::Host()
@@ -61,6 +77,7 @@ void UFatPartyGameInstance::Host()
 	if(!ensure(World != nullptr)) return;
 
 	World->ServerTravel("/Game/Maps/Dungeon_01?listen?ip=25.14.116.251");  // aca iria lo de hamachi si lo quiero hacer listener 192.168.1.10   25.14.116.251
+
 }
 
 void UFatPartyGameInstance::LoadGameMenu()
@@ -69,6 +86,11 @@ void UFatPartyGameInstance::LoadGameMenu()
 	if(!ensure(PlayerController!=nullptr)) return;
 	
 	PlayerController->ClientTravel("/Game/Maps/MainMenu", ETravelType::TRAVEL_Absolute);
+
+	if(PlayerHud != nullptr)
+	{
+		PlayerHud->Teardown();
+	}
 }
 
 void UFatPartyGameInstance::RestartLevel()
@@ -78,7 +100,9 @@ void UFatPartyGameInstance::RestartLevel()
 
 	FString LevelURL = GetWorld()->GetAddressURL();
 
-	World->ServerTravel(LevelURL, ETravelType::TRAVEL_Absolute);
+	// Esta OK porque el server va a ser Dedicado.  Entonces todos los players que entran son Clientes.
+	World->GetFirstPlayerController()->ClientTravel(LevelURL, ETravelType::TRAVEL_Absolute);
+	//World->ServerTravel(LevelURL, ETravelType::TRAVEL_Absolute);
 }
 
 void UFatPartyGameInstance::QuitGame()
@@ -110,5 +134,4 @@ void UFatPartyGameInstance::Join(const FString& Address)
 	if(!ensure(PlayerController!=nullptr)) return;
 	
 	PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
-
 }
