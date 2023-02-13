@@ -23,6 +23,9 @@ public:
 
 	void SetObjectToDrop(ABasePowerUp* PickedItem);
 
+	void SpawnDropObject();
+
+
 protected:
 	virtual void BeginPlay() override;
 

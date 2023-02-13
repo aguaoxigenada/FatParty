@@ -51,11 +51,11 @@ void ASkeletonArcher::HandleDestruction()
 {
 	Super::HandleDestruction();
 }
-
+/*
 void ASkeletonArcher::Fire_Implementation()
 {
 	Super::Fire();
 	GetMesh()->PlayAnimation(AttackAnim, false);
-}
+}*/
 
 	

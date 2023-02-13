@@ -30,6 +30,7 @@ void ADashPad::OverlapLaunchPad(UPrimitiveComponent* OverlappedComponent, AActor
 
 	if (Player)
 	{
+		Player->Multicast_JumpAnimation();
 		Player->LaunchCharacter(FVector(0,0,500), false, true);
 
 		// Spawn FX

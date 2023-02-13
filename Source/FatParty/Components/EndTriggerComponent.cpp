@@ -30,7 +30,7 @@ void UEndTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
     }
 }
 
-void UEndTriggerComponent::WonGame()
+void UEndTriggerComponent::WonGame_Implementation()
 {
 	UFatPartyGameInstance* GameInstance = Cast<UFatPartyGameInstance>(GetWorld()->GetGameInstance());
     if(GameInstance == nullptr) return;

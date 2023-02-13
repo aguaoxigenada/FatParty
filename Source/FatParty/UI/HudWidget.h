@@ -1,8 +1,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
+//#include "Blueprint/UserWidget.h"
 #include "Blueprint/WidgetTree.h"
+#include "MenuSystem/MenuWidget.h"
 #include "HudWidget.generated.h"
 
 class UTextBlock;
@@ -11,7 +12,7 @@ class AFatPartyCharacter;
 class UProgressBar;
 
 UCLASS()
-class FATPARTY_API UHudWidget : public UUserWidget
+class FATPARTY_API UHudWidget : public UMenuWidget
 {
 	GENERATED_BODY()
 

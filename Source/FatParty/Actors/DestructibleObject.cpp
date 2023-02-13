@@ -9,6 +9,8 @@ ADestructibleObject::ADestructibleObject()
 	RootComponent = ObjectMesh;
 }
 
+
+
 void ADestructibleObject::BeginPlay()
 {
 	Super::BeginPlay();
@@ -48,12 +50,8 @@ void ADestructibleObject::HandleDestruction_Implementation()
 
 	if(ObjectToDrop != nullptr)
 	{
-		GenericBuildingClass = ObjectToDrop->GetClass();
-		ABasePowerUp* BuildingToProspect =	GetWorld()->SpawnActor<ABasePowerUp>(GenericBuildingClass, this->GetActorLocation(), this->GetActorRotation());
-
-		if(BuildingToProspect == nullptr) return;
-
-		BuildingToProspect->SetOwner(this);
+		
+		SpawnDropObject();
 	}
 
 	Destroy();
@@ -63,6 +61,24 @@ void ADestructibleObject::SetObjectToDrop(ABasePowerUp* PickedItem)
 {
 	ObjectToDrop = PickedItem;
 }
+
+void ADestructibleObject::SpawnDropObject()
+{
+	if (ObjectToDrop != nullptr)
+	{
+
+
+
+		GenericBuildingClass = ObjectToDrop->GetClass();
+		ABasePowerUp* BuildingToProspect = GetWorld()->SpawnActor<ABasePowerUp>(GenericBuildingClass, this->GetActorLocation(), this->GetActorRotation());
+
+		if (BuildingToProspect == nullptr) return;
+
+		BuildingToProspect->SetOwner(this);
+	}
+	
+}
+
 
 
 
