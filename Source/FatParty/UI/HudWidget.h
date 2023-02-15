@@ -39,6 +39,8 @@ private:
 	void RepeatingVisualTimer();
 	void PlayerLost();
 	void GameTimer();
+	UFUNCTION(BlueprintCallable)
+	void UpdateTime(int newTime);
 
 	UHealthComponent* HealthComp;
 

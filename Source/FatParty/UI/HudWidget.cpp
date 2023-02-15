@@ -53,6 +53,11 @@ void UHudWidget::GameTimer()
 
 }
 
+void UHudWidget::UpdateTime(int newTime)
+{
+	HudTimer->SetText(FText::FromString(FString::FromInt(newTime)));
+}
+
 void UHudWidget::RepeatingVisualTimer()
 {
 	if (HealthComp->GetHealth() <= 0/*|| PlayerWon*/ )
@@ -63,7 +68,7 @@ void UHudWidget::RepeatingVisualTimer()
 	TimerCount--;
 
 	// Setear el timer al Texto
-	HudTimer->SetText(FText::FromString(FString::FromInt(TimerCount)));
+	//HudTimer->SetText(FText::FromString(FString::FromInt(TimerCount)));
 }
 
 void UHudWidget::PlayerLost()
