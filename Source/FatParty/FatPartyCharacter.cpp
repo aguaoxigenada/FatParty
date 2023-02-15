@@ -42,6 +42,11 @@ AFatPartyCharacter::AFatPartyCharacter()
 	MovementComponent = GetCharacterMovement();
 }
 
+void AFatPartyCharacter::HitAnimation()
+{
+	Server_PlayAnimation(HitAnim);
+}
+
 void AFatPartyCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);

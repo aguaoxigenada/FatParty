@@ -28,6 +28,11 @@ public:
 
 	void Turn(float Value);
 
+	UPROPERTY(EditAnywhere)
+		UAnimMontage* HitAnim = nullptr;
+
+	void HitAnimation();
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Turret Components", meta = (AllowPrivateAccess = "true"))
 		UStaticMeshComponent* TurretMesh;
 
@@ -67,6 +72,8 @@ public:
 	UGrabber* PlayerGrabber = nullptr;
 	UThrower* PlayerThrower = nullptr;
 	bool bAlive = true;
+
+
 
 
 protected:

@@ -54,7 +54,9 @@ void UHealthComponent::DamageTaken_Implementation(AActor* DamagedActor, float Da
 	// UDamageType: Un objeto que puede influir en los cálculos de daño.
 
 	if(Damage <= 0.f) return;
-
+	if (AFatPartyCharacter* Actor = Cast<AFatPartyCharacter>(DamagedActor)) {
+		Actor->HitAnimation();
+	}
 	Health -= Damage;
 
 	OnHealthChange.Broadcast();

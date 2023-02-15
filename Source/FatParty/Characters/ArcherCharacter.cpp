@@ -17,7 +17,7 @@ void AArcherCharacter::BeginPlay()
 	Super::BeginPlay();
 	ArcherPlayerController = Cast<APlayerController>(GetController());
 
-	Weapon->AttachToComponent(Body,FAttachmentTransformRules::KeepRelativeTransform, TEXT("RightHandSocket"));
+	Weapon->AttachToComponent(Body,FAttachmentTransformRules::KeepRelativeTransform, TEXT("LeftHandSocket"));
 }
 
 void AArcherCharacter::Fire()
@@ -32,6 +32,7 @@ void AArcherCharacter::Fire()
 			ProjectileSpawnPoint->GetComponentRotation());
 
 		Projectile->SetOwner(this);
+		Server_PlayAnimation(AttackAnim);
 	} 
 
 	if (ArcherCharacter)
