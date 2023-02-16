@@ -93,6 +93,12 @@ void UFatPartyGameInstance::LoadGameMenu()
 	}
 }
 
+UHudWidget* UFatPartyGameInstance::GetPlayerHUD()  // NO SE USA, VER DE BORRAR
+{
+	UHudWidget* HudWidget = Cast<UHudWidget>(PlayerHud);
+	return HudWidget;
+}
+
 void UFatPartyGameInstance::RestartLevel()
 {
 	UWorld* World = GetWorld();

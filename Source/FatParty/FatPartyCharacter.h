@@ -4,6 +4,7 @@
 #include "GameFramework/Character.h"
 #include "FatPartyCharacter.generated.h"
 
+class ASwordActor;
 class ASpeedPowerUp;
 class UThrower;
 class UGrabber;
@@ -77,7 +78,10 @@ public:
 
 
 protected:
-	virtual void BeginPlay();
+	virtual void BeginPlay() override;
+
+	UFUNCTION(NetMulticast, Reliable)
+		void KillAllPlayers();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Turret Components")
 		UStaticMeshComponent* WeaponMesh;
@@ -134,6 +138,8 @@ private:
 	class USpringArmComponent* CameraBoom;
 
 	void StopExtraSpeed();
+
+	ASwordActor* SwordObject;
 
 	UCharacterMovementComponent* MovementComponent;
 	ASpeedPowerUp* SpeedComp;

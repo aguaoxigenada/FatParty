@@ -66,9 +66,6 @@ void ADestructibleObject::SpawnDropObject()
 {
 	if (ObjectToDrop != nullptr)
 	{
-
-
-
 		GenericBuildingClass = ObjectToDrop->GetClass();
 		ABasePowerUp* BuildingToProspect = GetWorld()->SpawnActor<ABasePowerUp>(GenericBuildingClass, this->GetActorLocation(), this->GetActorRotation());
 

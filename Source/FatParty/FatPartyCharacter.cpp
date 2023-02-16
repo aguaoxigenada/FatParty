@@ -1,4 +1,5 @@
 #include "FatPartyCharacter.h"
+#include "Actors/SwordActor.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -62,6 +63,32 @@ void AFatPartyCharacter::BeginPlay()
 		SetReplicates(true);
 		SetReplicateMovement(true);
 	}
+
+	TArray<AActor*> PosibleActors;
+
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASwordActor::StaticClass(), PosibleActors);
+
+	for(AActor *Actors : PosibleActors)
+	{
+		ASwordActor* ThisActor = Cast<ASwordActor>(Actors);
+		if(ThisActor)
+		{
+            SwordObject = ThisActor;
+		}
+	}
+
+	if(SwordObject == nullptr) return;
+	SwordObject->OnDestroyedSword.AddDynamic(this, &AFatPartyCharacter::KillAllPlayers);
+
+	
+}
+
+void AFatPartyCharacter::KillAllPlayers_Implementation()
+{
+	AController* MyOwnerInstigator = this->GetInstigatorController();
+	UClass* DamageTypeClass = UDamageType::StaticClass();
+	UGameplayStatics::ApplyDamage(this, 1000, MyOwnerInstigator, this, DamageTypeClass);
+	
 }
 
 void AFatPartyCharacter::StartExtraSpeedTimer()
@@ -72,7 +99,6 @@ void AFatPartyCharacter::StartExtraSpeedTimer()
 
 void AFatPartyCharacter::Multicast_PlayAnimation_Implementation(UAnimMontage* AnimToPlay)
 {
-
 	PlayAnimMontage(AnimToPlay);
 }
 

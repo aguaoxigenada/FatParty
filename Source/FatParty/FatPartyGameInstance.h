@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "UI/HudWidget.h"
 #include "UI/MenuSystem/MenuInterface.h"
 #include "FatPartyGameInstance.generated.h"
 
@@ -35,11 +36,16 @@ public:
 	UFUNCTION()
 		virtual void LoadGameMenu() override;
 
+	UFUNCTION(BlueprintCallable)
+		UHudWidget* GetPlayerHUD();
+
 	UFUNCTION()
 		virtual void RestartLevel() override;
 
 	UFUNCTION(Exec)
 		virtual void Join(const FString& Address) override;
+
+	UMenuWidget* PlayerHud;
 
 private:
 	TSubclassOf<class UUserWidget> MenuClass;
@@ -48,5 +54,5 @@ private:
 
 	UMenuWidget* Menu;
 	UMenuWidget* InGameMenu;
-	UMenuWidget* PlayerHud;
+	
 };
