@@ -36,9 +36,6 @@ public:
 	UFUNCTION()
 		virtual void LoadGameMenu() override;
 
-	UFUNCTION(BlueprintCallable)
-		UHudWidget* GetPlayerHUD();
-
 	UFUNCTION()
 		virtual void RestartLevel() override;
 

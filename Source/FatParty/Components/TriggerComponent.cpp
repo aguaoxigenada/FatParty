@@ -37,6 +37,10 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
         
         Mover->SetShouldMove(true);
     }
+    else if(bKeepMoving && Actor != nullptr)
+    {
+	     Mover->SetShouldMove(true);
+    }
     else
     {
         Mover->SetShouldMove(false);

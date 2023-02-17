@@ -36,7 +36,7 @@ void UFatPartyGameInstance::LoadMenu()
 	if(!ensure(Menu !=nullptr)) return;
 
 	Menu->Setup(false);
-	Menu->SetMenuInterface(this);  // esta ok el this, porque esta clase implementa la IMenuInterface
+	Menu->SetMenuInterface(this);  //Implementa la IMenuInterface
 }
 
 void UFatPartyGameInstance::LoadInGameMenu()
@@ -91,12 +91,6 @@ void UFatPartyGameInstance::LoadGameMenu()
 	{
 		PlayerHud->Teardown();
 	}
-}
-
-UHudWidget* UFatPartyGameInstance::GetPlayerHUD()  // NO SE USA, VER DE BORRAR
-{
-	UHudWidget* HudWidget = Cast<UHudWidget>(PlayerHud);
-	return HudWidget;
 }
 
 void UFatPartyGameInstance::RestartLevel()

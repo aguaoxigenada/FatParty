@@ -17,22 +17,32 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 protected:
-	// Called when the game starts
+	UPROPERTY(EditInstanceOnly)
+		FName AcceptableActorTag;
+
 	virtual void BeginPlay() override;
 	AActor* GetAcceptableActor() const;
 
-	UPROPERTY(EditInstanceOnly)
-		FName AcceptableActorTag;	
+
 private:
+	UPROPERTY(EditInstanceOnly)
+		TWeakObjectPtr<AActor> ChoosenMover;
+
+	UPROPERTY(EditInstanceOnly)
+		bool bKeepMoving = false;
+
+	void SetMover(AActor* TheMover);
+
 	UMover* Mover; 
 
 	bool CheckIfActorIsPlayer(AActor* Player);
 	bool bIsPlayer;
 	bool CheckedPlayer;
 
-	UPROPERTY(EditInstanceOnly)
-		TWeakObjectPtr<AActor> ChoosenMover;
+	
 
-	void SetMover(AActor* TheMover); 
+
+
+	
 
 };
