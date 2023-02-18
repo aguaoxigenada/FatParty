@@ -12,7 +12,7 @@ void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
 
-	AKnightCharacter* Player = Cast<AKnightCharacter>(GetOwner());
+	AFatPartyCharacter* Player = Cast<AFatPartyCharacter>(GetOwner());
 	if (Player)
 	{
 		Player->SetGrabber(this);
@@ -59,7 +59,7 @@ void UGrabber::Grab()
 		HitComponent->SetSimulatePhysics(true);
 		HitComponent->WakeAllRigidBodies();
 
-		AKnightCharacter* Player = Cast<AKnightCharacter>(GetOwner());
+		AFatPartyCharacter* Player = Cast<AFatPartyCharacter>(GetOwner());
 		if (Player)
 		{
 			Player->ActorGrabbed = HitResult.GetActor();
@@ -97,7 +97,7 @@ void UGrabber::Release()
 	
 	if (IsGrabbed && HasComponent)  // primero el puntero de IsGrabed
 	{
-		AKnightCharacter* player = Cast<AKnightCharacter>(GetOwner());
+		AFatPartyCharacter* player = Cast<AFatPartyCharacter>(GetOwner());
 		if (player)
 		{
 			player->ActorGrabbed = nullptr;

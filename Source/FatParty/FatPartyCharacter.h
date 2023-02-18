@@ -45,7 +45,7 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Interaction")
 	FOnUseItem OnUseItem;
 
-	UFUNCTION(Server, Unreliable)
+	UFUNCTION(BlueprintCallable, Server, Unreliable)
 		void Server_PlayAnimation(UAnimMontage* AnimToPlay);
 
 	UFUNCTION(NetMulticast, Unreliable)
