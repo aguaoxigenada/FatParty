@@ -38,6 +38,7 @@ void AKnightCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("MoveRight", this, &AFatPartyCharacter::MoveRight);
 
 	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &AKnightCharacter::CharacterCanAttack);
+	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Released, this, &AKnightCharacter::StartCooldown);
 
 }
 
@@ -112,7 +113,7 @@ void AKnightCharacter::CharacterCanAttack()
 		Multicast_CharacterAttack();
 	}
 	else {
-		GetWorld()->GetTimerManager().SetTimer(AttackCooldown, this, &AKnightCharacter::SetCooldown, 0.3f, false);
+		GetWorld()->GetTimerManager().SetTimer(AttackCooldown, this, &AKnightCharacter::SetCooldown, 0.5f, false);
 	}
 }
 	
@@ -120,4 +121,26 @@ void AKnightCharacter::CharacterCanAttack()
 void AKnightCharacter::SetCooldown()
 {
 	CanAttack = true;
+}
+
+void AKnightCharacter::MoveForward(float Value)
+{
+	
+	if (CanAttack) {
+		Super::MoveForward(Value);
+		
+	}
+}
+
+void AKnightCharacter::MoveRight(float Value)
+{
+	if (CanAttack) {
+		Super::MoveRight(Value);
+	}
+	
+}
+
+void AKnightCharacter::StartCooldown()
+{
+	GetWorld()->GetTimerManager().SetTimer(AttackCooldown, this, &AKnightCharacter::SetCooldown, 0.5f, false);
 }
