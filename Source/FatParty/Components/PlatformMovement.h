@@ -13,6 +13,7 @@ class FATPARTY_API UPlatformMovement : public UActorComponent
 public:	
 	UPlatformMovement();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	void SetShouldMove(bool ShouldMove);
 
 protected:
 	virtual void BeginPlay() override;
@@ -30,11 +31,15 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Rotation")
 		FVector RotationVelocity = FVector(50, 0, 0);
 
+	UPROPERTY(EditInstanceOnly, Category = "Movement Platform")
+		bool bCanMove = false;
+
 	FVector StartLocation;
 	FRotator StartRotation;
 	FRotator TargetRotation;
 
 	bool bStartingOver = true;
+
 
 	void MovePlatform(float DeltaTime);
 	void RotatePlatform(float DeltaTime);

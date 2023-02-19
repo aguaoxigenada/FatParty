@@ -51,7 +51,7 @@ void AFatPartyCharacter::HitAnimation()
 void AFatPartyCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	DOREPLIFETIME(AFatPartyCharacter, JumpTime);
+    DOREPLIFETIME(AFatPartyCharacter, JumpTime);
 }
 
 void AFatPartyCharacter::BeginPlay()
@@ -124,7 +124,7 @@ void AFatPartyCharacter::Tick(float DeltaTime)
 		{
 			AController* MyOwnerInstigator = this->GetInstigatorController();
 			UClass* DamageTypeClass = UDamageType::StaticClass();
-			//UGameplayStatics::ApplyDamage(this, 1000, MyOwnerInstigator, this, DamageTypeClass);
+			UGameplayStatics::ApplyDamage(this, 1000, MyOwnerInstigator, this, DamageTypeClass);
 		}
 	}
 }

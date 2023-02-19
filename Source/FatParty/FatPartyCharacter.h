@@ -1,4 +1,4 @@
-#pragma once
+  #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
@@ -122,10 +122,10 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 		class UCameraComponent* Camera;
 
-	UPROPERTY(VisibleAnywhere, Category = "Death By Fall")
+	UPROPERTY(EditDefaultsOnly, Category = "Death By Fall")
 		float TimeToDie = 4.f;
 
-	UPROPERTY(Replicated,VisibleAnywhere, Category = "Death By Fall")
+	UPROPERTY(Replicated, VisibleAnywhere, Category = "Death By Fall")
 		float JumpTime = 0.f;
 
 	UPROPERTY(VisibleAnywhere, Category = "Death By Fall")

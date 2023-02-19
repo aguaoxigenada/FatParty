@@ -36,7 +36,13 @@ private:
 		float GrabRadius = 1; 
 
 	UPROPERTY(EditAnywhere)
-		float HoldDistance = 100; 
+		float HoldDistance = 100;
+
+	UPROPERTY(EditAnywhere)
+		float DefaultSpeed = 500;
+
+	UPROPERTY(EditAnywhere)
+		float GrabSpeed = 200;
 
 	bool GetGrabbableInReach(FHitResult &OutHitResult) const;
 };

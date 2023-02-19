@@ -2,6 +2,7 @@
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
 #include "FatParty/Characters/KnightCharacter.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 UGrabber::UGrabber()
 {
@@ -64,10 +65,15 @@ void UGrabber::Grab()
 		{
 			Player->ActorGrabbed = HitResult.GetActor();
 		}
+		Player->GetCharacterMovement()->MaxWalkSpeed = GrabSpeed;
+
 		AActor* ActorGrabbed = nullptr;
 		ActorGrabbed = HitResult.GetActor();
 		ActorGrabbed->Tags.Add("Grabbed");
+		UStaticMeshComponent* Mesh = Cast<UStaticMeshComponent>(ActorGrabbed->GetRootComponent());
+		Mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 
+		//ActorGrabbed->AttachToActor(Player, FAttachmentTransformRules::KeepWorldTransform);
 		ActorGrabbed->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
 		// Como se tiene el physics handle, el objeto queda agarrado por esta funcion y luego en tick permite su movimiento.
@@ -97,10 +103,13 @@ void UGrabber::Release()
 	
 	if (IsGrabbed && HasComponent)  // primero el puntero de IsGrabed
 	{
-		AFatPartyCharacter* player = Cast<AFatPartyCharacter>(GetOwner());
-		if (player)
+		AFatPartyCharacter* Player = Cast<AFatPartyCharacter>(GetOwner());
+		if (Player)
 		{
-			player->ActorGrabbed = nullptr;
+			Player->ActorGrabbed = nullptr;
+			Player->GetCharacterMovement()->MaxWalkSpeed = DefaultSpeed;
+			UStaticMeshComponent* Mesh = Cast<UStaticMeshComponent>(HasComponent);
+			Mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
 		}
 		HasComponent->GetOwner()->Tags.Remove("Grabbed");
 		IsGrabbed->ReleaseComponent();

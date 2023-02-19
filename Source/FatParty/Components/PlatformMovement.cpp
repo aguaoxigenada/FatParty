@@ -18,10 +18,18 @@ void UPlatformMovement::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	MovePlatform(DeltaTime);
-	RotatePlatform(DeltaTime);
+	if(bCanMove)
+	{
+		MovePlatform(DeltaTime);
+		RotatePlatform(DeltaTime);
+	}
+	
 }
 
+void UPlatformMovement::SetShouldMove(bool bShouldMove)
+{
+	bCanMove = bShouldMove;
+}
 void UPlatformMovement::MovePlatform(float DeltaTime)
 {
 	// Chequeo de puntero del por si se decide hacer que el objeto que tiene este componente pueda morir. El puntero desaparece cuando muere.
@@ -69,19 +77,11 @@ void UPlatformMovement::RotatePlatform(float DeltaTime)
 
 bool UPlatformMovement::ShouldPlatformReturn() const
 {
-	//float Distance = GetDistanceMoved();
-	//float Offset = MoveDistance;
-	//UE_LOG(LogTemp, Warning, TEXT("Distance is: %f"), Distance);
-	//UE_LOG(LogTemp, Warning, TEXT("MoveDistance is: %f"), Offset);
 	return GetDistanceMoved() > MoveDistance;
 }
 
 bool UPlatformMovement::ShouldRotationReturn() const
 {
-	//float Distance = GetDistanceRotated();
-	//float Offset = RotationDistance;
-	//UE_LOG(LogTemp, Warning, TEXT("Distance is: %f"), Distance);
-	//UE_LOG(LogTemp, Warning, TEXT("Rotation Offset is: %f"), Offset);
 	return GetDistanceRotated() >= RotationDistance;
 }
 
