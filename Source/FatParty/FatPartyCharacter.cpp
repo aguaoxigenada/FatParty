@@ -124,7 +124,7 @@ void AFatPartyCharacter::Tick(float DeltaTime)
 		{
 			AController* MyOwnerInstigator = this->GetInstigatorController();
 			UClass* DamageTypeClass = UDamageType::StaticClass();
-			UGameplayStatics::ApplyDamage(this, 1000, MyOwnerInstigator, this, DamageTypeClass);
+			//UGameplayStatics::ApplyDamage(this, 1000, MyOwnerInstigator, this, DamageTypeClass);
 		}
 	}
 }
@@ -146,6 +146,24 @@ void AFatPartyCharacter::StartJump()
 void AFatPartyCharacter::Multicast_JumpAnimation_Implementation()
 {
 	StartJump();
+}
+
+void AFatPartyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	check(PlayerInputComponent);
+	PlayerInputComponent->BindAction("ChangeCam", IE_Pressed, this, &AFatPartyCharacter::ChangeCam);
+}
+
+void AFatPartyCharacter::ChangeCam()
+{
+	bIsometric = !bIsometric;
+	
+	if(bIsometric)
+		CameraBoom->SetRelativeRotation(FRotator(-60, 270.f, 0.f));
+	else
+		CameraBoom->SetRelativeRotation(FRotator(-60.f, 290.f, 0.f));
 }
 
 void AFatPartyCharacter::SetGrabber(UGrabber* Grabber)

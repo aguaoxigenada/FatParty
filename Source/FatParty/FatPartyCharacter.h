@@ -65,6 +65,7 @@ public:
 	UFUNCTION(Server,Unreliable)
 		void Server_UpdateJumpTime();
 
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void HandleDestruction();
 	virtual void Tick(float DeltaTime) override;
 	virtual void Fire();
@@ -72,6 +73,7 @@ public:
 	void RotateToCharacter(FVector LookAtTarget);
 	void MoveForward(float Val);
 	void MoveRight(float Val);
+	void ChangeCam();
 	void SetGrabber(UGrabber* Grabber);
 	void SetThrower(UThrower* Thrower);
 	void StartJump();
@@ -81,6 +83,7 @@ public:
 	UGrabber* PlayerGrabber = nullptr;
 	UThrower* PlayerThrower = nullptr;
 	bool bAlive = true;
+	bool bIsometric = false;
 
 
 
@@ -153,5 +156,6 @@ private:
 	ASpeedPowerUp* SpeedComp;
 
 	float TimeDelay = 3.f;
+
 };
 
