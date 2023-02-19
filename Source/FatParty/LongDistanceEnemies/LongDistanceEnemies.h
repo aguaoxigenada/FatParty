@@ -14,6 +14,9 @@ class FATPARTY_API ALongDistanceEnemies : public AFatPartyEnemy
 public:
 	virtual void RotateToCharacter(FVector LookAtTarget);
 	AFatPartyCharacter* FatPartyCharacter;
+	UPROPERTY(EditAnywhere)
+		UAnimationAsset* AttackAnim = nullptr;
+
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Turret Components", meta = (AllowPrivateAccess = "true"))
