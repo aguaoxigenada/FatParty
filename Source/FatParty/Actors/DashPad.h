@@ -15,7 +15,6 @@ class FATPARTY_API ADashPad : public AActor
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this actor's properties
 	ADashPad();
 
 	UPrimitiveComponent* ObjectToThrow = nullptr;
@@ -37,8 +36,8 @@ protected:
 		float LaunchStrength;
 	/* Angle added on top of actor rotation to launch the character.
 	Marked 'EditInstanceOnly' to allow in-level editing of this property per instance. */
-	UPROPERTY(EditInstanceOnly, Category = "DashPad")
-		float LaunchPitchAngle;
+	//UPROPERTY(EditInstanceOnly, Category = "DashPad")
+		//float LaunchPitchAngle;
 	/* Effect to play when activating launch pad */
 	UPROPERTY(EditDefaultsOnly, Category = "DashPad", BlueprintReadOnly)
 		UParticleSystem* ActivateLaunchPadEffect;

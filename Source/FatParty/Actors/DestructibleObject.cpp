@@ -66,8 +66,9 @@ void ADestructibleObject::SpawnDropObject()
 {
 	if (ObjectToDrop != nullptr)
 	{
+		FVector PositionToSpawn = this->GetActorLocation() + FVector(0, 0, ZOffset);
 		GenericBuildingClass = ObjectToDrop->GetClass();
-		ABasePowerUp* BuildingToProspect = GetWorld()->SpawnActor<ABasePowerUp>(GenericBuildingClass, this->GetActorLocation(), this->GetActorRotation());
+		ABasePowerUp* BuildingToProspect = GetWorld()->SpawnActor<ABasePowerUp>(GenericBuildingClass, PositionToSpawn, this->GetActorRotation());
 
 		if (BuildingToProspect == nullptr) return;
 

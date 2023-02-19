@@ -1,13 +1,11 @@
 #include "SwordActor.h"
-#include "Components/BoxComponent.h"
 
 ASwordActor::ASwordActor()
 {
-	//WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WeaponMesh"));
-	//RootComponent = WeaponMesh;
 	PrimaryActorTick.bCanEverTick = true;
-	BoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision"));
-	BoxCollision->SetupAttachment(WeaponMesh);
+	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WeaponMesh"));
+	RootComponent = WeaponMesh;
+
 }
 
 void ASwordActor::Tick(float DeltaTime)

@@ -84,7 +84,6 @@ AActor *UTriggerComponent::GetAcceptableActor() const
     // Llena el Array de Actors con todos los actores que hacen overlap.
     GetOverlappingActors(Actors);
 
-    // for all AActors in Actors do:   (es como el in en C#)
     for (AActor *Actor : Actors) 
     {
         // A cada uno de los actores, revisa primero si el Tag es el "Aceptable"
@@ -95,6 +94,7 @@ AActor *UTriggerComponent::GetAcceptableActor() const
 
     	if (bHasAcceptableTag && !bIsGrabbed)
         {
+            //UE_LOG(LogTemp, Warning, TEXT("Hello"));
             return Actor;
         }
     }

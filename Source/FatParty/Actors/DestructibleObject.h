@@ -54,11 +54,15 @@ private:
 	UPROPERTY()
 		UClass* GenericBuildingClass;
 
+	UPROPERTY(EditDefaultsOnly)
+		double ZOffset = 10;
+
 	UFUNCTION()
 		void HitMesh(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit );
 
 
 	float Velocity = 0.f;
+
 	UHealthComponent* HealthComp;
 };
 

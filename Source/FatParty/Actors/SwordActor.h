@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Engine/StaticMeshActor.h"
+#include "GameFramework/Actor.h"
 #include "SwordActor.generated.h"
 
 class UBoxComponent;
@@ -9,7 +9,7 @@ class UBoxComponent;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDestroyedSword);
 
 UCLASS()
-class FATPARTY_API ASwordActor : public AStaticMeshActor
+class FATPARTY_API ASwordActor : public AActor
 {
 	GENERATED_BODY()
 
@@ -22,8 +22,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	UStaticMeshComponent* WeaponMesh;
-	UBoxComponent* BoxCollision;
+	UPROPERTY(EditDefaultsOnly)
+		UStaticMeshComponent* WeaponMesh;  
 
 	double ActualZ;
 	double ZVectorLimit = -2000;

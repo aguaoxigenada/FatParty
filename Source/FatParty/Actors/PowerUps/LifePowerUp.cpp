@@ -2,6 +2,7 @@
 #include "Components/SphereComponent.h"
 #include "FatParty/FatPartyCharacter.h"
 #include "FatParty/Components/HealthComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 ALifePowerUp::ALifePowerUp()
 {
@@ -30,6 +31,7 @@ void ALifePowerUp::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AAc
 			if( HealthComponent )
 			{
 				HealthComponent->AddHealth(LifeToAdd);
+				UGameplayStatics::PlaySoundAtLocation(this, PickedSound, GetActorLocation());
 			}
 		}
 
