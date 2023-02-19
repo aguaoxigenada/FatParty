@@ -10,9 +10,7 @@ class FATPARTY_API ASkeletonArcher : public ALongDistanceEnemies
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere)
-		UAnimationAsset* AttackAnim = nullptr;
-
+	
 	ASkeletonArcher();
 	virtual void Tick(float DeltaTime) override;
 	virtual void RotateToCharacter(FVector LookAtTarget) override;

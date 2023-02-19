@@ -53,6 +53,7 @@ bool ALongDistanceEnemies::InFireRange()
 
 void ALongDistanceEnemies::Fire()
 {
+    GetMesh()->PlayAnimation(AttackAnim, false);
 	FTimerHandle TimerHandleToOpenInGameMenu;
     GetWorld()->GetTimerManager().SetTimer(TimerHandleToOpenInGameMenu, this, &ALongDistanceEnemies::SpawnProjectile, ShotDelay, false );
 }
