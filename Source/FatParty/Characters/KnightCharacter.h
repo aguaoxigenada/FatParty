@@ -35,6 +35,10 @@ public:
 	void CharacterCanAttack();
 
 	void SetCooldown();
+
+	virtual void MoveForward(float Value) override;
+	virtual void MoveRight(float Value) override;
+	void StartCooldown();
 	
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

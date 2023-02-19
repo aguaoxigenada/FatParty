@@ -71,8 +71,8 @@ public:
 	virtual void Fire();
 
 	void RotateToCharacter(FVector LookAtTarget);
-	void MoveForward(float Val);
-	void MoveRight(float Val);
+	virtual void MoveForward(float Val);
+	virtual void MoveRight(float Val);
 	void ChangeCam();
 	void SetGrabber(UGrabber* Grabber);
 	void SetThrower(UThrower* Thrower);
