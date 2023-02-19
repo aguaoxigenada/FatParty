@@ -91,6 +91,7 @@ void AKnightCharacter::Multicast_CharacterAttack_Implementation()
 
 void AKnightCharacter::CharacterAttack()
 {
+	UWorld* World = GetWorld();
 	AKnightCharacter* KnightCharacter = Cast<AKnightCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
 
 	if (KnightCharacter)
@@ -103,6 +104,7 @@ void AKnightCharacter::CharacterAttack()
 
 		else
 			Server_PlayAnimation(AttackAnim);
+			UGameplayStatics::PlaySound2D(World, AttackSound, 1.0f, 1.0f);
 	}
 }
 

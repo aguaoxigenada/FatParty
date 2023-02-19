@@ -6,6 +6,7 @@
 
 class UGrabber;
 class UThrower;
+class USoundBase;
 
 UCLASS()
 class FATPARTY_API AKnightCharacter : public AFatPartyCharacter
@@ -54,6 +55,9 @@ public:
 	bool CanAttack = true;
 
 	FTimerHandle AttackCooldown;
+
+	UPROPERTY(EditAnywhere)
+		USoundBase* AttackSound = nullptr;
 		
 protected:
 	virtual void BeginPlay() override;

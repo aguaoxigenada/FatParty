@@ -3,6 +3,7 @@
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "FatParty/FatPartyCharacter.h"
 #include "FatParty/FatPartyGameInstance.h"
+#include "FatParty/Characters/KnightCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "FatParty/GameMode/FatPartyGameMode.h"
 #include "FatParty/UI/HudWidget.h"
@@ -53,15 +54,19 @@ void UHealthComponent::DamageTaken_Implementation(AActor* DamagedActor, float Da
 	// Instigator: Representa el peón/personaje responsable de cualquier acción que realice el actor engendrado, como infligir daño
 	// DamageCauser: El actor que realmente infligió este daño (por ejemplo, un proyectil o una granada).
 	// UDamageType: Un objeto que puede influir en los cálculos de daño.
-
+	
 	if(Damage <= 0.f) return;
 	if (AFatPartyCharacter* Actor = Cast<AFatPartyCharacter>(DamagedActor)) {
+		
 		Actor->HitAnimation();
+		
 	}
 	else if (AFatPartyEnemy* Enemy = Cast<AFatPartyEnemy>(DamagedActor)) {
 		Enemy->PlayAnimMontage(Enemy->HitAnimation);
 	}
 	Health -= Damage;
+	
+
 
 	OnHealthChange.Broadcast();
 	OnObjectDamaged.Broadcast();
