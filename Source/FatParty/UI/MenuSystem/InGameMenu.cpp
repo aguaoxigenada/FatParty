@@ -13,6 +13,9 @@ bool UInGameMenu::Initialize()
 	if(!ensure(LevelPassed_MenuButton!=nullptr)) return false;
 	LevelPassed_MenuButton->OnClicked.AddDynamic(this, &UInGameMenu::GoToMainMenu);
 
+	if(!ensure(NextLevelButton!=nullptr)) return false;
+	NextLevelButton->OnClicked.AddDynamic(this, &UInGameMenu::GoToNextLevel);
+
 	if(!ensure(LevelLost_MenuButton!=nullptr)) return false;
 	LevelLost_MenuButton->OnClicked.AddDynamic(this, &UInGameMenu::GoToMainMenu);
 
@@ -46,6 +49,15 @@ void UInGameMenu::GoToMainMenu()
 	{
 		Teardown();
 		MenuInterface->LoadGameMenu();
+	}
+}
+
+void UInGameMenu::GoToNextLevel()
+{
+	if(MenuInterface != nullptr)
+	{
+		Teardown();
+		MenuInterface->LoadNextLevel();
 	}
 }
 

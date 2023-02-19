@@ -29,6 +29,9 @@ private:
 		UButton* LevelLost_MenuButton;
 
 	UPROPERTY(meta = (BindWidget))
+		UButton* NextLevelButton;
+
+	UPROPERTY(meta = (BindWidget))
 		UButton* RetryButton;
 
 	UPROPERTY(meta = (BindWidget))
@@ -51,6 +54,9 @@ private:
 
 	UFUNCTION()
 		void GoToMainMenu();
+
+	UFUNCTION()
+		void GoToNextLevel();
 
 	UFUNCTION()
 		void RetryLevel();

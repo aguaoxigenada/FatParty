@@ -37,6 +37,9 @@ public:
 		virtual void LoadGameMenu() override;
 
 	UFUNCTION()
+		virtual void LoadNextLevel() override;
+
+	UFUNCTION()
 		virtual void RestartLevel() override;
 
 	UFUNCTION(Exec)

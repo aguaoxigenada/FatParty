@@ -93,6 +93,19 @@ void UFatPartyGameInstance::LoadGameMenu()
 	}
 }
 
+void UFatPartyGameInstance::LoadNextLevel()
+{
+	UWorld* World = GetWorld();
+	if(!ensure(World!=nullptr)) return;
+	
+	if(PlayerHud != nullptr)
+	{
+		PlayerHud->Teardown();
+	}
+
+	World->ServerTravel("/Game/Maps/Dungeon_02", ETravelType::TRAVEL_Absolute);
+}
+
 void UFatPartyGameInstance::RestartLevel()
 {
 	UWorld* World = GetWorld();

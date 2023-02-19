@@ -24,6 +24,7 @@ public:
 	virtual void Join(const FString& Address) = 0;
 	virtual void LoadGameMenu() = 0;
 	virtual void RestartLevel() = 0;
+	virtual void LoadNextLevel() = 0;
 	virtual void QuitGame() = 0;
 
 

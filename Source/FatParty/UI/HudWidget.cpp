@@ -3,7 +3,6 @@
 #include "FatParty/FatPartyCharacter.h"
 #include "FatParty/Components/HealthComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Net/UnrealNetwork.h"
 
 void UHudWidget::NativeOnInitialized()
 {
@@ -67,8 +66,6 @@ void UHudWidget::RepeatingVisualTimer()
 	
 	TimerCount--;
 
-	// Setear el timer al Texto
-	//HudTimer->SetText(FText::FromString(FString::FromInt(TimerCount)));
 }
 
 void UHudWidget::PlayerLost()
