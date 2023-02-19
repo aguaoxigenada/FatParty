@@ -37,14 +37,39 @@ void AFatPartyGameMode::ActorDied(AActor *DeadActor)
     }
 }
 
+AFatPartyGameMode::AFatPartyGameMode()
+{
+    PlayerControllerClass = AThePlayerController::StaticClass();
+}
+
+
+
 void AFatPartyGameMode::BeginPlay()
 {
     Super::BeginPlay();
 
     // Inicializa la configuracion que se quiere en el juego
     HandleGameStart();
+
+
     
 }
+
+UClass* AFatPartyGameMode::GetDefaultPawnClassForController_Implementation(AController* InController)
+{
+    /* Override Functionality to get Pawn from PlayerController */
+    AThePlayerController* MyController = Cast<AThePlayerController>(InController);
+    if (MyController)
+    {
+        return MyController->GetPlayerPawnClass();
+    }
+
+    /* If we don't get the right Controller, use the Default Pawn */
+    return DefaultPawnClass;
+
+	///return Super::GetDefaultPawnClassForController_Implementation(InController);
+}
+
 
 void AFatPartyGameMode::HandleGameStart()
 {

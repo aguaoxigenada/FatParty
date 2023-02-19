@@ -109,6 +109,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 		float Damage = 50.f;
 
+	UPROPERTY(EditAnywhere, Category = "SFX")
+		USoundBase* OnJumpSound;
+
 private:
 	UPROPERTY(EditAnywhere, Category = "TurnRate")
 		float TurnRate = 100.f;

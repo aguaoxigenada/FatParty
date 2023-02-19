@@ -42,6 +42,13 @@ void AFatPartyEnemy::Multicast_HandleDestruction_Implementation()
 	}
 }
 
+
+void AFatPartyEnemy::Multicast_PlayAnimation_Implementation(UAnimSequence* AnimToPlay)
+{
+	GetMesh()->PlayAnimation(AnimToPlay,false);
+
+}
+
 void AFatPartyEnemy::HandleDestruction()
 {
 	Server_HandleDestruction();

@@ -4,7 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "DashPad.generated.h"
 
-class AKnightCharacter;
+class AFatPartyCharacter;
 class UStaticMeshComponent;
 class UBoxComponent;
 class UArrowComponent;
@@ -26,6 +26,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 		UBoxComponent* OverlapComp;
 
+
 	UFUNCTION()
 		void OverlapLaunchPad(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
@@ -42,11 +43,14 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "DashPad", BlueprintReadOnly)
 		UParticleSystem* ActivateLaunchPadEffect;
 
+	UPROPERTY(EditAnywhere, Category = "DashPad")
+		USoundBase* OnOverlapSound;
+
 private:
 	float TimeInAir = 0.3f;
 
 	void Jumped();
 
-	AKnightCharacter* Player = nullptr;
+	AFatPartyCharacter* Player = nullptr;
 
 };

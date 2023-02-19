@@ -17,6 +17,10 @@ public:
 		void Server_HandleDestruction();
 	UFUNCTION(NetMulticast, Unreliable)
 		void Multicast_HandleDestruction();
+
+	UFUNCTION(BlueprintCallable, NetMulticast, Unreliable)
+		void Multicast_PlayAnimation(UAnimSequence* AnimToPlay);
+
 	virtual void HandleDestruction();
 	UPROPERTY(EditAnywhere)
 		UAnimMontage* HitAnimation = nullptr;

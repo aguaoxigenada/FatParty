@@ -133,7 +133,11 @@ void AFatPartyCharacter::StartJump()
 {
 	Jump();
 	Server_UpdateJumpTime();
-	
+
+	if (OnJumpSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, OnJumpSound, GetActorLocation());
+	}
 	/*if (this->GetCharacterMovement()->IsFalling()) {
 		Server_PlayAnimation(JumpAnim);
 	}

@@ -28,15 +28,20 @@ void ADashPad::OverlapLaunchPad(UPrimitiveComponent* OverlappedComponent, AActor
 	LaunchDirection.Pitch += LaunchPitchAngle;
 	FVector LaunchVelocity = LaunchDirection.Vector() * LaunchStrength;
 	*/
-	Player = Cast<AKnightCharacter>(OtherActor);
+	Player = Cast<AFatPartyCharacter>(OtherActor);
 
 	if (Player)
 	{
 		Player->Multicast_JumpAnimation();
 		Player->LaunchCharacter(FVector(0,0,LaunchStrength), false, true);
 
-		// Spawn FX
-		//UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ActivateLaunchPadEffect, GetActorLocation());
+		//Spawn FX
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ActivateLaunchPadEffect, GetActorLocation());
+
+		if (OnOverlapSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, OnOverlapSound, Player->GetActorLocation());
+		}
 	}
 	else if (OtherComp && OtherComp->IsSimulatingPhysics())
 	{

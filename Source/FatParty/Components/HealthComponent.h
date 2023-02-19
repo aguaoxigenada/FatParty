@@ -39,7 +39,7 @@ private:
 		float MaxHealth = 100.f;
 
 	UPROPERTY(EditAnywhere)
-		float Health = 0.f;
+		float Health = 100.f;
 
 	UPROPERTY(EditAnywhere)
 		float Delay = 2.f;

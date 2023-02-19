@@ -16,6 +16,7 @@ protected:
 
 	virtual void BeginPlay() override;
 
+	virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
 	UFUNCTION(BlueprintImplementableEvent)  // No es necesario crearla en cpp cuando es un BlueprintImplementableEvent
 	void StartGame();
 
@@ -28,6 +29,8 @@ public:
 	void ActorDied(AActor* DeadActor);
 
 	class ABaseCharacter* BaseCharacter;
+
+	AFatPartyGameMode();
 
 private:
 	AFatPartyCharacter* FatPartyCharacter;
