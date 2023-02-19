@@ -133,7 +133,14 @@ void AFatPartyCharacter::StartJump()
 {
 	Jump();
 	Server_UpdateJumpTime();
-	Server_PlayAnimation(JumpAnim);
+	
+	/*if (this->GetCharacterMovement()->IsFalling()) {
+		Server_PlayAnimation(JumpAnim);
+	}
+	else {
+		StopAnimMontage(JumpAnim);
+	}*/
+
 }
 
 void AFatPartyCharacter::Multicast_JumpAnimation_Implementation()

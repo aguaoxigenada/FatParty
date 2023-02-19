@@ -46,6 +46,21 @@ void AArcherCharacter::Fire()
 	}
 }
 
+void AArcherCharacter::CharacterCanAttack()
+{
+	if (CanAttack) {
+		CanAttack = false;
+		Fire();
+	}else {
+		GetWorld()->GetTimerManager().SetTimer(AttackCooldown, this, &AArcherCharacter::SetCooldown, 0.3f, false);
+	}
+}
+
+void AArcherCharacter::SetCooldown()
+{
+	CanAttack = true;
+}
+
 void AArcherCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -58,7 +73,7 @@ void AArcherCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("MoveRight", this, &AFatPartyCharacter::MoveRight);
 	//PlayerInputComponent->BindAxis(TEXT("Turn"), this, &AFatPartyCharacter::Turn);
 
-	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &AArcherCharacter::Fire);
+	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &AArcherCharacter::CharacterCanAttack);
 
 }
 

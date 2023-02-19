@@ -4,6 +4,7 @@
 #include "GameFramework/Character.h"
 #include "FatPartyCharacter.generated.h"
 
+
 class ASwordActor;
 class ASpeedPowerUp;
 class UThrower;
@@ -14,6 +15,9 @@ class USceneComponent;
 class UCameraComponent;
 class UAnimMontage;
 class USoundBase;
+class UImage;
+class UTexture2D;
+
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnUseItem);
 
@@ -31,6 +35,10 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		UAnimMontage* HitAnim = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UTexture2D* HUDImg = nullptr;
+
+
 
 	void HitAnimation();
 

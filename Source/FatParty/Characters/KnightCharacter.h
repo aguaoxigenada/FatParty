@@ -31,6 +31,10 @@ public:
 		void Multicast_CharacterAttack();
 
 	void CharacterAttack();
+
+	void CharacterCanAttack();
+
+	void SetCooldown();
 	
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -43,6 +47,9 @@ public:
 	
 	bool bHadJumped = false;
 	float Distance = 0.f;
+	bool CanAttack = true;
+
+	FTimerHandle AttackCooldown;
 		
 protected:
 	virtual void BeginPlay() override;

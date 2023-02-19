@@ -18,6 +18,8 @@ public:
 	UFUNCTION(NetMulticast, Unreliable)
 		void Multicast_HandleDestruction();
 	virtual void HandleDestruction();
+	UPROPERTY(EditAnywhere)
+		UAnimMontage* HitAnimation = nullptr;
 
 protected:
 	virtual void BeginPlay() override;

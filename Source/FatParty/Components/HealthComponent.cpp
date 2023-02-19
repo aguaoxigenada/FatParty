@@ -7,6 +7,7 @@
 #include "FatParty/GameMode/FatPartyGameMode.h"
 #include "FatParty/UI/HudWidget.h"
 #include "FatParty/UI/MenuSystem/InGameMenu.h"
+#include "FatParty/FatPartyEnemy.h"
 
 UHealthComponent::UHealthComponent()
 {
@@ -56,6 +57,9 @@ void UHealthComponent::DamageTaken_Implementation(AActor* DamagedActor, float Da
 	if(Damage <= 0.f) return;
 	if (AFatPartyCharacter* Actor = Cast<AFatPartyCharacter>(DamagedActor)) {
 		Actor->HitAnimation();
+	}
+	else if (AFatPartyEnemy* Enemy = Cast<AFatPartyEnemy>(DamagedActor)) {
+		Enemy->PlayAnimMontage(Enemy->HitAnimation);
 	}
 	Health -= Damage;
 

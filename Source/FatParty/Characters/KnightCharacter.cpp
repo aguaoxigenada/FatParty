@@ -4,6 +4,7 @@
 #include "FatParty/Components/Thrower.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/CapsuleComponent.h"
+#include "TimerManager.h"
 
 
 AKnightCharacter::AKnightCharacter()
@@ -36,7 +37,7 @@ void AKnightCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("MoveForward", this, &AFatPartyCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AFatPartyCharacter::MoveRight);
 
-	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &AKnightCharacter::Multicast_CharacterAttack);
+	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &AKnightCharacter::CharacterCanAttack);
 
 }
 
@@ -102,4 +103,21 @@ void AKnightCharacter::CharacterAttack()
 		else
 			Server_PlayAnimation(AttackAnim);
 	}
+}
+
+void AKnightCharacter::CharacterCanAttack()
+{
+	if (CanAttack) {
+		CanAttack = false;
+		Multicast_CharacterAttack();
+	}
+	else {
+		GetWorld()->GetTimerManager().SetTimer(AttackCooldown, this, &AKnightCharacter::SetCooldown, 0.3f, false);
+	}
+}
+	
+
+void AKnightCharacter::SetCooldown()
+{
+	CanAttack = true;
 }
