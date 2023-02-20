@@ -76,7 +76,8 @@ void UFatPartyGameInstance::Host()
 	UWorld* World = GetWorld();
 	if(!ensure(World != nullptr)) return;
 
-	World->ServerTravel("/Game/Maps/Dungeon_01?listen?ip=25.14.116.251");  // aca iria lo de hamachi si lo quiero hacer listener 192.168.1.10   25.14.116.251
+	// Aca se coloca la URL de Hamachi o propia para jugar en LAN
+	World->ServerTravel("/Game/Maps/Dungeon_01?listen?ip=25.76.209.200");  
 
 }
 
@@ -102,6 +103,11 @@ void UFatPartyGameInstance::LoadNextLevel()
 	{
 		PlayerHud->Teardown();
 	}
+
+	UEngine* Engine = GetEngine();
+	if(!ensure(Engine!=nullptr)) return;
+
+	Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, TEXT("Travelling to new Level"));
 
 	World->ServerTravel("/Game/Maps/Dungeon_02", ETravelType::TRAVEL_Absolute);
 }
