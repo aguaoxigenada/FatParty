@@ -77,7 +77,7 @@ void UFatPartyGameInstance::Host()
 	if(!ensure(World != nullptr)) return;
 
 	// Aca se coloca la URL de Hamachi o propia para jugar en LAN
-	World->ServerTravel("/Game/Maps/Dungeon_01?listen?ip=25.5.193.208");  
+	World->ServerTravel("/Game/Maps/Dungeon_02?listen?ip=25.5.193.208");  
 
 }
 

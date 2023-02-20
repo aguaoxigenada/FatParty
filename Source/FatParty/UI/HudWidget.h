@@ -37,10 +37,15 @@ private:
 		float TimerCount = 240;
 
 	void RepeatingVisualTimer();
-	void PlayerLost();
-	void GameTimer();
+
 	UFUNCTION(BlueprintCallable)
-	void UpdateTime(int newTime);
+		void PlayerLost();
+
+	UFUNCTION(BlueprintCallable)
+		void UpdateTime(int newTime);
+
+	void GameTimer();
+
 
 	UHealthComponent* HealthComp;
 

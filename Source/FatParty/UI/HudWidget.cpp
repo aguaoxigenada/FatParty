@@ -2,6 +2,7 @@
 #include "Components/TextBlock.h"
 #include "FatParty/FatPartyCharacter.h"
 #include "FatParty/Components/HealthComponent.h"
+#include "FatParty/GameMode/FatPartyGameMode.h"
 #include "Kismet/GameplayStatics.h"
 
 void UHudWidget::NativeOnInitialized()
@@ -25,10 +26,8 @@ void UHudWidget::NativeOnInitialized()
 		}
 
 		HealthComp->OnHealthChange.AddDynamic(this, &UHudWidget::PlayerDamaged);
-
+		GameTimer();
 	}
-
-	GameTimer();
 }
 
 void UHudWidget::GameTimer()
@@ -38,7 +37,8 @@ void UHudWidget::GameTimer()
 		&UHudWidget::PlayerLost                                // Funcion de la clase
 														       // Parametro pasado a la clase (si se quiere)
 	);
-	
+
+
 	// Start Repeating function
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UHudWidget::RepeatingVisualTimer, 1.0f, true, 0.f);
 	
