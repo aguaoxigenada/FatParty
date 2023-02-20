@@ -21,7 +21,8 @@ void ALongDistanceEnemies::CheckFireCondition()
 
     if (InFireRange() && FatPartyCharacter->bAlive)
     {
-       Fire();
+       //Fire();
+        ServerFire();
     }
 }
 
@@ -49,6 +50,11 @@ bool ALongDistanceEnemies::InFireRange()
     }
 
     return false;
+}
+
+void ALongDistanceEnemies::ServerFire_Implementation()
+{
+	Fire();
 }
 
 void ALongDistanceEnemies::Fire()

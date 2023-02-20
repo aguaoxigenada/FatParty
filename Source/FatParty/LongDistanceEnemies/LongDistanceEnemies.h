@@ -27,7 +27,13 @@ protected:
 
 	virtual void BeginPlay() override;
 	virtual void HandleDestruction() override;
-	virtual void Fire();
+	
+	//UFUNCTION(NetMulticast, Reliable)
+		virtual void Fire();
+
+	UFUNCTION(Server, Reliable)
+		virtual void ServerFire();
+
 	void SpawnProjectile();
 	bool InFireRange();
 
