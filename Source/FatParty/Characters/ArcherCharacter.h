@@ -44,7 +44,15 @@ public:
 		
 protected:
 	virtual void BeginPlay() override;
+
 	virtual void Fire() override;
+
+	UFUNCTION(Server, Reliable)
+		void Fire_Server();
+
+	UFUNCTION(NetMulticast, Reliable)
+		void Multicast_Fire();
+
 	
 private:
 	APlayerController* ArcherPlayerController;

@@ -3,6 +3,7 @@
 #include "DrawDebugHelpers.h"
 #include "FatParty/Actors/Projectile.h"
 #include "FatParty/Components/Thrower.h"
+#include "FatParty/Controllers/ThePlayerController.h"
 
 AArcherCharacter::AArcherCharacter()
 {
@@ -20,10 +21,23 @@ void AArcherCharacter::BeginPlay()
 	Weapon->AttachToComponent(Body,FAttachmentTransformRules::KeepRelativeTransform, TEXT("LeftHandSocket"));
 }
 
+void AArcherCharacter::Multicast_Fire_Implementation()
+{
+	Fire();
+	
+}
+
+void AArcherCharacter::Fire_Server_Implementation()
+{
+	Multicast_Fire();
+}
+
 void AArcherCharacter::Fire()
 {
+	//AArcherCharacter* ArcherCharacter = Cast<AArcherCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
+	AThePlayerController* PlayerController = Cast<AThePlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+	AArcherCharacter* ArcherCharacter = Cast<AArcherCharacter>(PlayerController->GetPlayerPawnClass()->GetDefaultObject());
 
-	AArcherCharacter* ArcherCharacter = Cast<AArcherCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
 	if (ArcherCharacter->ActorGrabbed == nullptr)
 	{
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
@@ -50,9 +64,9 @@ void AArcherCharacter::CharacterCanAttack()
 {
 	if (CanAttack) {
 		CanAttack = false;
-		Fire();
+		Fire_Server();
 	}else {
-		GetWorld()->GetTimerManager().SetTimer(AttackCooldown, this, &AArcherCharacter::SetCooldown, 0.3f, false);
+		GetWorld()->GetTimerManager().SetTimer(AttackCooldown, this, &AArcherCharacter::SetCooldown, 0.2f, false);
 	}
 }
 

@@ -18,6 +18,12 @@ public:
 	UFUNCTION(NetMulticast, Unreliable)
 		void Multicast_HandleDestruction();
 
+	UFUNCTION(NetMulticast, Unreliable)
+		void MulticastDeathParticles();
+
+	UFUNCTION(Server, Unreliable)
+		void ServerDeathParticles();
+
 	UFUNCTION(BlueprintCallable, NetMulticast, Unreliable)
 		void Multicast_PlayAnimation(UAnimSequence* AnimToPlay);
 

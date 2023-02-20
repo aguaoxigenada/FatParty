@@ -24,11 +24,31 @@ void AFatPartyEnemy::BeginPlay()
 
 }
 
+void AFatPartyEnemy::MulticastDeathParticles_Implementation()
+{
+	ServerDeathParticles();
+	
+}
+
+void AFatPartyEnemy::ServerDeathParticles_Implementation()
+{
+	UGameplayStatics::SpawnEmitterAtLocation(this, DeathParticles, GetActorLocation(), GetActorRotation());
+}
+
+
 void AFatPartyEnemy::Multicast_HandleDestruction_Implementation()
 {
 	if (DeathParticles)
 	{
-		UGameplayStatics::SpawnEmitterAtLocation(this, DeathParticles, GetActorLocation(), GetActorRotation());
+		if(HasAuthority())
+		{
+			MulticastDeathParticles();
+		}
+		else
+		{
+			ServerDeathParticles();
+		}
+		
 	}
 
 	if (DeathSound)
