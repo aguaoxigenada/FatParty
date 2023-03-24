@@ -1,12 +1,28 @@
 #include "MainMenu.h"
+#include "ServerRow.h"
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
+#include "UObject/ConstructorHelpers.h"
 #include "Components/EditableTextBox.h"
+#include "Components/TextBlock.h"
 
+UMainMenu::UMainMenu(const FObjectInitializer &ObjectInitializer)
+ {
+ 	ConstructorHelpers::FClassFinder<UUserWidget>ServerRowBP_Class(TEXT("/Game/Blueprints/UI/WBP_ServerRow"));
+	if(!ensure(ServerRowBP_Class.Class!=nullptr)) return;
+
+	ServerRowClass = ServerRowBP_Class.Class;
+ }
 bool UMainMenu::Initialize()
 {
 	bool Success = Super::Initialize();
 	if(!Success) return false;
+
+	if(!ensure(HostButton!=nullptr)) return false;
+	MenuHostButton->OnClicked.AddDynamic(this, &UMainMenu::OpenHostMenu);
+
+	if(!ensure(CancelHostButton!=nullptr)) return false;
+	CancelHostButton->OnClicked.AddDynamic(this, &UMainMenu::OpenMainMenu);
 
 	if(!ensure(HostButton!=nullptr)) return false;
 	HostButton->OnClicked.AddDynamic(this, &UMainMenu::HostServer);
@@ -22,8 +38,17 @@ bool UMainMenu::Initialize()
 
 	if(!ensure(QuitButton!=nullptr)) return false;
 	QuitButton->OnClicked.AddDynamic(this, &UMainMenu::QuitSession);
-
+	
 	return true;
+}
+
+void UMainMenu::OpenHostMenu()
+{
+	if(!ensure(MenuSwitcher!=nullptr)) return;
+	if(!ensure(HostMenu!=nullptr)) return;
+
+	MenuSwitcher->SetActiveWidget(HostMenu);
+
 }
 
 void UMainMenu::HostServer()
@@ -31,16 +56,65 @@ void UMainMenu::HostServer()
 	
 	if(MenuInterface != nullptr)
 	{
-		MenuInterface->Host();
+		if(!ensure(TextInput!=nullptr)) return;
+		HostName = TextInput->GetText().ToString();
+
+		MenuInterface->Host(HostName);
 
 	}
 
 	//UE_LOG(LogTemp, Warning, TEXT("Host has been clicked!"));
 }
 
+void UMainMenu::SetServerList(TArray<FServerData> ServerNames)
+{
+	UWorld* World = this->GetWorld();
+	if(!ensure(World !=nullptr)) return;
+
+	ServerList->ClearChildren();
+
+	uint32 i = 0;
+ 	for(const FServerData& ServerData : ServerNames)
+	{
+		UServerRow* Row = CreateWidget<UServerRow>(this, ServerRowClass);
+		if(!ensure(Row !=nullptr)) return;
+
+		Row->ServerName->SetText(FText::FromString(ServerData.Name));
+		Row->HostUsername->SetText(FText::FromString(ServerData.HostUsername));
+		FString FractionText = FString::Printf(TEXT("%d/%d"), ServerData.CurrentPlayers, ServerData.MaxPlayers);
+		Row->ConnectionFraction->SetText(FText::FromString(FractionText));
+		Row->Setup(this, i);
+		++i;
+
+		ServerList->AddChild(Row);
+		
+	
+	}
+}
+
+void UMainMenu::SelectIndex(uint32 Index)
+{
+	SelectedIndex = Index;
+	UpdateChildren();
+	UE_LOG(LogTemp, Warning, TEXT("The selected index is: %d"), SelectedIndex.GetValue());
+}
+
+void UMainMenu::UpdateChildren()
+{
+	for(int32 i = 0; i < ServerList->GetChildrenCount(); i++)
+	{
+		auto Row = Cast<UServerRow>(ServerList->GetChildAt(i));
+		if(Row != nullptr)
+		{
+			Row->Selected = (SelectedIndex.IsSet() && SelectedIndex.GetValue() == i);
+		}	
+	}
+}
+
 void UMainMenu::JoinServer()
 {
-	if(MenuInterface != nullptr)
+	/* OLD for Hamachi
+	 if(MenuInterface != nullptr)
 	{
 		if(!ensure(IPAddressField!=nullptr)) return;
 		const FString Address = IPAddressField->GetText().ToString();
@@ -48,6 +122,18 @@ void UMainMenu::JoinServer()
 		MenuInterface->Join(Address);
 		//UE_LOG(LogTemp, Warning, TEXT("Joined the %s IP Address"), *Address);
 	}
+	 */
+
+	if(SelectedIndex.IsSet() && MenuInterface != nullptr)
+	{
+		MenuInterface->Join(SelectedIndex.GetValue());
+		UE_LOG(LogTemp, Warning, TEXT("Selected index %d"), SelectedIndex.GetValue());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Selected index not set"));
+	}
+	
 }
 
 void UMainMenu::OpenJoinMenu()
@@ -56,6 +142,10 @@ void UMainMenu::OpenJoinMenu()
 	if(!ensure(JoinMenu!=nullptr)) return;
 
 	MenuSwitcher->SetActiveWidget(JoinMenu);
+	if(MenuInterface != nullptr)
+	{
+		MenuInterface->RefreshServerList();
+	}
 }
 
 void UMainMenu::OpenMainMenu()

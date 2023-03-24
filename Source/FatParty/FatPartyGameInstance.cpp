@@ -1,9 +1,15 @@
 #include "FatPartyGameInstance.h"
+#include "Engine/Engine.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Blueprint/UserWidget.h"
+#include "OnlineSessionSettings.h"
+#include "Interfaces/OnlineSessionInterface.h"
 #include "UI/HudWidget.h"
 #include "UI/MenuSystem/InGameMenu.h"
+#include "UI/MenuSystem/MainMenu.h"
 
+const static FName SESSION_NAME = NAME_GameSession;
+const static FName SERVER_NAME_SETTINGS_KEY = TEXT("ServerName");
 
 UFatPartyGameInstance::UFatPartyGameInstance(const FObjectInitializer &ObjectInitializer)
 {
@@ -24,15 +30,195 @@ UFatPartyGameInstance::UFatPartyGameInstance(const FObjectInitializer &ObjectIni
 void UFatPartyGameInstance::Init()  
 {
 	Super::Init();
+	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+	if(Subsystem != nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Found subsystem %s"), *Subsystem->GetSubsystemName().ToString());
+		SessionInterface = Subsystem->GetSessionInterface();
+
+		if(SessionInterface.IsValid())
+		{
+			SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UFatPartyGameInstance::OnCreateSessionComplete);
+			SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UFatPartyGameInstance::OnDestroySessionComplete);
+			SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UFatPartyGameInstance::OnFindSessionsComplete);
+			SessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UFatPartyGameInstance::OnJoinSessionComplete);
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Found no subsystem"));
+	}
+
+	if(GEngine != nullptr)
+	{
+		GEngine->OnNetworkFailure().AddUObject(this, &UFatPartyGameInstance::OnNetworkFailure);
+	}
+
 
 }
 
+void UFatPartyGameInstance::CreateSession()
+{
+	if (SessionInterface.IsValid()) {
+		FOnlineSessionSettings SessionSettings;
+		if (IOnlineSubsystem::Get()->GetSubsystemName() == "NULL")
+		{
+			SessionSettings.bIsLANMatch = true;
+		}
+		else
+		{
+			SessionSettings.bIsLANMatch = false;
+		}
+		SessionSettings.NumPublicConnections = 3;
+		SessionSettings.bShouldAdvertise = true;
+		SessionSettings.bUsesPresence = true;
+		SessionSettings.Set(SERVER_NAME_SETTINGS_KEY, DesiredServerName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 
-void UFatPartyGameInstance::LoadMenu()
+		SessionInterface->CreateSession(0, NAME_GameSession, SessionSettings);
+	}
+
+	/* Mi Forma
+	 if(SessionInterface.IsValid())
+	{
+		FOnlineSessionSettings SessionSettings;
+		FOnlineSessionSetting  SessionNameSettings;
+
+		SessionNameSettings.AdvertisementType = EOnlineDataAdvertisementType::ViaOnlineServiceAndPing;
+		SessionNameSettings.Data = Menu->HostName;
+		
+		if(IOnlineSubsystem::Get()->GetSubsystemName() == "NULL")
+		{
+			SessionSettings.bIsLANMatch = true;
+		}
+		else
+		{
+			SessionSettings.bIsLANMatch = false;
+		}
+		
+		SessionSettings.NumPublicConnections = 2;
+		SessionSettings.bShouldAdvertise = true;  // para que no sea necsario mandar un invite.
+		SessionSettings.bUsesPresence = true;
+		SessionSettings.Set(TEXT("Test"), FString("Hello"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+
+		SessionSettings.Settings.Add(FName("SESSION_NAME"), SessionNameSettings);
+
+		SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
+	}
+	 */
+}
+
+void UFatPartyGameInstance::OnFindSessionsComplete(bool bWasSuccessful)
+{
+	if(bWasSuccessful && SessionSearch.IsValid() && Menu != nullptr)
+	{
+		TArray Results = SessionSearch->SearchResults;
+		TArray<FServerData>ServerNames;
+		/*
+		Se pueden agregar mas para testear.
+		ServerNames.Add("Test Server 1");
+		*/
+
+		UE_LOG(LogTemp, Warning, TEXT("finished find session"));
+		for (const FOnlineSessionSearchResult& SearchResult : Results)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Found Session %s"), *SearchResult.GetSessionIdStr());
+			FServerData Data;
+			Data.MaxPlayers = SearchResult.Session.SessionSettings.NumPublicConnections;
+			Data.CurrentPlayers = Data.MaxPlayers - SearchResult.Session.NumOpenPublicConnections;   //NumOpenPublicConnections son las disponibles.
+																									 // Esto funciona bien desde Steam.
+			Data.HostUsername = SearchResult.Session.OwningUserName;
+
+			//Esta es de mi intento TB ¡Funciona!
+			//Data.Name = SearchResult.Session.SessionSettings.Settings.FindRef("SESSION_NAME").Data.ToString();
+
+			FString ServerName;
+			if (SearchResult.Session.SessionSettings.Get(SERVER_NAME_SETTINGS_KEY, ServerName))
+			{
+				Data.Name = ServerName;
+			}
+			else
+			{
+				Data.Name = "Could not find name.";
+			}
+
+			ServerNames.Add(Data);
+		}
+		Menu->SetServerList(ServerNames);
+	}
+	
+}
+
+void UFatPartyGameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
+{
+	if(!SessionInterface.IsValid()) return;
+
+	FString TravelURL;                                   // Es un Out Object
+	if(!SessionInterface->GetResolvedConnectString(SessionName, TravelURL))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Could Not Connect"));
+		return;
+	}
+
+	UEngine* Engine = GetEngine();
+	if(!ensure(Engine!=nullptr)) return;
+
+	Engine->AddOnScreenDebugMessage(0, 5, FColor::Green, FString::Printf(TEXT("Joining %s"), *TravelURL));
+
+	APlayerController* PlayerController = GetFirstLocalPlayerController();
+	if(!ensure(PlayerController!=nullptr)) return;
+
+	PlayerController->ClientTravel(TravelURL, ETravelType::TRAVEL_Absolute);
+
+}
+
+void UFatPartyGameInstance::OnCreateSessionComplete(FName SessionName, bool Success)
+{
+	if(!Success)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Session has already been created"));
+		return;
+	}
+
+	if(Menu != nullptr)
+	{
+		Menu->Teardown();
+	}
+
+	UEngine* Engine = GetEngine();
+	if(!ensure(Engine!=nullptr)) return;
+
+	Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, TEXT("Hosting"));
+
+	UWorld* World = GetWorld();
+	if(!ensure(World != nullptr)) return;
+
+	World->ServerTravel("/Game/Maps/Lobby?listen"); 
+}
+
+void UFatPartyGameInstance::OnDestroySessionComplete(FName SessionName, bool Success)
+{
+	if(Success)
+	{
+		CreateSession();
+	}
+}
+
+void UFatPartyGameInstance::OnNetworkFailure(UWorld* World, UNetDriver* NetDriver,
+	ENetworkFailure::Type FailureType, const FString& ErrorString)
+{
+
+	// Se podria agregar un pop up de error explicando el error... hacer esto para Fat Party.
+
+	// Go back to the main menu screen
+	LoadGameMenu();
+}
+
+
+void UFatPartyGameInstance::LoadMenuWidget()
 {
 	if(!ensure(MenuClass !=nullptr)) return;
 
-	Menu = CreateWidget<UMenuWidget>(this, MenuClass);
+	Menu = CreateWidget<UMainMenu>(this, MenuClass);
 	if(!ensure(Menu !=nullptr)) return;
 
 	Menu->Setup(false);
@@ -61,25 +247,6 @@ void UFatPartyGameInstance::LoadHUD()
 	PlayerHud->SetMenuInterface(this);
 }
 
-void UFatPartyGameInstance::Host()
-{
-	if(Menu != nullptr)
-	{
-		Menu->Teardown();
-	}
-
-	UEngine* Engine = GetEngine();
-	if(!ensure(Engine!=nullptr)) return;
-
-	Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, TEXT("Hosting"));
-
-	UWorld* World = GetWorld();
-	if(!ensure(World != nullptr)) return;
-
-	// Aca se coloca la URL de Hamachi o propia para jugar en LAN
-	World->ServerTravel("/Game/Maps/Dungeon_02?listen?ip=25.5.193.208");  
-
-}
 
 void UFatPartyGameInstance::LoadGameMenu()
 {
@@ -92,6 +259,7 @@ void UFatPartyGameInstance::LoadGameMenu()
 	{
 		PlayerHud->Teardown();
 	}
+
 }
 
 void UFatPartyGameInstance::LoadNextLevel()
@@ -137,13 +305,10 @@ UMenuWidget* UFatPartyGameInstance::GetInGameMenu() const
 	return InGameMenu;
 }
 
-void UFatPartyGameInstance::Join(const FString& Address)
+void UFatPartyGameInstance::Join(uint32 Index)
 {
-	if(Menu != nullptr)
-	{
-		Menu->Teardown();
-	}
-
+	/*  El Address ya no lo recibe, podria hacerse otra funcion en la que si se utilice.
+	 
 	UEngine* Engine = GetEngine();
 	if(!ensure(Engine!=nullptr)) return;
 
@@ -153,4 +318,72 @@ void UFatPartyGameInstance::Join(const FString& Address)
 	if(!ensure(PlayerController!=nullptr)) return;
 	
 	PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
+	*/
+
+	if(!SessionInterface.IsValid()) return;
+	if(!SessionSearch.IsValid()) return;
+
+	if(Menu != nullptr)
+	{
+		//Menu->SetServerList({"Test1", "Test2"});  Para Testing
+		Menu->Teardown();
+	}
+
+	if(SessionSearch->SearchResults[Index].Session.SessionSettings.NumPublicConnections <= 0)
+	{
+		return;
+	}
+
+	SessionInterface->JoinSession(0, NAME_GameSession, SessionSearch->SearchResults[Index]);
+
+}
+
+void UFatPartyGameInstance::Host(FString ServerName)  // revisar
+{
+	DesiredServerName = ServerName;
+	if (SessionInterface.IsValid())
+	{
+		auto ExistingSession = SessionInterface->GetNamedSession(NAME_GameSession);
+		if (ExistingSession != nullptr) 
+		{
+			SessionInterface->DestroySession(NAME_GameSession);
+		}
+		else
+		{
+			CreateSession();
+		}
+	}
+
+	/*OLD FOR HAMACHI
+	 if(Menu != nullptr)
+	{
+		Menu->Teardown();
+	}
+
+	UEngine* Engine = GetEngine();
+	if(!ensure(Engine!=nullptr)) return;
+
+	Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, TEXT("Hosting"));
+
+	UWorld* World = GetWorld();
+	if(!ensure(World != nullptr)) return;
+
+	// Aca se coloca la URL de Hamachi o propia para jugar en LAN
+	World->ServerTravel("/Game/Maps/Dungeon_02?listen?ip=25.5.193.208");  
+
+	 */
+	
+}
+
+void UFatPartyGameInstance::RefreshServerList()
+{
+	SessionSearch = MakeShareable(new FOnlineSessionSearch());
+	if(SessionSearch.IsValid())
+	{
+		//SessionSearch->bIsLanQuery = true;
+		SessionSearch->MaxSearchResults = 100;
+		SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
+		UE_LOG(LogTemp, Warning, TEXT("Starting to look for sessions"));
+		SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
+	}
 }
