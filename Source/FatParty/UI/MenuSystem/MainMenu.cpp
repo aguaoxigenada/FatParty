@@ -13,6 +13,7 @@ UMainMenu::UMainMenu(const FObjectInitializer &ObjectInitializer)
 
 	ServerRowClass = ServerRowBP_Class.Class;
  }
+
 bool UMainMenu::Initialize()
 {
 	bool Success = Super::Initialize();

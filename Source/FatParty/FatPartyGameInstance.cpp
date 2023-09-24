@@ -2,14 +2,22 @@
 #include "Engine/Engine.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Blueprint/UserWidget.h"
+#include "Online.h"
+#include "OnlineSubsystemUtils.h"
 #include "OnlineSessionSettings.h"
 #include "Interfaces/OnlineSessionInterface.h"
 #include "UI/HudWidget.h"
 #include "UI/MenuSystem/InGameMenu.h"
+#include "UI/MenuSystem/NetworkErrorWidget.h"
 #include "UI/MenuSystem/MainMenu.h"
+
+
+
+
 
 const static FName SESSION_NAME = NAME_GameSession;
 const static FName SERVER_NAME_SETTINGS_KEY = TEXT("ServerName");
+
 
 UFatPartyGameInstance::UFatPartyGameInstance(const FObjectInitializer &ObjectInitializer)
 {
@@ -22,15 +30,27 @@ UFatPartyGameInstance::UFatPartyGameInstance(const FObjectInitializer &ObjectIni
 	ConstructorHelpers::FClassFinder<UUserWidget>InGameHudBP_Class(TEXT("/Game/Blueprints/UI/WBP_HUD"));
 	if(!ensure(InGameHudBP_Class.Class!=nullptr)) return;
 
+	ConstructorHelpers::FClassFinder<UUserWidget>NetworkErrorBP_Class(TEXT("/Game/Blueprints/UI/WBP_NetWorkError"));
+	if(!ensure(NetworkErrorBP_Class.Class!=nullptr)) return;
+
+	ConstructorHelpers::FClassFinder<UUserWidget>LoadingBP_Class(TEXT("/Game/Blueprints/UI/WBP_Loading"));
+	if(!ensure(LoadingBP_Class.Class!=nullptr)) return;
+
 	MenuClass = MainMenuBP_Class.Class;
 	InGameMenuClass = InGameMainMenuBP_Class.Class;
+	NetworkErrorClass = NetworkErrorBP_Class.Class;
 	HudClass = InGameHudBP_Class.Class;
+	LoadingClass = LoadingBP_Class.Class;
+
+
+	
 }
 
 void UFatPartyGameInstance::Init()  
 {
 	Super::Init();
 	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+
 	if(Subsystem != nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Found subsystem %s"), *Subsystem->GetSubsystemName().ToString());
@@ -42,6 +62,7 @@ void UFatPartyGameInstance::Init()
 			SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UFatPartyGameInstance::OnDestroySessionComplete);
 			SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UFatPartyGameInstance::OnFindSessionsComplete);
 			SessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UFatPartyGameInstance::OnJoinSessionComplete);
+			
 		}
 	}
 	else
@@ -53,6 +74,8 @@ void UFatPartyGameInstance::Init()
 	{
 		GEngine->OnNetworkFailure().AddUObject(this, &UFatPartyGameInstance::OnNetworkFailure);
 	}
+
+	
 
 
 }
@@ -69,7 +92,7 @@ void UFatPartyGameInstance::CreateSession()
 		{
 			SessionSettings.bIsLANMatch = false;
 		}
-		SessionSettings.NumPublicConnections = 3;
+		SessionSettings.NumPublicConnections = 3; // esto lo puedo cambiar
 		SessionSettings.bShouldAdvertise = true;
 		SessionSettings.bUsesPresence = true;
 		SessionSettings.bUseLobbiesIfAvailable = true;
@@ -107,6 +130,8 @@ void UFatPartyGameInstance::CreateSession()
 	}
 	 */
 }
+
+
 
 void UFatPartyGameInstance::OnFindSessionsComplete(bool bWasSuccessful)
 {
@@ -208,12 +233,30 @@ void UFatPartyGameInstance::OnNetworkFailure(UWorld* World, UNetDriver* NetDrive
 	ENetworkFailure::Type FailureType, const FString& ErrorString)
 {
 
-	// Se podria agregar un pop up de error explicando el error... hacer esto para Fat Party.
+	NetworkErrorPopUp();
+	FString ErrorMessage = FString::Printf(TEXT("Network Failure (%s): %s"), ENetworkFailure::ToString(FailureType), *ErrorString);
 
-	// Go back to the main menu screen
-	LoadGameMenu();
+	UEngine* Engine = GetEngine();
+	if(!ensure(Engine!=nullptr)) return;
+
+	Engine->AddOnScreenDebugMessage(0, 5, FColor::Red, ErrorMessage);
+
+	
 }
 
+void UFatPartyGameInstance::NetworkErrorPopUp()
+{
+	UE_LOG(LogTemp, Warning, TEXT("IT WORKED"));
+
+	if(!ensure(NetworkErrorClass !=nullptr)) return;
+
+	NetworkError = CreateWidget<UNetworkErrorWidget>(this, NetworkErrorClass);
+	if(!ensure(NetworkError !=nullptr)) return;
+
+	NetworkError->Setup(false);
+	NetworkError->SetMenuInterface(this);
+
+}
 
 void UFatPartyGameInstance::LoadMenuWidget()
 {
@@ -388,3 +431,18 @@ void UFatPartyGameInstance::RefreshServerList()
 		SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 	}
 }
+
+
+void UFatPartyGameInstance::LoadingWBP()
+{
+
+	if(!ensure(LoadingClass !=nullptr)) return;
+
+	LoadingScreen = CreateWidget<UUserWidget>(this, LoadingClass);
+	if(!ensure(LoadingScreen !=nullptr)) return;
+
+	LoadingScreen->AddToViewport();
+
+}
+
+

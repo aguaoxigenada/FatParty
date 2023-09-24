@@ -12,14 +12,16 @@
 class UMenuWidget;
 class UMainMenu;
 
+
 UCLASS()
 class FATPARTY_API UFatPartyGameInstance : public UGameInstance, public IMenuInterface
 {
 	GENERATED_BODY()
 
+	
 public:
 	UFatPartyGameInstance(const FObjectInitializer &ObjectInitializer);
-	virtual void Init();
+	virtual void Init() override;
 
 	virtual void QuitGame() override;
 
@@ -30,7 +32,7 @@ public:
 
 	UFUNCTION(Exec, BlueprintCallable)
 		void LoadInGameMenu();
-
+	
 	UFUNCTION(Exec, BlueprintCallable)
 		void LoadHUD();
 
@@ -46,6 +48,7 @@ public:
 	UFUNCTION()
 		virtual void RestartLevel() override;
 
+//	FOnSteamAuthFailureDelegate OnOverrideFailure;	
 	//UFUNCTION(Exec)  Lo voy a usar solo para Hamachi
 		//virtual void Join(const FString& Address) override;
 
@@ -58,13 +61,23 @@ public:
 
 	UMenuWidget* PlayerHud;
 
+	void NetworkErrorPopUp();
+
+	void LoadingWBP();
+
+	TSubclassOf<class UUserWidget> LoadingClass;
+
 private:
+
+	TSubclassOf<class UUserWidget> NetworkErrorClass;
 	TSubclassOf<class UUserWidget> MenuClass;
 	TSubclassOf<class UUserWidget> InGameMenuClass;
 	TSubclassOf<class UUserWidget> HudClass;
 
 	UMainMenu* Menu;
+	UUserWidget* LoadingScreen;
 	UMenuWidget* InGameMenu;
+	UMenuWidget* NetworkError;
 
 	FString DesiredServerName;
 
@@ -74,7 +87,8 @@ private:
 	void OnDestroySessionComplete(FName SessionName, bool Success);
 	void OnFindSessionsComplete(bool bWasSuccessful);
 	void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
-	void OnNetworkFailure(UWorld * World, UNetDriver *NetDriver, ENetworkFailure::Type FailureType, const FString& ErrorString);
+	void OnNetworkFailure(UWorld* World, UNetDriver* NetDriver, ENetworkFailure::Type FailureType, const FString& ErrorString);
 
 	void CreateSession();
+
 };

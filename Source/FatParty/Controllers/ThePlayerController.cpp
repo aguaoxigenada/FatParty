@@ -1,6 +1,6 @@
 #include "ThePlayerController.h"
-
 #include "FatParty/FatPartyCharacter.h"
+#include "FatParty/FatPartyGameInstance.h"
 #include "FatParty/GameMode/FatPartyGameMode.h"
 #include "GameFramework/Pawn.h"
 #include "GameFramework/Character.h"
@@ -15,6 +15,9 @@ AThePlayerController::AThePlayerController()
 
     /* Make sure the PawnClass is Replicated */
     bReplicates = true;
+
+   // ConstructorHelpers::FClassFinder<UUserWidget>LoadingBP_Class(TEXT("/Game/Blueprints/UI/WBP_Loading"));
+	//if(!ensure(LoadingBP_Class.Class!=nullptr)) return;
 }
 
 void AThePlayerController::SetPlayerEnabledState(bool bPlayerEnabled)
@@ -84,5 +87,18 @@ void AThePlayerController::ServerSetPawn_Implementation(TSubclassOf<AFatPartyCha
     {
 	    GameMode->RestartPlayer(this);
     }
+}
+
+void AThePlayerController::OpenWidget_Implementation()
+{
+    UFatPartyGameInstance* GameInstance =  Cast<UFatPartyGameInstance>(GetGameInstance());
+
+	LoadingWBPClass = GameInstance->LoadingClass;
+    LoadingWBP = CreateWidget<UUserWidget>(this, LoadingWBPClass);
+
+	if(!ensure(LoadingWBP !=nullptr)) return;
+
+    LoadingWBP->AddToViewport();
+    
 }
 

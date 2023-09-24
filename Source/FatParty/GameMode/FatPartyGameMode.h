@@ -4,6 +4,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "FatPartyGameMode.generated.h"
 
+class UMenuWidget;
 class AFatPartyCharacter;
 class AThePlayerController;
 
@@ -23,6 +24,12 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent) 
 	void GameOver(bool bWonGame);
 
+	TSubclassOf<class UUserWidget> LoadingClass;
+	TSubclassOf<class UUserWidget> NetworkErrorClass;
+
+	UMenuWidget* NetworkError;
+	UUserWidget* LoadingWidget;
+
 
 public:
 
@@ -31,6 +38,7 @@ public:
 	class ABaseCharacter* BaseCharacter;
 
 	AFatPartyGameMode();
+
 
 private:
 	AFatPartyCharacter* FatPartyCharacter;

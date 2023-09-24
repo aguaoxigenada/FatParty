@@ -1,10 +1,10 @@
 #include "FatPartyGameMode.h"
-
 #include "FatParty/Actors/DestructibleObject.h"
 #include "Kismet/GameplayStatics.h"
 #include "FatParty/Actors/Tower.h"
 #include "FatParty/Characters/KnightCharacter.h"
 #include "FatParty/Controllers/ThePlayerController.h"
+#include "FatParty/UI/MenuSystem/NetworkErrorWidget.h"
 
 void AFatPartyGameMode::ActorDied(AActor *DeadActor)
 {
@@ -39,8 +39,9 @@ void AFatPartyGameMode::ActorDied(AActor *DeadActor)
 
 AFatPartyGameMode::AFatPartyGameMode()
 {
-    PlayerControllerClass = AThePlayerController::StaticClass();
+    PlayerControllerClass = AThePlayerController::StaticClass();	
 }
+
 
 
 

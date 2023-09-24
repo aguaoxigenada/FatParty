@@ -4,6 +4,7 @@
 #include "GameFramework/PlayerController.h"
 #include "ThePlayerController.generated.h"
 
+class UMenuWidget;
 UCLASS()
 class FATPARTY_API AThePlayerController : public APlayerController
 {
@@ -17,11 +18,18 @@ public:
 
     virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 
-    
+	UUserWidget* LoadingWBP;
+	TSubclassOf<class UUserWidget> LoadingWBPClass;
+
+	UFUNCTION(Reliable, Client)
+    void OpenWidget();
+
+
 protected:
     /* Return The Correct Pawn Class Client-Side */
     UFUNCTION(Reliable, Client)
         void DeterminePawnClass();
+
     virtual void DeterminePawnClass_Implementation();
 
     /* Use BeginPlay to start the functionality */
@@ -29,7 +37,7 @@ protected:
 
     /* Set Pawn Class On Server For This Controller */
     UFUNCTION(Reliable, Server, WithValidation)
-        virtual void ServerSetPawn(TSubclassOf<AFatPartyCharacter> InPawnClass);
+	virtual void ServerSetPawn(TSubclassOf<AFatPartyCharacter> InPawnClass);
     virtual void ServerSetPawn_Implementation(TSubclassOf<AFatPartyCharacter> InPawnClass);
     virtual bool ServerSetPawn_Validate(TSubclassOf<AFatPartyCharacter> InPawnClass);
 
@@ -45,6 +53,6 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "My Controller")
         TSubclassOf<AFatPartyCharacter> PawnToUseB;
 
-    
+
 
 };
