@@ -5,6 +5,30 @@
 #include "FatParty/Characters/KnightCharacter.h"
 #include "FatParty/Controllers/ThePlayerController.h"
 #include "FatParty/UI/MenuSystem/NetworkErrorWidget.h"
+#include "GameFramework/PlayerStart.h"
+
+AFatPartyGameMode::AFatPartyGameMode()
+{
+    PlayerControllerClass = AThePlayerController::StaticClass();
+    PopulatePlayerStartArray();
+    // SpawnPoint/s
+
+
+	//SpawnPoint = CreateDefaultSubobject<USceneComponent>(TEXT("SpawnPoint"));
+
+	//const FTransform SpawnPoint = SpawnPoint.GetRelativeTransform();
+}
+
+void AFatPartyGameMode::BeginPlay()
+{
+    Super::BeginPlay();
+
+    // Inicializa la configuracion que se quiere en el juego
+  //  HandleGameStart();
+ //   PlayerController = Cast<AThePlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+  //  RespawnPlayer(PlayerController);
+    
+}
 
 void AFatPartyGameMode::ActorDied(AActor *DeadActor)
 {
@@ -37,24 +61,6 @@ void AFatPartyGameMode::ActorDied(AActor *DeadActor)
     }
 }
 
-AFatPartyGameMode::AFatPartyGameMode()
-{
-    PlayerControllerClass = AThePlayerController::StaticClass();	
-}
-
-
-
-
-void AFatPartyGameMode::BeginPlay()
-{
-    Super::BeginPlay();
-
-    // Inicializa la configuracion que se quiere en el juego
-    HandleGameStart();
-
-
-    
-}
 
 UClass* AFatPartyGameMode::GetDefaultPawnClassForController_Implementation(AController* InController)
 {
@@ -113,3 +119,43 @@ int32 AFatPartyGameMode::GetTargetTowerCount()
     UGameplayStatics::GetAllActorsOfClass(this, ATower::StaticClass(), Towers);
     return Towers.Num();
 }
+
+AActor* AFatPartyGameMode::ChoosePlayerStart_Implementation(AController* Player)
+{
+    // Implement your logic to choose a spawn point here
+    // You can choose a spawn point based on team, game mode, or any other criteria
+    // For simplicity, we'll choose a random spawn point from the available ones.
+
+    if (PlayerStartPoints.Num() > 0)
+    {
+        int32 RandomIndex = FMath::RandRange(0, PlayerStartPoints.Num() - 1);
+        return PlayerStartPoints[RandomIndex];
+    }
+
+    return nullptr;
+}
+
+
+
+void AFatPartyGameMode::PopulatePlayerStartArray()
+{
+    // Find all PlayerStart actors in the current level
+    TArray<AActor*> PlayerStartActors;
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerStart::StaticClass(), PlayerStartActors);
+
+    // Loop through the found PlayerStart actors and add them to the PlayerStartArray
+    for (AActor* Actor : PlayerStartActors)
+    {
+        APlayerStart* PlayerStart = Cast<APlayerStart>(Actor);
+        if (PlayerStart)
+        {
+            PlayerStartPoints.Add(PlayerStart);
+        	//UE_LOG(LogTemp, Warning, TEXT("Element %d"), PlayerStart);
+        }
+    }
+}
+
+
+
+
+   

@@ -29,5 +29,7 @@ public:
 	virtual void LoadNextLevel() = 0;
 	virtual void QuitGame() = 0;
 
+	virtual void PlayerRetry() = 0;
+
 
 };

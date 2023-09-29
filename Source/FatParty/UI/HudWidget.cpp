@@ -8,7 +8,7 @@
 void UHudWidget::NativeOnInitialized()
 {
 	Character = Cast<AFatPartyCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
-	HudTimer = (UTextBlock*)(WidgetTree->FindWidget(FName(TEXT("Timer"))));
+	//HudTimer = (UTextBlock*)(WidgetTree->FindWidget(FName(TEXT("Timer"))));
 
 	if(AFatPartyCharacter* FatCharacter = Character ? Cast<AFatPartyCharacter>(Character) : nullptr)
 	{
@@ -54,7 +54,7 @@ void UHudWidget::GameTimer()
 
 void UHudWidget::UpdateTime(int newTime)
 {
-	HudTimer->SetText(FText::FromString(FString::FromInt(newTime)));
+//	HudTimer->SetText(FText::FromString(FString::FromInt(newTime)));
 }
 
 void UHudWidget::RepeatingVisualTimer()

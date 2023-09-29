@@ -5,6 +5,7 @@
 #include "ThePlayerController.generated.h"
 
 class UMenuWidget;
+class AFatPartyCharacter;
 UCLASS()
 class FATPARTY_API AThePlayerController : public APlayerController
 {
@@ -21,13 +22,21 @@ public:
 	UUserWidget* LoadingWBP;
 	TSubclassOf<class UUserWidget> LoadingWBPClass;
 
-	UFUNCTION(Reliable, Client)
+	UFUNCTION(Client, Reliable)
     void OpenWidget();
 
+    UFUNCTION(Server, Reliable)
+		void ServerRespawnPlayer(AController* Controller);
+
+    // Function to respawn a player
+    void RespawnPlayer(AController* Controller);
+
+    UFUNCTION(BlueprintImplementableEvent) 
+	void PlayerRespawned(bool PlayerHasRespawned);
 
 protected:
     /* Return The Correct Pawn Class Client-Side */
-    UFUNCTION(Reliable, Client)
+    UFUNCTION(Client, Reliable)
         void DeterminePawnClass();
 
     virtual void DeterminePawnClass_Implementation();
@@ -35,8 +44,14 @@ protected:
     /* Use BeginPlay to start the functionality */
     virtual void BeginPlay() override;
 
-    /* Set Pawn Class On Server For This Controller */
-    UFUNCTION(Reliable, Server, WithValidation)
+	
+    // The default spawn location for players
+    UPROPERTY(EditAnywhere, Category = "Spawning")
+    TSubclassOf<APawn> ThePawnClass;
+
+
+	/* Set Pawn Class On Server For This Controller */
+    UFUNCTION(Server, Reliable, WithValidation)
 	virtual void ServerSetPawn(TSubclassOf<AFatPartyCharacter> InPawnClass);
     virtual void ServerSetPawn_Implementation(TSubclassOf<AFatPartyCharacter> InPawnClass);
     virtual bool ServerSetPawn_Validate(TSubclassOf<AFatPartyCharacter> InPawnClass);

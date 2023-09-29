@@ -102,3 +102,52 @@ void AThePlayerController::OpenWidget_Implementation()
     
 }
 
+void AThePlayerController::RespawnPlayer(AController* Controller)
+{
+    AFatPartyGameMode* PlayerGameMode = Cast<AFatPartyGameMode>(GetWorld()->GetAuthGameMode());
+    // Check if the Controller is valid and has a valid pawn
+
+    UE_LOG(LogTemp, Warning, TEXT("Starting Respawn"));
+    if (Controller && ThePawnClass)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Got Controller and Pawn Class"));
+        // Destroy the existing pawn
+        APawn* ExistingPawn = Controller->GetPawn();
+
+        
+    	if (ExistingPawn)
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Destroying old pawn"));
+            ExistingPawn->Destroy();
+        }
+        
+
+        // Spawn a new pawn at a chosen spawn point
+        if (APlayerStart* PlayerStartPoint = Cast<APlayerStart>(PlayerGameMode->ChoosePlayerStart_Implementation(Controller)))
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Spawm Point Obtained"));
+            FActorSpawnParameters SpawnParams;
+            SpawnParams.Instigator = nullptr;
+            SpawnParams.Owner = Controller;
+            APawn* NewPawn = GetWorld()->SpawnActor<APawn>(ThePawnClass, PlayerStartPoint->GetActorLocation(), PlayerStartPoint->GetActorRotation(), SpawnParams);
+            
+            // Possess the new pawn
+            if (NewPawn)
+            {
+                PlayerRespawned(true);
+                Controller->Possess(NewPawn);
+                 UE_LOG(LogTemp, Warning, TEXT("Should Spawn"));
+            }
+        }
+    }
+
+ 
+}
+
+void AThePlayerController::ServerRespawnPlayer_Implementation(AController* Controller)
+{
+    RespawnPlayer(Controller);
+     UE_LOG(LogTemp, Warning, TEXT("Client Request"));
+}
+
+

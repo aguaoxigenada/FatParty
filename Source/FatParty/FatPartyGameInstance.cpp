@@ -5,14 +5,14 @@
 #include "Online.h"
 #include "OnlineSubsystemUtils.h"
 #include "OnlineSessionSettings.h"
+#include "Controllers/ThePlayerController.h"
+#include "GameMode/FatPartyGameMode.h"
 #include "Interfaces/OnlineSessionInterface.h"
 #include "UI/HudWidget.h"
+#include "UI/TimerWidget.h"
 #include "UI/MenuSystem/InGameMenu.h"
 #include "UI/MenuSystem/NetworkErrorWidget.h"
 #include "UI/MenuSystem/MainMenu.h"
-
-
-
 
 
 const static FName SESSION_NAME = NAME_GameSession;
@@ -36,11 +36,15 @@ UFatPartyGameInstance::UFatPartyGameInstance(const FObjectInitializer &ObjectIni
 	ConstructorHelpers::FClassFinder<UUserWidget>LoadingBP_Class(TEXT("/Game/Blueprints/UI/WBP_Loading"));
 	if(!ensure(LoadingBP_Class.Class!=nullptr)) return;
 
+	ConstructorHelpers::FClassFinder<UUserWidget>GameTimerBP_Class(TEXT("/Game/Blueprints/UI/WBP_GameTimer"));
+	if(!ensure(GameTimerBP_Class.Class!=nullptr)) return;
+
 	MenuClass = MainMenuBP_Class.Class;
 	InGameMenuClass = InGameMainMenuBP_Class.Class;
 	NetworkErrorClass = NetworkErrorBP_Class.Class;
 	HudClass = InGameHudBP_Class.Class;
 	LoadingClass = LoadingBP_Class.Class;
+	TimerClass = GameTimerBP_Class.Class;
 
 
 	
@@ -258,6 +262,18 @@ void UFatPartyGameInstance::NetworkErrorPopUp()
 
 }
 
+void UFatPartyGameInstance::LoadTimer()
+{
+	if(!ensure(TimerClass !=nullptr)) return;
+
+	TimerWidget = CreateWidget<UTimerWidget>(this, TimerClass);
+	if(!ensure(TimerWidget !=nullptr)) return;
+
+	TimerWidget->Setup(true);
+	TimerWidget->SetMenuInterface(this);  
+}
+
+
 void UFatPartyGameInstance::LoadMenuWidget()
 {
 	if(!ensure(MenuClass !=nullptr)) return;
@@ -324,16 +340,56 @@ void UFatPartyGameInstance::LoadNextLevel()
 	World->ServerTravel("/Game/Maps/Dungeon_02", ETravelType::TRAVEL_Absolute);
 }
 
-void UFatPartyGameInstance::RestartLevel()
+void UFatPartyGameInstance::RestartLevel() 
 {
 	UWorld* World = GetWorld();
 	if(!ensure(World!=nullptr)) return;
 
 	FString LevelURL = GetWorld()->GetAddressURL();
 
-	// Esta OK porque el server va a ser Dedicado.  Entonces todos los players que entran son Clientes.
+	// Esta OK porque el server va a ser Dedicado.  Entonces todos los players que entran son Clientes.  NO necesariamente...
+
+	//World->ServerTrav(LevelURL, ETravelType::TRAVEL_Absolute);
 	World->GetFirstPlayerController()->ClientTravel(LevelURL, ETravelType::TRAVEL_Absolute);
-	//World->ServerTravel(LevelURL, ETravelType::TRAVEL_Absolute);
+}
+
+void UFatPartyGameInstance::PlayerRetry() 
+{
+	UE_LOG(LogTemp, Warning, TEXT("Got To Player Instance"));
+	//AFatPartyGameMode* PlayerGameMode = Cast<AFatPartyGameMode>(GetWorld()->GetAuthGameMode());
+	AThePlayerController* PlayerController = Cast<AThePlayerController>(GetFirstLocalPlayerController());
+	AController* TestPlayerController = PlayerController;
+	UWorld* World = GetWorld();
+
+    if (World)
+    {
+        // Check the network mode using IsNetMode
+        if (World->IsNetMode(NM_DedicatedServer))
+        {
+            // This code runs on a dedicated server
+            UE_LOG(LogTemp, Warning, TEXT("Running on a dedicated server"));
+        }
+        else if (World->IsNetMode(NM_ListenServer))
+        {
+          	// Handle server-side respawn logic
+			 UE_LOG(LogTemp, Warning, TEXT("Running on a Listener server"));
+			PlayerController->RespawnPlayer(TestPlayerController);
+			
+        }
+        else if (World->IsNetMode(NM_Standalone))
+        {
+            // This code runs in a standalone game (not networked)
+            UE_LOG(LogTemp, Warning, TEXT("Running in standalone mode"));
+        }
+        else if (World->IsNetMode(NM_Client))
+        {
+            // Call the server to request respawn
+			PlayerController->ServerRespawnPlayer(TestPlayerController);
+			 UE_LOG(LogTemp, Warning, TEXT("Running on a Client"));
+        }
+    }
+
+	
 }
 
 void UFatPartyGameInstance::QuitGame()

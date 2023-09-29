@@ -32,6 +32,9 @@ public:
 
 	UFUNCTION(Exec, BlueprintCallable)
 		void LoadInGameMenu();
+
+	UFUNCTION(Exec, BlueprintCallable)
+		void LoadTimer();
 	
 	UFUNCTION(Exec, BlueprintCallable)
 		void LoadHUD();
@@ -48,6 +51,8 @@ public:
 	UFUNCTION()
 		virtual void RestartLevel() override;
 
+	UFUNCTION()
+		virtual void PlayerRetry() override;
 //	FOnSteamAuthFailureDelegate OnOverrideFailure;	
 	//UFUNCTION(Exec)  Lo voy a usar solo para Hamachi
 		//virtual void Join(const FString& Address) override;
@@ -66,18 +71,20 @@ public:
 	void LoadingWBP();
 
 	TSubclassOf<class UUserWidget> LoadingClass;
-
+	TSubclassOf<class UUserWidget>TimerClass;
 private:
 
 	TSubclassOf<class UUserWidget> NetworkErrorClass;
 	TSubclassOf<class UUserWidget> MenuClass;
 	TSubclassOf<class UUserWidget> InGameMenuClass;
 	TSubclassOf<class UUserWidget> HudClass;
+	
 
 	UMainMenu* Menu;
 	UUserWidget* LoadingScreen;
 	UMenuWidget* InGameMenu;
 	UMenuWidget* NetworkError;
+	UMenuWidget* TimerWidget;
 
 	FString DesiredServerName;
 

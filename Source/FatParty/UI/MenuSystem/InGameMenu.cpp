@@ -65,8 +65,11 @@ void UInGameMenu::RetryLevel()
 {
 	if(MenuInterface != nullptr)
 	{
+			 UE_LOG(LogTemp, Warning, TEXT("Got Pressed"));
 		Teardown();
-		MenuInterface->RestartLevel();
+		MenuInterface->PlayerRetry();
+	
+	//	MenuInterface->RestartLevel();
 	}
 }
 
