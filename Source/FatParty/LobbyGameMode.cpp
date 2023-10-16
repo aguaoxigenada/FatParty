@@ -13,9 +13,8 @@ void ALobbyGameMode::PostLogin(APlayerController* NewPlayer)
 	++PlayersLoggedIn;
 	if(PlayersLoggedIn >= 2)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Three Playyers logged in"));
+		UE_LOG(LogTemp, Warning, TEXT("Playyers logged in"));
 
-		//GetWorldTimerManager().SetTimer(TimerHandle, this, &ALobbyGameMode::StartPlayerGame, TimeToStart);
 		GetWorldTimerManager().SetTimer(TimerHandle, this, &ALobbyGameMode::StartPlayerGame, TimeToStart);
 	}
 	Controller = Cast<AThePlayerController>(NewPlayer);
@@ -49,5 +48,4 @@ void ALobbyGameMode::StartPlayerGame()
 	
 	bUseSeamlessTravel = true;
 	World->ServerTravel("/Game/Maps/Dungeon_01?listen");
-
 }

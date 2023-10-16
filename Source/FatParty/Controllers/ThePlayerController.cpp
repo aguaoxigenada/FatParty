@@ -15,9 +15,6 @@ AThePlayerController::AThePlayerController()
 
     /* Make sure the PawnClass is Replicated */
     bReplicates = true;
-
-   // ConstructorHelpers::FClassFinder<UUserWidget>LoadingBP_Class(TEXT("/Game/Blueprints/UI/WBP_Loading"));
-	//if(!ensure(LoadingBP_Class.Class!=nullptr)) return;
 }
 
 void AThePlayerController::SetPlayerEnabledState(bool bPlayerEnabled)
@@ -102,25 +99,21 @@ void AThePlayerController::OpenWidget_Implementation()
     
 }
 
+
 void AThePlayerController::RespawnPlayer(AController* Controller)
 {
     AFatPartyGameMode* PlayerGameMode = Cast<AFatPartyGameMode>(GetWorld()->GetAuthGameMode());
     // Check if the Controller is valid and has a valid pawn
 
-    UE_LOG(LogTemp, Warning, TEXT("Starting Respawn"));
     if (Controller && ThePawnClass)
     {
-        UE_LOG(LogTemp, Warning, TEXT("Got Controller and Pawn Class"));
         // Destroy the existing pawn
         APawn* ExistingPawn = Controller->GetPawn();
 
-        
     	if (ExistingPawn)
         {
-            UE_LOG(LogTemp, Warning, TEXT("Destroying old pawn"));
             ExistingPawn->Destroy();
         }
-        
 
         // Spawn a new pawn at a chosen spawn point
         if (APlayerStart* PlayerStartPoint = Cast<APlayerStart>(PlayerGameMode->ChoosePlayerStart_Implementation(Controller)))
@@ -136,7 +129,6 @@ void AThePlayerController::RespawnPlayer(AController* Controller)
             {
                 PlayerRespawned(true);
                 Controller->Possess(NewPawn);
-                 UE_LOG(LogTemp, Warning, TEXT("Should Spawn"));
             }
         }
     }
@@ -147,7 +139,6 @@ void AThePlayerController::RespawnPlayer(AController* Controller)
 void AThePlayerController::ServerRespawnPlayer_Implementation(AController* Controller)
 {
     RespawnPlayer(Controller);
-     UE_LOG(LogTemp, Warning, TEXT("Client Request"));
 }
 
 

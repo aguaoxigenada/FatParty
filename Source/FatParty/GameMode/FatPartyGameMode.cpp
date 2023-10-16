@@ -6,27 +6,19 @@
 #include "FatParty/Controllers/ThePlayerController.h"
 #include "FatParty/UI/MenuSystem/NetworkErrorWidget.h"
 #include "GameFramework/PlayerStart.h"
+#include "AssetRegistryModule.h"
 
 AFatPartyGameMode::AFatPartyGameMode()
 {
     PlayerControllerClass = AThePlayerController::StaticClass();
     PopulatePlayerStartArray();
-    // SpawnPoint/s
-
-
-	//SpawnPoint = CreateDefaultSubobject<USceneComponent>(TEXT("SpawnPoint"));
-
-	//const FTransform SpawnPoint = SpawnPoint.GetRelativeTransform();
+   
 }
 
 void AFatPartyGameMode::BeginPlay()
 {
     Super::BeginPlay();
 
-    // Inicializa la configuracion que se quiere en el juego
-  //  HandleGameStart();
- //   PlayerController = Cast<AThePlayerController>(UGameplayStatics::GetPlayerController(this, 0));
-  //  RespawnPlayer(PlayerController);
     
 }
 
@@ -122,9 +114,6 @@ int32 AFatPartyGameMode::GetTargetTowerCount()
 
 AActor* AFatPartyGameMode::ChoosePlayerStart_Implementation(AController* Player)
 {
-    // Implement your logic to choose a spawn point here
-    // You can choose a spawn point based on team, game mode, or any other criteria
-    // For simplicity, we'll choose a random spawn point from the available ones.
 
     if (PlayerStartPoints.Num() > 0)
     {
@@ -134,7 +123,6 @@ AActor* AFatPartyGameMode::ChoosePlayerStart_Implementation(AController* Player)
 
     return nullptr;
 }
-
 
 
 void AFatPartyGameMode::PopulatePlayerStartArray()
@@ -155,7 +143,115 @@ void AFatPartyGameMode::PopulatePlayerStartArray()
     }
 }
 
+void AFatPartyGameMode::GetAssetsInLevel(ULevel* TargetLevel, TArray<UObject*>& OutAssets)
+{
+    ULevel* LevelToQuery = TargetLevel; 
+//	 ULevel* Level = UGameplayStatics::GetLevelByName(GetWorld(), LevelName);
+    // Iterate through the actors in the level
+    for (AActor* Actor : LevelToQuery->Actors)
+    {
+    	OutAssets.Add(Actor);
+    }
 
 
+
+ /*  
+ 
+    // Get a reference to the Asset Registry module.
+    FAssetRegistryModule& AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
+
+    // Create a class filter to specify the asset class you want to retrieve (e.g., UStaticMesh::StaticClass()).
+   // UClass* AssetClassFilter = UStaticMesh::StaticClass();  // Set to nullptr if you don't want to filter by class.
+
+	ULevel* Level = GetLevel();
+
+	//FString PackagePathString;
+    FName PackagePathFilter;
+
+    // Get the package name of the level.
+    // Create a package path filter to specify the level's package path.
+	//PackagePathString = Level->GetOutermost()->GetName();
+
+	//PackagePathString = Level->GetOutermost()->GetName();
+    //PackagePathFilter = FName(*PackagePathString);
+
+     // Create a filter for combined level and class filtering.
+
+    // El enfoque es al reves.  Hacemos que busqye la carpeta de los assets y vemos si estan anexados al nivel...
+
+
+
+    FARFilter CombinedFilter;
+  //  CombinedFilter.PackageNames.Add(LevelName);
+    //CombinedFilter.ClassNames.Add(AssetClassFilter);
+   // CombinedFilter.PackagePaths.Add(PackagePathFilter);
+    //CombinedFilter.ClassPaths.Add();
+
+    // Use the Asset Registry module to search for assets that match the filter.
+    TArray<FAssetData> AssetData;  
+    AssetRegistryModule.Get().GetAssets(CombinedFilter, AssetData);
+
+	// Iterate through the results and add assets to the OutAssets array.
+   for (const FAssetData& Asset : AssetData)
+    {
+        // Get a reference to the asset.
+        UObject* AssetObject = Asset.GetAsset();
+
+		AssetObject->CollectDefaultSubobjects(OutAssets);
+        // Check if the asset is valid before adding it to the output array.
+}
+    
+    /*
+	
+  
+    */
+/*
+    UWorld* World = GetWorld();
+    // Create a filter to specify the level name.
+    FString LevelNameFilter = LevelName.ToString();
 
    
+
+
+   	/*if (AssetObject)
+        {
+			ULevel* LevelToQuery = TargetLevel;  //
+           // World->GetLevel();
+
+        	// Iterate through the actors in the level
+		    for (AActor* Actor : LevelToQuery->Actors)
+		    {
+		        // Check if Actor is a UClass you're interested in (e.g., UStaticMesh)
+		        if (Actor->IsA(UStaticMesh::StaticClass()))
+		        {
+		            UStaticMesh* StaticMeshActor = Cast<UStaticMesh>(Actor);
+
+		            if (StaticMeshActor)
+		            {
+		            //    UStaticMesh* Mesh = StaticMeshActor/*->GetStaticMeshComponent()->GetStaticMesh()*/;
+                        // OutAssets.Add(StaticMeshActor);
+		              /*  if (Mesh)
+		                {
+		                   OutAssets.Add(Mesh);
+		                }
+		                */
+		    //        }
+		      //  }
+		  //  }
+       // }
+    //}*/
+
+}
+
+/* USAMOS ESTO PERO TOCA HACER ASINCRONA EL CAMBIO DE NIVEL...
+ * Del lobby al nivel,
+ * Del lobby siempre al nivel...
+ULevel* LevelToQuery = TargetLevel; 
+//	 ULevel* Level = UGameplayStatics::GetLevelByName(GetWorld(), LevelName);
+    // Iterate through the actors in the level
+    for (AActor* Actor : LevelToQuery->Actors)
+    {
+    	OutAssets.Add(Actor);
+    }
+
+  */ 
