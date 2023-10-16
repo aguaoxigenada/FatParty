@@ -40,11 +40,6 @@ protected:
 
 public:
 
-	UFUNCTION(BlueprintCallable, Category = "Asset Management")
-		void GetAssetsInLevel(ULevel* TargetLevel, TArray<UObject*>& OutAssets);
-		
-	//void GetAssetsInLevel(FName LevelName, FString PackagePathString, TArray<UObject*>& OutAssets);
-		
 	virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
 
 	void ActorDied(AActor* DeadActor);
