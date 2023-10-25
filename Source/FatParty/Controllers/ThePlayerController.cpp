@@ -66,6 +66,8 @@ void AThePlayerController::BeginPlay()
 	Super::BeginPlay();
 
     DeterminePawnClass();
+
+    //RespawnPlayer(this);
 }
 
 bool AThePlayerController::ServerSetPawn_Validate(TSubclassOf<AFatPartyCharacter> InPawnClass)
