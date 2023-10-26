@@ -26,7 +26,7 @@ void UHudWidget::NativeOnInitialized()
 		}
 
 		HealthComp->OnHealthChange.AddDynamic(this, &UHudWidget::PlayerDamaged);
-		GameTimer();
+		//GameTimer();
 	}
 }
 

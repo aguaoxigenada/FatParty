@@ -17,6 +17,15 @@ AThePlayerController::AThePlayerController()
     bReplicates = true;
 }
 
+void AThePlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+   // DeterminePawnClass();
+
+    //RespawnPlayer(this);
+}
+
 void AThePlayerController::SetPlayerEnabledState(bool bPlayerEnabled)
 {
     /*if (bPlayerEnabled)
@@ -61,14 +70,6 @@ void AThePlayerController::DeterminePawnClass_Implementation()
     }
 }
 
-void AThePlayerController::BeginPlay()
-{
-	Super::BeginPlay();
-
-    DeterminePawnClass();
-
-    //RespawnPlayer(this);
-}
 
 bool AThePlayerController::ServerSetPawn_Validate(TSubclassOf<AFatPartyCharacter> InPawnClass)
 {

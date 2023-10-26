@@ -8,7 +8,7 @@ void UTimerWidget::NativeOnInitialized()
 	Character = Cast<AFatPartyCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
 	HudTimer = (UTextBlock*)(WidgetTree->FindWidget(FName(TEXT("Timer"))));
 
-		GameTimer();
+	GameTimer();
 }
 
 void UTimerWidget::GameTimer()

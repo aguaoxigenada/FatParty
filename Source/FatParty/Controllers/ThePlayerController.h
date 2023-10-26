@@ -36,7 +36,7 @@ public:
 
 protected:
     /* Return The Correct Pawn Class Client-Side */
-    UFUNCTION(Client, Reliable)
+    UFUNCTION(BlueprintCallable, Client, Reliable)
         void DeterminePawnClass();
 
     virtual void DeterminePawnClass_Implementation();
