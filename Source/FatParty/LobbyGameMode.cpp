@@ -41,7 +41,7 @@ void ALobbyGameMode::StartPlayerGame()
 	if(!ensure(World != nullptr)) return;
 	GameInstance->SessionInterface->StartSession(NAME_GameSession);  // esto tal vez no debe ir ahi
 
-	//GameInstance->LoadingWBP();
+	GameInstance->LoadingWBP();
 
 	// Si aca tienes el session interface puedes decirle que empiece la session y que no permita mas ingresos.
 	// se tiene que obtener la session.

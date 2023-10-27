@@ -44,8 +44,7 @@ protected:
     /* Use BeginPlay to start the functionality */
     virtual void BeginPlay() override;
 
-	
-    // The default spawn location for players
+	// The default spawn location for players
     UPROPERTY(EditAnywhere, Category = "Spawning")
     TSubclassOf<APawn> ThePawnClass;
 

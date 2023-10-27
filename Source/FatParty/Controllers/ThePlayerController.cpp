@@ -1,6 +1,7 @@
 #include "ThePlayerController.h"
 #include "FatParty/FatPartyCharacter.h"
 #include "FatParty/FatPartyGameInstance.h"
+#include "FatParty/LobbyGameMode.h"
 #include "FatParty/GameMode/FatPartyGameMode.h"
 #include "GameFramework/Pawn.h"
 #include "GameFramework/Character.h"
@@ -20,10 +21,7 @@ AThePlayerController::AThePlayerController()
 void AThePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
-   // DeterminePawnClass();
-
-    //RespawnPlayer(this);
+   
 }
 
 void AThePlayerController::SetPlayerEnabledState(bool bPlayerEnabled)
