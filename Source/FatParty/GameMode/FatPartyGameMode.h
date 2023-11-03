@@ -5,6 +5,7 @@
 #include "GameFramework/PlayerStart.h"
 #include "FatPartyGameMode.generated.h"
 
+class UFatPartyGameInstance;
 class UMenuWidget;
 class AFatPartyCharacter;
 class AThePlayerController;
@@ -42,6 +43,10 @@ public:
 
 	virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
 
+
+	
+		void SendToNextLevel();
+
 	void ActorDied(AActor* DeadActor);
 
 	class ABaseCharacter* BaseCharacter;
@@ -50,6 +55,11 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	USceneComponent* SpawnPoint = nullptr;
+
+	UFatPartyGameInstance* GameInstance;
+
+	//UFUNCTION(Client, Reliable)
+	void TriggerNextLevel();
 
 private:
 	AFatPartyCharacter* FatPartyCharacter;
@@ -61,4 +71,7 @@ private:
 
 	int32 TargetTowers = 0;
 	int32 GetTargetTowerCount();
+
+	FTimerHandle TimerHandle;
+	float TimeToStart = 10;
 };

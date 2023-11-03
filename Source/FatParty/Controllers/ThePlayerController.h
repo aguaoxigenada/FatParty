@@ -4,6 +4,7 @@
 #include "GameFramework/PlayerController.h"
 #include "ThePlayerController.generated.h"
 
+class UFatPartyGameInstance;
 class UMenuWidget;
 class AFatPartyCharacter;
 UCLASS()
@@ -25,6 +26,15 @@ public:
 	UFUNCTION(Client, Reliable)
     void OpenWidget();
 
+    
+	UFUNCTION(Server, Reliable)
+		void SendToNextLevel();
+
+    //UFUNCTION(Server, Reliable)
+		void SendToNextLevelClientCall();
+
+    UFatPartyGameInstance* TheGameInstance;
+
     UFUNCTION(Server, Reliable)
 		void ServerRespawnPlayer(AController* Controller);
 
@@ -33,6 +43,8 @@ public:
 
     UFUNCTION(BlueprintImplementableEvent) 
 	void PlayerRespawned(bool PlayerHasRespawned);
+
+
 
 protected:
     /* Return The Correct Pawn Class Client-Side */

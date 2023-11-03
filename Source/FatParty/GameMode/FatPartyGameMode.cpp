@@ -7,6 +7,8 @@
 #include "FatParty/UI/MenuSystem/NetworkErrorWidget.h"
 #include "GameFramework/PlayerStart.h"
 #include "AssetRegistryModule.h"
+#include "FatParty/FatPartyGameInstance.h"
+#include "GameFramework/GameSession.h"
 
 AFatPartyGameMode::AFatPartyGameMode()
 {
@@ -69,9 +71,10 @@ UClass* AFatPartyGameMode::GetDefaultPawnClassForController_Implementation(ACont
 	///return Super::GetDefaultPawnClassForController_Implementation(InController);
 }
 
-
+/*
 void AFatPartyGameMode::HandleGameStart()
 {
+    //Esta funcion no se usa, ver de borrarla.
     // Calcula y retorna la cantidad de torres actual en el escenario
     TargetTowers = GetTargetTowerCount();
     FatPartyCharacter = Cast<AFatPartyCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
@@ -103,7 +106,7 @@ void AFatPartyGameMode::HandleGameStart()
         );
     }
 }
-
+*/
 int32 AFatPartyGameMode::GetTargetTowerCount()
 {
     // Calcula y retorna la cantidad de Torres que hay actualmente en el escenario.
@@ -123,6 +126,37 @@ AActor* AFatPartyGameMode::ChoosePlayerStart_Implementation(AController* Player)
 
     return nullptr;
 }
+
+void AFatPartyGameMode::TriggerNextLevel()
+{
+
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &AFatPartyGameMode::SendToNextLevel, TimeToStart);
+
+	
+}
+
+void AFatPartyGameMode::SendToNextLevel()
+{
+    PlayerController = Cast<AThePlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+   
+    if(PlayerController)
+    {
+	    PlayerController->OpenWidget();
+    }
+
+	GameInstance = Cast<UFatPartyGameInstance>(GetGameInstance());
+	if(GameInstance == nullptr) return;
+
+  
+	GameInstance->LoadingWBP();
+    
+    UWorld* World = GetWorld();
+	bUseSeamlessTravel = true;
+	World->ServerTravel("/Game/Maps/Level_02/Dungeon_02");
+
+    // Aca tocaria hacer el switch de en que nivel estoy y a que nivel voy.
+}
+
 
 
 void AFatPartyGameMode::PopulatePlayerStartArray()

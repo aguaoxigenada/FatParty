@@ -324,6 +324,45 @@ void UFatPartyGameInstance::LoadGameMenu()
 
 void UFatPartyGameInstance::LoadNextLevel()
 {
+	AFatPartyGameMode* FatPartyGameMode = Cast<AFatPartyGameMode>(GetWorld()->GetAuthGameMode());
+	AThePlayerController* PlayerController = Cast<AThePlayerController>(GetFirstLocalPlayerController());
+	// Parece que esto tiene que ser una funcion aparte y el game mode la puede llamar para todos...
+	if(PlayerHud != nullptr)
+	{
+		PlayerHud->Teardown();
+	}
+
+		UWorld* World = GetWorld();
+
+    if (World)
+    {
+        // Check the network mode using IsNetMode
+        if (World->IsNetMode(NM_DedicatedServer))
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Running on a dedicated server"));
+        }
+        else if (World->IsNetMode(NM_ListenServer))
+        {
+          	FatPartyGameMode->TriggerNextLevel();
+        }
+        else if (World->IsNetMode(NM_Standalone))
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Running in standalone mode"));
+        }
+        else if (World->IsNetMode(NM_Client))
+        {
+			//FatPartyGameMode->TriggerNextLevel();
+			PlayerController->SendToNextLevelClientCall();
+        }
+    }
+
+	
+}
+
+void UFatPartyGameInstance::LoadNextLevelMulticast_Implementation()
+{
+	// Borrar esto....
+	// Me parece que esto tiene que hacerse en el game mode...
 	UWorld* World = GetWorld();
 	if(!ensure(World!=nullptr)) return;
 	
@@ -337,7 +376,14 @@ void UFatPartyGameInstance::LoadNextLevel()
 
 	Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, TEXT("Travelling to new Level"));
 
-	World->ServerTravel("/Game/Maps/Dungeon_02", ETravelType::TRAVEL_Absolute);
+	// hay que ver de hacerlo seamless, y en el caso de que sea el cliente el que apreta el next level???
+
+	//bUseSeamlessTravel = true;
+	//World->ServerTravel;
+	
+	World->SeamlessTravel("/Game/Maps/Level_02/Dungeon_02", ETravelType::TRAVEL_Absolute);
+
+	// SE tiene que hacer un case para cualquier posible nivel que entre en el juego.
 }
 
 void UFatPartyGameInstance::RestartLevel() 
@@ -355,8 +401,6 @@ void UFatPartyGameInstance::RestartLevel()
 
 void UFatPartyGameInstance::PlayerRetry() 
 {
-	UE_LOG(LogTemp, Warning, TEXT("Got To Player Instance"));
-	//AFatPartyGameMode* PlayerGameMode = Cast<AFatPartyGameMode>(GetWorld()->GetAuthGameMode());
 	AThePlayerController* PlayerController = Cast<AThePlayerController>(GetFirstLocalPlayerController());
 	AController* TestPlayerController = PlayerController;
 	UWorld* World = GetWorld();

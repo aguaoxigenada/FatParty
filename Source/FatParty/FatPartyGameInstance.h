@@ -48,6 +48,9 @@ public:
 	UFUNCTION()
 		virtual void LoadNextLevel() override;
 
+	UFUNCTION(NetMulticast, Reliable)
+		virtual void LoadNextLevelMulticast();
+
 	UFUNCTION()
 		virtual void RestartLevel() override;
 

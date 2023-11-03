@@ -89,7 +89,9 @@ void AThePlayerController::ServerSetPawn_Implementation(TSubclassOf<AFatPartyCha
 
 void AThePlayerController::OpenWidget_Implementation()
 {
-    UFatPartyGameInstance* GameInstance =  Cast<UFatPartyGameInstance>(GetGameInstance());
+
+	// Es la copia inicial del loading WBP (Ver si es o no necesaria la de blueprint)
+	UFatPartyGameInstance* GameInstance =  Cast<UFatPartyGameInstance>(GetGameInstance());
 
 	LoadingWBPClass = GameInstance->LoadingClass;
     LoadingWBP = CreateWidget<UUserWidget>(this, LoadingWBPClass);
@@ -137,9 +139,27 @@ void AThePlayerController::RespawnPlayer(AController* Controller)
  
 }
 
+
 void AThePlayerController::ServerRespawnPlayer_Implementation(AController* Controller)
 {
     RespawnPlayer(Controller);
 }
+
+void AThePlayerController::SendToNextLevelClientCall()
+{
+  
+    SendToNextLevel();
+    // Hay que bloquear al player client, quitar el hud e ir poniendo un loading WBP.
+    // Tambien funcionaria para 
+
+}
+
+void AThePlayerController::SendToNextLevel_Implementation()
+{
+    AFatPartyGameMode* PlayerGameMode = Cast<AFatPartyGameMode>(GetWorld()->GetAuthGameMode());
+    PlayerGameMode->TriggerNextLevel();
+   
+}
+
 
 
