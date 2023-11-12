@@ -26,12 +26,13 @@ public:
 	UFUNCTION(Client, Reliable)
     void OpenWidget();
 
-    
+    UFUNCTION(NetMulticast, Reliable)
+    void OpenWidgetFromServer();
+
 	UFUNCTION(Server, Reliable)
 		void SendToNextLevel();
 
-    //UFUNCTION(Server, Reliable)
-		void SendToNextLevelClientCall();
+	void SendToNextLevelClientCall();
 
     UFatPartyGameInstance* TheGameInstance;
 

@@ -13,7 +13,6 @@ class FATPARTY_API ALobbyGameMode : public AFatPartyGameMode
 
 public:
 
-
 	void PostLogin(APlayerController* NewPlayer) override;
 	void Logout(AController* Exiting) override;
 	void StartPlayerGame();

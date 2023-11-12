@@ -1,7 +1,6 @@
 #include "ThePlayerController.h"
 #include "FatParty/FatPartyCharacter.h"
 #include "FatParty/FatPartyGameInstance.h"
-#include "FatParty/LobbyGameMode.h"
 #include "FatParty/GameMode/FatPartyGameMode.h"
 #include "GameFramework/Pawn.h"
 #include "GameFramework/Character.h"
@@ -90,7 +89,7 @@ void AThePlayerController::ServerSetPawn_Implementation(TSubclassOf<AFatPartyCha
 void AThePlayerController::OpenWidget_Implementation()
 {
 
-	// Es la copia inicial del loading WBP (Ver si es o no necesaria la de blueprint)
+	// Es la copia inicial del loading WBP
 	UFatPartyGameInstance* GameInstance =  Cast<UFatPartyGameInstance>(GetGameInstance());
 
 	LoadingWBPClass = GameInstance->LoadingClass;
@@ -99,7 +98,6 @@ void AThePlayerController::OpenWidget_Implementation()
 	if(!ensure(LoadingWBP !=nullptr)) return;
 
     LoadingWBP->AddToViewport();
-    
 }
 
 
@@ -145,21 +143,36 @@ void AThePlayerController::ServerRespawnPlayer_Implementation(AController* Contr
     RespawnPlayer(Controller);
 }
 
+
 void AThePlayerController::SendToNextLevelClientCall()
 {
   
     SendToNextLevel();
-    // Hay que bloquear al player client, quitar el hud e ir poniendo un loading WBP.
-    // Tambien funcionaria para 
-
+    OpenWidget();
+	GetCharacter()->DisableInput(this);
 }
 
 void AThePlayerController::SendToNextLevel_Implementation()
 {
     AFatPartyGameMode* PlayerGameMode = Cast<AFatPartyGameMode>(GetWorld()->GetAuthGameMode());
-    PlayerGameMode->TriggerNextLevel();
+    PlayerGameMode->SendToNextLevel();
    
 }
+
+void AThePlayerController::OpenWidgetFromServer_Implementation()
+{
+    // Es la copia inicial del loading WBP
+	UFatPartyGameInstance* GameInstance =  Cast<UFatPartyGameInstance>(GetGameInstance());
+
+	LoadingWBPClass = GameInstance->LoadingClass;
+    LoadingWBP = CreateWidget<UUserWidget>(this, LoadingWBPClass);
+
+	if(!ensure(LoadingWBP !=nullptr)) return;
+
+    LoadingWBP->AddToViewport();
+    OpenWidget();
+}
+
 
 
 

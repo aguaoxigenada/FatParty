@@ -43,11 +43,15 @@ public:
 
 	virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
 
+	void SendToNextLevel();
 
-	
-		void SendToNextLevel();
+	UFUNCTION(Server, Reliable)
+		void LoadWBPLoadingOnClient();
 
 	void ActorDied(AActor* DeadActor);
+
+	//UFUNCTION(Client, Reliable)
+	void OpenClientWidget();
 
 	class ABaseCharacter* BaseCharacter;
 
@@ -57,9 +61,6 @@ public:
 	USceneComponent* SpawnPoint = nullptr;
 
 	UFatPartyGameInstance* GameInstance;
-
-	//UFUNCTION(Client, Reliable)
-	void TriggerNextLevel();
 
 private:
 	AFatPartyCharacter* FatPartyCharacter;
@@ -74,4 +75,5 @@ private:
 
 	FTimerHandle TimerHandle;
 	float TimeToStart = 10;
+
 };

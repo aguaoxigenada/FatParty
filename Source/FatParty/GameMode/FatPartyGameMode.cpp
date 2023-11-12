@@ -4,11 +4,8 @@
 #include "FatParty/Actors/Tower.h"
 #include "FatParty/Characters/KnightCharacter.h"
 #include "FatParty/Controllers/ThePlayerController.h"
-#include "FatParty/UI/MenuSystem/NetworkErrorWidget.h"
 #include "GameFramework/PlayerStart.h"
-#include "AssetRegistryModule.h"
 #include "FatParty/FatPartyGameInstance.h"
-#include "GameFramework/GameSession.h"
 
 AFatPartyGameMode::AFatPartyGameMode()
 {
@@ -127,36 +124,42 @@ AActor* AFatPartyGameMode::ChoosePlayerStart_Implementation(AController* Player)
     return nullptr;
 }
 
-void AFatPartyGameMode::TriggerNextLevel()
-{
-
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &AFatPartyGameMode::SendToNextLevel, TimeToStart);
-
-	
-}
 
 void AFatPartyGameMode::SendToNextLevel()
 {
-    PlayerController = Cast<AThePlayerController>(UGameplayStatics::GetPlayerController(this, 0));
-   
-    if(PlayerController)
+
+    if(HasAuthority())
     {
-	    PlayerController->OpenWidget();
+    	LoadWBPLoadingOnClient();
     }
+
+    //PlayerController = Cast<AThePlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+    //PlayerController->OpenWidgetFromServer();
 
 	GameInstance = Cast<UFatPartyGameInstance>(GetGameInstance());
 	if(GameInstance == nullptr) return;
 
-  
-	GameInstance->LoadingWBP();
+    GameInstance->LoadingWBP();
     
     UWorld* World = GetWorld();
+
 	bUseSeamlessTravel = true;
 	World->ServerTravel("/Game/Maps/Level_02/Dungeon_02");
 
     // Aca tocaria hacer el switch de en que nivel estoy y a que nivel voy.
 }
 
+void AFatPartyGameMode::LoadWBPLoadingOnClient_Implementation()
+{
+  for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; ++It)
+    {
+        AThePlayerController* ThePlayerController = Cast<AThePlayerController>(*It);
+  		if (ThePlayerController)
+        {
+            ThePlayerController->OpenWidget();
+        }
+    }
+}
 
 
 void AFatPartyGameMode::PopulatePlayerStartArray()

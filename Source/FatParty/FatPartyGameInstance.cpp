@@ -326,13 +326,13 @@ void UFatPartyGameInstance::LoadNextLevel()
 {
 	AFatPartyGameMode* FatPartyGameMode = Cast<AFatPartyGameMode>(GetWorld()->GetAuthGameMode());
 	AThePlayerController* PlayerController = Cast<AThePlayerController>(GetFirstLocalPlayerController());
-	// Parece que esto tiene que ser una funcion aparte y el game mode la puede llamar para todos...
+	
 	if(PlayerHud != nullptr)
 	{
 		PlayerHud->Teardown();
 	}
 
-		UWorld* World = GetWorld();
+	UWorld* World = GetWorld();
 
     if (World)
     {
@@ -343,7 +343,7 @@ void UFatPartyGameInstance::LoadNextLevel()
         }
         else if (World->IsNetMode(NM_ListenServer))
         {
-          	FatPartyGameMode->TriggerNextLevel();
+        	FatPartyGameMode->SendToNextLevel();
         }
         else if (World->IsNetMode(NM_Standalone))
         {
@@ -351,7 +351,6 @@ void UFatPartyGameInstance::LoadNextLevel()
         }
         else if (World->IsNetMode(NM_Client))
         {
-			//FatPartyGameMode->TriggerNextLevel();
 			PlayerController->SendToNextLevelClientCall();
         }
     }
