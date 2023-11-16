@@ -50,9 +50,6 @@ public:
 
 	void ActorDied(AActor* DeadActor);
 
-	//UFUNCTION(Client, Reliable)
-	void OpenClientWidget();
-
 	class ABaseCharacter* BaseCharacter;
 
 	AFatPartyGameMode();

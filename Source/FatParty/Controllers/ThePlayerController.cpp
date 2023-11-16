@@ -17,6 +17,11 @@ AThePlayerController::AThePlayerController()
     bReplicates = true;
 }
 
+void AThePlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+    DOREPLIFETIME(AThePlayerController, MyPawnClass);
+}
+
 void AThePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -42,11 +47,6 @@ UClass* AThePlayerController::GetPlayerPawnClass()
     return MyPawnClass; 
 }
 
-// Replication
-void AThePlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-    DOREPLIFETIME(AThePlayerController, MyPawnClass);
-}
 
 void AThePlayerController::DeterminePawnClass_Implementation()
 {

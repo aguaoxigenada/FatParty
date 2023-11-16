@@ -45,9 +45,6 @@ UFatPartyGameInstance::UFatPartyGameInstance(const FObjectInitializer &ObjectIni
 	HudClass = InGameHudBP_Class.Class;
 	LoadingClass = LoadingBP_Class.Class;
 	TimerClass = GameTimerBP_Class.Class;
-
-
-	
 }
 
 void UFatPartyGameInstance::Init()  
@@ -66,7 +63,6 @@ void UFatPartyGameInstance::Init()
 			SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UFatPartyGameInstance::OnDestroySessionComplete);
 			SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UFatPartyGameInstance::OnFindSessionsComplete);
 			SessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UFatPartyGameInstance::OnJoinSessionComplete);
-			
 		}
 	}
 	else
@@ -78,10 +74,6 @@ void UFatPartyGameInstance::Init()
 	{
 		GEngine->OnNetworkFailure().AddUObject(this, &UFatPartyGameInstance::OnNetworkFailure);
 	}
-
-	
-
-
 }
 
 void UFatPartyGameInstance::CreateSession()
@@ -96,7 +88,7 @@ void UFatPartyGameInstance::CreateSession()
 		{
 			SessionSettings.bIsLANMatch = false;
 		}
-		SessionSettings.NumPublicConnections = 3; // esto lo puedo cambiar
+		SessionSettings.NumPublicConnections = 3;
 		SessionSettings.bShouldAdvertise = true;
 		SessionSettings.bUsesPresence = true;
 		SessionSettings.bUseLobbiesIfAvailable = true;
@@ -104,35 +96,6 @@ void UFatPartyGameInstance::CreateSession()
 
 		SessionInterface->CreateSession(0, NAME_GameSession, SessionSettings);
 	}
-
-	/* Mi Forma
-	 if(SessionInterface.IsValid())
-	{
-		FOnlineSessionSettings SessionSettings;
-		FOnlineSessionSetting  SessionNameSettings;
-
-		SessionNameSettings.AdvertisementType = EOnlineDataAdvertisementType::ViaOnlineServiceAndPing;
-		SessionNameSettings.Data = Menu->HostName;
-		
-		if(IOnlineSubsystem::Get()->GetSubsystemName() == "NULL")
-		{
-			SessionSettings.bIsLANMatch = true;
-		}
-		else
-		{
-			SessionSettings.bIsLANMatch = false;
-		}
-		
-		SessionSettings.NumPublicConnections = 2;
-		SessionSettings.bShouldAdvertise = true;  // para que no sea necsario mandar un invite.
-		SessionSettings.bUsesPresence = true;
-		SessionSettings.Set(TEXT("Test"), FString("Hello"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
-
-		SessionSettings.Settings.Add(FName("SESSION_NAME"), SessionNameSettings);
-
-		SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
-	}
-	 */
 }
 
 
@@ -143,6 +106,7 @@ void UFatPartyGameInstance::OnFindSessionsComplete(bool bWasSuccessful)
 	{
 		TArray Results = SessionSearch->SearchResults;
 		TArray<FServerData>ServerNames;
+
 		/*
 		Se pueden agregar mas para testear.
 		ServerNames.Add("Test Server 1");
@@ -154,11 +118,12 @@ void UFatPartyGameInstance::OnFindSessionsComplete(bool bWasSuccessful)
 			UE_LOG(LogTemp, Warning, TEXT("Found Session %s"), *SearchResult.GetSessionIdStr());
 			FServerData Data;
 			Data.MaxPlayers = SearchResult.Session.SessionSettings.NumPublicConnections;
-			Data.CurrentPlayers = Data.MaxPlayers - SearchResult.Session.NumOpenPublicConnections;   //NumOpenPublicConnections son las disponibles.
-																									 // Esto funciona bien desde Steam.
+
+			// NumOpenPublicConnections son las disponibles.
+			Data.CurrentPlayers = Data.MaxPlayers - SearchResult.Session.NumOpenPublicConnections;   
 			Data.HostUsername = SearchResult.Session.OwningUserName;
 
-			//Esta es de mi intento TB ¡Funciona!
+			// Tambien funciona:
 			//Data.Name = SearchResult.Session.SessionSettings.Settings.FindRef("SESSION_NAME").Data.ToString();
 
 			FString ServerName;
@@ -358,33 +323,6 @@ void UFatPartyGameInstance::LoadNextLevel()
 	
 }
 
-void UFatPartyGameInstance::LoadNextLevelMulticast_Implementation()
-{
-	// Borrar esto....
-	// Me parece que esto tiene que hacerse en el game mode...
-	UWorld* World = GetWorld();
-	if(!ensure(World!=nullptr)) return;
-	
-	if(PlayerHud != nullptr)
-	{
-		PlayerHud->Teardown();
-	}
-
-	UEngine* Engine = GetEngine();
-	if(!ensure(Engine!=nullptr)) return;
-
-	Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, TEXT("Travelling to new Level"));
-
-	// hay que ver de hacerlo seamless, y en el caso de que sea el cliente el que apreta el next level???
-
-	//bUseSeamlessTravel = true;
-	//World->ServerTravel;
-	
-	World->SeamlessTravel("/Game/Maps/Level_02/Dungeon_02", ETravelType::TRAVEL_Absolute);
-
-	// SE tiene que hacer un case para cualquier posible nivel que entre en el juego.
-}
-
 void UFatPartyGameInstance::RestartLevel() 
 {
 	UWorld* World = GetWorld();
@@ -392,9 +330,6 @@ void UFatPartyGameInstance::RestartLevel()
 
 	FString LevelURL = GetWorld()->GetAddressURL();
 
-	// Esta OK porque el server va a ser Dedicado.  Entonces todos los players que entran son Clientes.  NO necesariamente...
-
-	//World->ServerTrav(LevelURL, ETravelType::TRAVEL_Absolute);
 	World->GetFirstPlayerController()->ClientTravel(LevelURL, ETravelType::TRAVEL_Absolute);
 }
 

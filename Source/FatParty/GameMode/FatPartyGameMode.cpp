@@ -61,11 +61,8 @@ UClass* AFatPartyGameMode::GetDefaultPawnClassForController_Implementation(ACont
     {
         return MyController->GetPlayerPawnClass();
     }
-
     /* If we don't get the right Controller, use the Default Pawn */
     return DefaultPawnClass;
-
-	///return Super::GetDefaultPawnClassForController_Implementation(InController);
 }
 
 /*
@@ -104,6 +101,7 @@ void AFatPartyGameMode::HandleGameStart()
     }
 }
 */
+
 int32 AFatPartyGameMode::GetTargetTowerCount()
 {
     // Calcula y retorna la cantidad de Torres que hay actualmente en el escenario.
@@ -133,9 +131,6 @@ void AFatPartyGameMode::SendToNextLevel()
     	LoadWBPLoadingOnClient();
     }
 
-    //PlayerController = Cast<AThePlayerController>(UGameplayStatics::GetPlayerController(this, 0));
-    //PlayerController->OpenWidgetFromServer();
-
 	GameInstance = Cast<UFatPartyGameInstance>(GetGameInstance());
 	if(GameInstance == nullptr) return;
 
@@ -144,9 +139,38 @@ void AFatPartyGameMode::SendToNextLevel()
     UWorld* World = GetWorld();
 
 	bUseSeamlessTravel = true;
-	World->ServerTravel("/Game/Maps/Level_02/Dungeon_02");
 
-    // Aca tocaria hacer el switch de en que nivel estoy y a que nivel voy.
+	FName CurrentLevelName = World->GetFName();
+	int LevelIndex = -1;
+
+	// Map level of names to integers
+	if (CurrentLevelName == "Dungeon_01") LevelIndex = 0;
+	else if (CurrentLevelName == "Dungeon_02") LevelIndex = 1;
+	else if (CurrentLevelName == "Dungeon_03") LevelIndex = 2;
+	else if (CurrentLevelName == "Dungeon_04") LevelIndex = 3;
+
+	switch (LevelIndex)
+	{
+	    case 0:
+	        World->ServerTravel("/Game/Maps/Level_02/Dungeon_02");
+	        break;
+
+	    case 1:
+	        World->ServerTravel("/Game/Maps/Level_03/Dungeon_03");
+	        break;
+
+	    case 2:
+	        World->ServerTravel("/Game/Maps/Level_04/Dungeon_04");
+	        break;
+
+	    case 3:
+	        World->ServerTravel("/Game/Maps/Level_05/Dungeon_05");
+	        break;
+
+	    default:
+	        // Handle the default case or leave it empty
+	        break;
+	}
 }
 
 void AFatPartyGameMode::LoadWBPLoadingOnClient_Implementation()

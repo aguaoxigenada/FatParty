@@ -1,5 +1,4 @@
 #include "LobbyGameMode.h"
-#include "Blueprint/UserWidget.h"
 #include "FatPartyGameInstance.h"
 #include "Controllers/ThePlayerController.h"
 
@@ -39,12 +38,9 @@ void ALobbyGameMode::StartPlayerGame()
 
 	UWorld* World = GetWorld();
 	if(!ensure(World != nullptr)) return;
-	GameInstance->SessionInterface->StartSession(NAME_GameSession);  // esto tal vez no debe ir ahi
+	GameInstance->SessionInterface->StartSession(NAME_GameSession);
 
 	GameInstance->LoadingWBP();
-
-	// Si aca tienes el session interface puedes decirle que empiece la session y que no permita mas ingresos.
-	// se tiene que obtener la session.
 	
 	bUseSeamlessTravel = true;
 	World->ServerTravel("/Game/Maps/Dungeon_01?listen");

@@ -48,14 +48,12 @@ public:
 	UFUNCTION()
 		virtual void LoadNextLevel() override;
 
-	UFUNCTION(NetMulticast, Reliable)
-		virtual void LoadNextLevelMulticast();
-
 	UFUNCTION()
 		virtual void RestartLevel() override;
 
 	UFUNCTION()
 		virtual void PlayerRetry() override;
+
 //	FOnSteamAuthFailureDelegate OnOverrideFailure;	
 	//UFUNCTION(Exec)  Lo voy a usar solo para Hamachi
 		//virtual void Join(const FString& Address) override;
