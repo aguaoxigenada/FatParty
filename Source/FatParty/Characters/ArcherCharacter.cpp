@@ -38,6 +38,8 @@ void AArcherCharacter::Fire()
 	AThePlayerController* PlayerController = Cast<AThePlayerController>(UGameplayStatics::GetPlayerController(this, 0));
 	AArcherCharacter* ArcherCharacter = Cast<AArcherCharacter>(PlayerController->GetPlayerPawnClass()->GetDefaultObject());
 
+	//  Hay problemas raros por aca... revisar.
+
 	if (ArcherCharacter->ActorGrabbed == nullptr)
 	{
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(

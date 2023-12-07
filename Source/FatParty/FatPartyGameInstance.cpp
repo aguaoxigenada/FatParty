@@ -45,6 +45,9 @@ UFatPartyGameInstance::UFatPartyGameInstance(const FObjectInitializer &ObjectIni
 	HudClass = InGameHudBP_Class.Class;
 	LoadingClass = LoadingBP_Class.Class;
 	TimerClass = GameTimerBP_Class.Class;
+
+	// Initialize the map
+    PlayerPawnClassMap.Empty();
 }
 
 void UFatPartyGameInstance::Init()  
@@ -321,6 +324,11 @@ void UFatPartyGameInstance::LoadNextLevel()
     }
 
 	
+}
+
+void UFatPartyGameInstance::SetSelectedPawnClass(const FUniqueNetIdRepl& UniqueId, UClass* SelectedPawnClass)
+{
+    PlayerPawnClassMap.Add(UniqueId, SelectedPawnClass);
 }
 
 void UFatPartyGameInstance::RestartLevel() 

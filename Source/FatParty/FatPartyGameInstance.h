@@ -9,6 +9,7 @@
 #include "UI/MenuSystem/MainMenu.h"
 #include "FatPartyGameInstance.generated.h"
 
+class AThePlayerController;
 class UMenuWidget;
 class UMainMenu;
 
@@ -18,8 +19,12 @@ class FATPARTY_API UFatPartyGameInstance : public UGameInstance, public IMenuInt
 {
 	GENERATED_BODY()
 
-	
 public:
+	UPROPERTY(BlueprintReadWrite, Category = "GameInstance")
+    TMap<FUniqueNetIdRepl, TSubclassOf<class AFatPartyCharacter>> PlayerPawnClassMap;
+
+	void SetSelectedPawnClass(const FUniqueNetIdRepl& UniqueId, UClass* SelectedPawnClass);
+
 	UFatPartyGameInstance(const FObjectInitializer &ObjectInitializer);
 	virtual void Init() override;
 
@@ -47,6 +52,7 @@ public:
 
 	UFUNCTION()
 		virtual void LoadNextLevel() override;
+
 
 	UFUNCTION()
 		virtual void RestartLevel() override;

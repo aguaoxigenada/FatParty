@@ -1,6 +1,9 @@
 #include "ThePlayerController.h"
 #include "FatParty/FatPartyCharacter.h"
 #include "FatParty/FatPartyGameInstance.h"
+#include "FatParty/FatPartyPlayerState.h"
+#include "FatParty/GamplayGameMode.h"
+#include "FatParty/LobbyGameMode.h"
 #include "FatParty/GameMode/FatPartyGameMode.h"
 #include "GameFramework/Pawn.h"
 #include "GameFramework/Character.h"
@@ -25,20 +28,22 @@ void AThePlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 void AThePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-   
+
+	World = GetWorld();
+}
+
+
+void AThePlayerController::RestartPlayer()
+{
+	AGameModeBase* GameMode = Cast<AGameModeBase>(GetWorld()->GetAuthGameMode());
+    if(GameMode)
+    {
+	    GameMode->RestartPlayer(this);
+    }
 }
 
 void AThePlayerController::SetPlayerEnabledState(bool bPlayerEnabled)
 {
-    /*if (bPlayerEnabled)
-    {
-        GetCharacter()->EnableInput(this);
-    }
-    else
-    {
-        GetCharacter()->DisableInput(this);
-    }*/
-    // bShowMouseCursor viene de la clase PlayerController, sirve para habilitar / deshabilitar el mouse.
     bShowMouseCursor = bPlayerEnabled;
 }
 
@@ -47,48 +52,62 @@ UClass* AThePlayerController::GetPlayerPawnClass()
     return MyPawnClass; 
 }
 
-
-void AThePlayerController::DeterminePawnClass_Implementation()
+void AThePlayerController::DeterminePawnClass_Implementation(bool PlayerInLobby)
 {
-    if (IsLocalController()) //Only Do This Locally (NOT Client-Only, since Server wants this too!)
+    if (IsLocalController())
     {
-        
         int random = FMath::RandRange(0, 1);
-        /* Use PawnA if the Text File tells us to */
         if (random == 0)
         {
-            ServerSetPawn(PawnToUseA);
+            ServerSetPawn(PawnToUseA, PlayerInLobby);
             return;
         }
 
-        /* Otherwise, Use PawnB :) */
-        ServerSetPawn(PawnToUseB);
-        return;
+        ServerSetPawn(PawnToUseB, PlayerInLobby);
     }
 }
 
 
-bool AThePlayerController::ServerSetPawn_Validate(TSubclassOf<AFatPartyCharacter> InPawnClass)
+bool AThePlayerController::ServerSetPawn_Validate(TSubclassOf<AFatPartyCharacter> InPawnClass, bool PlayerInLobby)
 {
     return true;
 }
 
-void AThePlayerController::ServerSetPawn_Implementation(TSubclassOf<AFatPartyCharacter> InPawnClass)
-{
-    MyPawnClass = InPawnClass;
 
-    /* Just in case we didn't get the PawnClass on the Server in time... */
-   
-    AGameModeBase* GameMode = Cast<AGameModeBase>(GetWorld()->GetAuthGameMode());
-    if(GameMode)
-    {
-	    GameMode->RestartPlayer(this);
-    }
+void AThePlayerController::ServerSetPawn_Implementation(TSubclassOf<AFatPartyCharacter> InPawnClass, bool PlayerInLobby)
+{
+   if(PlayerInLobby)
+   {
+		MyPawnClass = InPawnClass;
+
+        if(PlayerState)
+        {
+            AFatPartyPlayerState* ThePlayerState = GetPlayerState<AFatPartyPlayerState>();
+        	
+            if (ThePlayerState)
+			{
+            	ThePlayerState->SetSelectedPawnClass(InPawnClass);
+               // ThePlayerState->SetPlayerID();
+            	
+				ALobbyGameMode* Lobby =  Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
+				Lobby->HandlePlayerTransitionToGame();
+            }
+        }
+	
+		RestartPlayer();
+
+   }
+   else
+   {
+	   	AGamplayGameMode* GamplayGameMode =  Cast<AGamplayGameMode>(GetWorld()->GetAuthGameMode());
+   		GamplayGameMode->HandlePlayerControllers();
+   }
 }
+
 
 void AThePlayerController::OpenWidget_Implementation()
 {
-
+    
 	// Es la copia inicial del loading WBP
 	UFatPartyGameInstance* GameInstance =  Cast<UFatPartyGameInstance>(GetGameInstance());
 

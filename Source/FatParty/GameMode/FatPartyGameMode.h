@@ -21,7 +21,7 @@ protected:
 
 	virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
 
-	UFUNCTION(BlueprintImplementableEvent)  // No es necesario crearla en cpp cuando es un BlueprintImplementableEvent
+	UFUNCTION(BlueprintImplementableEvent)
 	void StartGame();
 
 	UFUNCTION(BlueprintImplementableEvent) 
@@ -39,14 +39,13 @@ protected:
 
 	void PopulatePlayerStartArray();
 
+
+
 public:
 
 	virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
 
 	void SendToNextLevel();
-
-	UFUNCTION(Server, Reliable)
-		void LoadWBPLoadingOnClient();
 
 	void ActorDied(AActor* DeadActor);
 
@@ -59,7 +58,13 @@ public:
 
 	UFatPartyGameInstance* GameInstance;
 
+	UFUNCTION(Server, Reliable)
+		void LoadWBPLoadingOnClient();
+
+
+
 private:
+
 	AFatPartyCharacter* FatPartyCharacter;
 	AThePlayerController* PlayerController;
 
@@ -72,5 +77,11 @@ private:
 
 	FTimerHandle TimerHandle;
 	float TimeToStart = 10;
+
+	FName CurrentLevelName;
+	UWorld* World;
+
+
+
 
 };

@@ -15,9 +15,16 @@ public:
 
 	void PostLogin(APlayerController* NewPlayer) override;
 	void Logout(AController* Exiting) override;
+
+	UFUNCTION(BlueprintCallable, Category = "Lobby")
 	void StartPlayerGame();
 
 	UFatPartyGameInstance* GameInstance;
+
+	UFUNCTION(BlueprintCallable, Category = "Lobby")
+    void HandlePlayerTransitionToGame();
+	APlayerController* PlayerController;
+
 
 private:
 	uint32 PlayersLoggedIn;

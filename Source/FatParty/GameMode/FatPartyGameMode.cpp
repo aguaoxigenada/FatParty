@@ -1,11 +1,13 @@
 #include "FatPartyGameMode.h"
+
+#include "FatParty/FatPartyCharacter.h"
 #include "FatParty/Actors/DestructibleObject.h"
 #include "Kismet/GameplayStatics.h"
 #include "FatParty/Actors/Tower.h"
-#include "FatParty/Characters/KnightCharacter.h"
 #include "FatParty/Controllers/ThePlayerController.h"
 #include "GameFramework/PlayerStart.h"
 #include "FatParty/FatPartyGameInstance.h"
+#include "GameFramework/GameStateBase.h"
 
 AFatPartyGameMode::AFatPartyGameMode()
 {
@@ -18,8 +20,13 @@ void AFatPartyGameMode::BeginPlay()
 {
     Super::BeginPlay();
 
-    
+	World = GetWorld();
+	CurrentLevelName = World->GetFName();
 }
+
+
+
+
 
 void AFatPartyGameMode::ActorDied(AActor *DeadActor)
 {
@@ -57,10 +64,13 @@ UClass* AFatPartyGameMode::GetDefaultPawnClassForController_Implementation(ACont
 {
     /* Override Functionality to get Pawn from PlayerController */
     AThePlayerController* MyController = Cast<AThePlayerController>(InController);
+
+    // Aca se puede hacer un if que consulte si estas en en el lobby haces esto sino pes te vas a la otra opcion.
     if (MyController)
     {
         return MyController->GetPlayerPawnClass();
     }
+
     /* If we don't get the right Controller, use the Default Pawn */
     return DefaultPawnClass;
 }
@@ -135,12 +145,9 @@ void AFatPartyGameMode::SendToNextLevel()
 	if(GameInstance == nullptr) return;
 
     GameInstance->LoadingWBP();
-    
-    UWorld* World = GetWorld();
 
 	bUseSeamlessTravel = true;
 
-	FName CurrentLevelName = World->GetFName();
 	int LevelIndex = -1;
 
 	// Map level of names to integers
@@ -168,7 +175,6 @@ void AFatPartyGameMode::SendToNextLevel()
 	        break;
 
 	    default:
-	        // Handle the default case or leave it empty
 	        break;
 	}
 }
