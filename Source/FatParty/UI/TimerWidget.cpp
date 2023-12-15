@@ -1,6 +1,7 @@
 #include "TimerWidget.h"
+#include "Blueprint/WidgetTree.h"
 #include "Components/TextBlock.h"
-#include "FatParty/FatPartyCharacter.h"
+#include "FatParty/Characters/FatPartyCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
 void UTimerWidget::NativeOnInitialized()

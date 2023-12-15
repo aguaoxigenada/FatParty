@@ -1,0 +1,87 @@
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/GameModeBase.h"
+#include "GameFramework/PlayerStart.h"
+#include "FatPartyGameMode.generated.h"
+
+class UFatPartyGameInstance;
+class UMenuWidget;
+class AFatPartyCharacter;
+class AThePlayerController;
+
+UCLASS()
+class FATPARTY_API AFatPartyGameMode : public AGameModeBase
+{
+	GENERATED_BODY()
+
+protected:
+
+	virtual void BeginPlay() override;
+
+	virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartGame();
+
+	UFUNCTION(BlueprintImplementableEvent) 
+	void GameOver(bool bWonGame);
+
+	TSubclassOf<class UUserWidget> LoadingClass;
+	TSubclassOf<class UUserWidget> NetworkErrorClass;
+
+	UMenuWidget* NetworkError;
+	UUserWidget* LoadingWidget;
+
+    // Array of spawn points for players
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
+    TArray<APlayerStart*> PlayerStartPoints;
+
+	void PopulatePlayerStartArray();
+
+
+
+public:
+
+	virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
+
+	void SendToNextLevel();
+
+	void ActorDied(AActor* DeadActor);
+
+	class ABaseCharacter* BaseCharacter;
+
+	AFatPartyGameMode();
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	USceneComponent* SpawnPoint = nullptr;
+
+	UFatPartyGameInstance* GameInstance;
+
+	UFUNCTION(Server, Reliable)
+		void LoadWBPLoadingOnClient();
+
+
+
+private:
+
+	AFatPartyCharacter* FatPartyCharacter;
+	AThePlayerController* PlayerController;
+
+	float StartDelay = 3.f;
+
+	void HandleGameStart();	
+
+	int32 TargetTowers = 0;
+	int32 GetTargetTowerCount();
+
+	FTimerHandle TimerHandle;
+	float TimeToStart = 10;
+
+	FName CurrentLevelName;
+	UWorld* World;
+
+
+
+
+};

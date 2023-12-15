@@ -1,18 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "AI_ArcherController.h"
-
-#include "AIModule/Classes/BehaviorTree/BlackboardComponent.h"
 #include "AIModule/Classes/Perception/AIPerceptionComponent.h"
 #include "AIModule/Classes/Perception/AIPerceptionSystem.h"
 #include "AIModule/Classes/Perception/AISenseConfig_Sight.h"
-#include "AIModule/Classes/BehaviorTree/Blackboard/BlackboardKeyType_Bool.h"
-#include "AIModule/Classes/BehaviorTree/BehaviorTreeComponent.h"
-#include "AIModule/Classes/BehaviorTree/Blackboard/BlackboardKeyType_Object.h"
-#include "AIModule/Classes/BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
-#include "FatParty/FatPartyCharacter.h"
-#include "FatParty/LongDistanceEnemies/LongDistanceEnemies.h"
+#include "FatParty/BasicEnemies/LongDistanceEnemies/LongDistanceEnemies.h"
+#include "FatParty/Characters/FatPartyCharacter.h"
 
 AAI_ArcherController::AAI_ArcherController()
 {

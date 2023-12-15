@@ -1,9 +1,6 @@
 #include "KnightCharacter.h"
-#include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "FatParty/Components/Thrower.h"
-#include "Kismet/KismetMathLibrary.h"
-#include "Components/CapsuleComponent.h"
 #include "TimerManager.h"
 
 

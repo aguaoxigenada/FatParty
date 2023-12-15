@@ -1,5 +1,5 @@
 #include "DestructibleObject.h"
-#include "FatParty/FatPartyEnemy.h"
+#include "FatParty/BasicEnemies/FatPartyEnemy.h"
 #include "Kismet/GameplayStatics.h"
 #include "PowerUps/BasePowerUp.h"
 

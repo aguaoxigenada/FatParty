@@ -1,6 +1,6 @@
 #include "LifePowerUp.h"
 #include "Components/SphereComponent.h"
-#include "FatParty/FatPartyCharacter.h"
+#include "FatParty/Characters/FatPartyCharacter.h"
 #include "FatParty/Components/HealthComponent.h"
 #include "Kismet/GameplayStatics.h"
 

@@ -1,8 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "FatParty/FatPartyEnemy.h"
-#include "GameFramework/Character.h"
+#include "FatParty/BasicEnemies/FatPartyEnemy.h"
 #include "AI_CharacterBase.generated.h"
 
 class UBehaviorTree;

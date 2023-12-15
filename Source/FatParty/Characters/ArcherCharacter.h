@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "FatParty/FatPartyCharacter.h"
+#include "FatPartyCharacter.h"
 #include "ArcherCharacter.generated.h"
 
 class UGrabber;

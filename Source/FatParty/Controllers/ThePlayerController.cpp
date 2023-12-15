@@ -1,10 +1,11 @@
 #include "ThePlayerController.h"
-#include "FatParty/FatPartyCharacter.h"
-#include "FatParty/FatPartyGameInstance.h"
-#include "FatParty/FatPartyPlayerState.h"
-#include "FatParty/GamplayGameMode.h"
-#include "FatParty/LobbyGameMode.h"
-#include "FatParty/GameMode/FatPartyGameMode.h"
+#include "Blueprint/UserWidget.h"
+#include "FatParty/Characters/FatPartyCharacter.h"
+#include "FatParty/GameInstance/FatPartyGameInstance.h"
+#include "FatParty/PlayerState/FatPartyPlayerState.h"
+#include "FatParty/GameModes/GamplayGameMode.h"
+#include "FatParty/GameModes/LobbyGameMode.h"
+#include "FatParty/GameModes/FatPartyGameMode.h"
 #include "GameFramework/Pawn.h"
 #include "GameFramework/Character.h"
 #include "Net/UnrealNetwork.h"
@@ -24,6 +25,8 @@ void AThePlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 {
     DOREPLIFETIME(AThePlayerController, MyPawnClass);
 }
+
+
 
 void AThePlayerController::BeginPlay()
 {
@@ -52,56 +55,76 @@ UClass* AThePlayerController::GetPlayerPawnClass()
     return MyPawnClass; 
 }
 
-void AThePlayerController::DeterminePawnClass_Implementation(bool PlayerInLobby)
+void AThePlayerController::DeterminePawnClass_Implementation()
 {
     if (IsLocalController())
     {
         int random = FMath::RandRange(0, 1);
         if (random == 0)
         {
-            ServerSetPawn(PawnToUseA, PlayerInLobby);
+            ServerSetPawn(PawnToUseA);
             return;
         }
 
-        ServerSetPawn(PawnToUseB, PlayerInLobby);
+        ServerSetPawn(PawnToUseB);
     }
 }
 
+void AThePlayerController::HandlePlayerControllers_Implementation() 
+{
+    // Iterate over all player controllers in the world
+    if (IsLocalController()) 
+    {
+    	for (auto It = GetWorld()->GetPlayerControllerIterator(); It; ++It)
+		{
+	        PlayerController = Cast<AThePlayerController>(*It);
+			
+		    if (PlayerController)
+		    {
+	    		StartToSpawnInLevel(PlayerController);
+	        }
+	        else
+		    {
+		        // Handle the case where the controller is not of the expected type
+		    }
+	    }
+    }
 
-bool AThePlayerController::ServerSetPawn_Validate(TSubclassOf<AFatPartyCharacter> InPawnClass, bool PlayerInLobby)
+  
+}
+
+void AThePlayerController::StartToSpawnInLevel_Implementation(AThePlayerController* Controller)
+{
+    AGamplayGameMode* GameplayMode = Cast<AGamplayGameMode>(GetWorld()->GetAuthGameMode());
+	GameplayMode->SpawnPlayerPawn(Controller);
+}
+
+
+bool AThePlayerController::ServerSetPawn_Validate(TSubclassOf<AFatPartyCharacter> InPawnClass)
 {
     return true;
 }
 
 
-void AThePlayerController::ServerSetPawn_Implementation(TSubclassOf<AFatPartyCharacter> InPawnClass, bool PlayerInLobby)
+void AThePlayerController::ServerSetPawn_Implementation(TSubclassOf<AFatPartyCharacter> InPawnClass)
 {
-   if(PlayerInLobby)
-   {
-		MyPawnClass = InPawnClass;
 
-        if(PlayerState)
-        {
-            AFatPartyPlayerState* ThePlayerState = GetPlayerState<AFatPartyPlayerState>();
-        	
-            if (ThePlayerState)
-			{
-            	ThePlayerState->SetSelectedPawnClass(InPawnClass);
-               // ThePlayerState->SetPlayerID();
-            	
-				ALobbyGameMode* Lobby =  Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
-				Lobby->HandlePlayerTransitionToGame();
-            }
+	MyPawnClass = InPawnClass;
+
+    if(PlayerState)
+    {
+        AFatPartyPlayerState* ThePlayerState = GetPlayerState<AFatPartyPlayerState>();
+        
+        if (ThePlayerState)
+		{
+            ThePlayerState->SetSelectedPawnClass(InPawnClass);
+			ALobbyGameMode* Lobby =  Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
+			Lobby->HandlePlayerTransitionToGame();
         }
-	
-		RestartPlayer();
+    }
 
-   }
-   else
-   {
-	   	AGamplayGameMode* GamplayGameMode =  Cast<AGamplayGameMode>(GetWorld()->GetAuthGameMode());
-   		GamplayGameMode->HandlePlayerControllers();
-   }
+	RestartPlayer();
+
 }
 
 
@@ -125,7 +148,7 @@ void AThePlayerController::RespawnPlayer(AController* Controller)
     AFatPartyGameMode* PlayerGameMode = Cast<AFatPartyGameMode>(GetWorld()->GetAuthGameMode());
     // Check if the Controller is valid and has a valid pawn
 
-    if (Controller && ThePawnClass)
+    if (Controller && /*ThePawnClass*/ MyPawnClass)
     {
         // Destroy the existing pawn
         APawn* ExistingPawn = Controller->GetPawn();
@@ -138,11 +161,11 @@ void AThePlayerController::RespawnPlayer(AController* Controller)
         // Spawn a new pawn at a chosen spawn point
         if (APlayerStart* PlayerStartPoint = Cast<APlayerStart>(PlayerGameMode->ChoosePlayerStart_Implementation(Controller)))
         {
-            UE_LOG(LogTemp, Warning, TEXT("Spawm Point Obtained"));
+           // UE_LOG(LogTemp, Warning, TEXT("Spawm Point Obtained"));
             FActorSpawnParameters SpawnParams;
             SpawnParams.Instigator = nullptr;
             SpawnParams.Owner = Controller;
-            APawn* NewPawn = GetWorld()->SpawnActor<APawn>(ThePawnClass, PlayerStartPoint->GetActorLocation(), PlayerStartPoint->GetActorRotation(), SpawnParams);
+            APawn* NewPawn = GetWorld()->SpawnActor<APawn>(MyPawnClass, PlayerStartPoint->GetActorLocation(), PlayerStartPoint->GetActorRotation(), SpawnParams);
             
             // Possess the new pawn
             if (NewPawn)
@@ -154,6 +177,15 @@ void AThePlayerController::RespawnPlayer(AController* Controller)
     }
 
  
+}
+
+void AThePlayerController::SpawnPlayer(TSubclassOf<AFatPartyCharacter> ChoosenPawn)
+{
+    if (ChoosenPawn)
+    {
+        MyPawnClass = ChoosenPawn;
+        RestartPlayer();
+    }
 }
 
 

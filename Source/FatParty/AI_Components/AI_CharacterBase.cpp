@@ -1,10 +1,5 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "AI_CharacterBase.h"
-
-#include "Components/SphereComponent.h"
-#include "FatParty/FatPartyCharacter.h"
+#include "FatParty/Characters/FatPartyCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
 

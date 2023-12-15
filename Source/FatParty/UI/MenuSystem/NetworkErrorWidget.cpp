@@ -1,5 +1,4 @@
 #include "NetworkErrorWidget.h"
-//#include "Components/Button.h"
 
 bool UNetworkErrorWidget::Initialize()
 {

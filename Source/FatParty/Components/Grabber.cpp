@@ -1,7 +1,7 @@
 #include "Grabber.h"
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
-#include "FatParty/Characters/KnightCharacter.h"
+#include "FatParty/Characters/FatPartyCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 UGrabber::UGrabber()

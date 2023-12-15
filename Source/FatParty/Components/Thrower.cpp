@@ -1,6 +1,6 @@
 #include "Thrower.h"
 #include "Grabber.h"
-#include "FatParty/Characters/KnightCharacter.h"
+#include "FatParty/Characters/FatPartyCharacter.h"
 
 UThrower::UThrower()
 {

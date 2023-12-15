@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "GameFramework/PlayerStart.h"
 #include "ThePlayerController.generated.h"
 
 class UFatPartyGameInstance;
@@ -42,24 +43,30 @@ public:
     // Function to respawn a player
     void RespawnPlayer(AController* Controller);
 
-    UFUNCTION(BlueprintImplementableEvent) 
+	void SpawnPlayer(TSubclassOf<AFatPartyCharacter> ChoosenPawn);
+
+	UFUNCTION(BlueprintImplementableEvent) 
 	void PlayerRespawned(bool PlayerHasRespawned);
 
 	/* Set Pawn Class On Server For This Controller */
     UFUNCTION(Server, Reliable, WithValidation)
-	virtual void ServerSetPawn(TSubclassOf<AFatPartyCharacter> InPawnClass, bool PlayerInLobby);
-    virtual void ServerSetPawn_Implementation(TSubclassOf<AFatPartyCharacter> InPawnClass, bool PlayerInLobby);
-    virtual bool ServerSetPawn_Validate(TSubclassOf<AFatPartyCharacter> InPawnClass, bool PlayerInLobby);
+	virtual void ServerSetPawn(TSubclassOf<AFatPartyCharacter> InPawnClass);
+    virtual void ServerSetPawn_Implementation(TSubclassOf<AFatPartyCharacter> InPawnClass);
+    virtual bool ServerSetPawn_Validate(TSubclassOf<AFatPartyCharacter> InPawnClass);
 
 	void StartChoosenPawns();
 
         /* Return The Correct Pawn Class Client-Side */
     UFUNCTION(BlueprintCallable, Client, Reliable)
-        void DeterminePawnClass(bool PlayerInLobby);
+        void DeterminePawnClass();
 
-    virtual void DeterminePawnClass_Implementation(bool PlayerInLobby);
+    virtual void DeterminePawnClass_Implementation();
 
+    UFUNCTION(BlueprintCallable, Client, Reliable)
+		void HandlePlayerControllers();
 
+    UFUNCTION(Server, Reliable)
+		void StartToSpawnInLevel(AThePlayerController* Controller);
 
 protected:
 
@@ -67,9 +74,9 @@ protected:
     /* Use BeginPlay to start the functionality */
     virtual void BeginPlay() override;
 
-	// The default spawn location for players?????
-    UPROPERTY(EditAnywhere, Category = "Spawning")
-    TSubclassOf<APawn> ThePawnClass;
+	// The default spawn player
+    //UPROPERTY(EditAnywhere, Category = "Spawning")  // este se borra?
+   // TSubclassOf<APawn> ThePawnClass;
 
     /* Actual Pawn class we want to use */
     UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite)
@@ -91,4 +98,6 @@ private:
     UWorld* World;
     
 	FName CurrentLevelName;
+
+    AThePlayerController* PlayerController;
 };

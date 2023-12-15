@@ -1,8 +1,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-//#include "Blueprint/UserWidget.h"
-#include "Blueprint/WidgetTree.h"
 #include "MenuSystem/MenuWidget.h"
 #include "HudWidget.generated.h"
 

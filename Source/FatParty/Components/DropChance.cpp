@@ -1,8 +1,6 @@
 #include "DropChance.h"
 #include "FatParty/Actors/PowerUps/BasePowerUp.h"
 #include "FatParty/Actors/DestructibleObject.h"
-#include "Kismet/GameplayStatics.h"
-#include "FatParty/UI/HudWidget.h"
 
 
 UDropChance::UDropChance()

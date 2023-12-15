@@ -1,6 +1,6 @@
 #include "SpeedPowerUp.h"
 #include "Components/SphereComponent.h"
-#include "FatParty/FatPartyCharacter.h"
+#include "FatParty/Characters/FatPartyCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 ASpeedPowerUp::ASpeedPowerUp()

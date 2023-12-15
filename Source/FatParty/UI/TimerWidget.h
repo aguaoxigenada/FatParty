@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/WidgetTree.h"
 #include "MenuSystem/MenuWidget.h"
 #include "TimerWidget.generated.h"
 

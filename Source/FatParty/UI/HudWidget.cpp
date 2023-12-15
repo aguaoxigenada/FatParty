@@ -1,8 +1,6 @@
 #include "HudWidget.h"
-#include "Components/TextBlock.h"
-#include "FatParty/FatPartyCharacter.h"
+#include "FatParty/Characters/FatPartyCharacter.h"
 #include "FatParty/Components/HealthComponent.h"
-#include "FatParty/GameMode/FatPartyGameMode.h"
 #include "Kismet/GameplayStatics.h"
 
 void UHudWidget::NativeOnInitialized()

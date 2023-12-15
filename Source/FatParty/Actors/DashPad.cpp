@@ -1,7 +1,7 @@
 #include "DashPad.h"
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
-#include "FatParty/Characters/KnightCharacter.h"
+#include "FatParty/Characters/FatPartyCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
 ADashPad::ADashPad()

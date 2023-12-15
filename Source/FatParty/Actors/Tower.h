@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "FatParty/LongDistanceEnemies/LongDistanceEnemies.h"
+#include "FatParty/BasicEnemies/LongDistanceEnemies/LongDistanceEnemies.h"
 #include "Tower.generated.h"
 
 UCLASS()

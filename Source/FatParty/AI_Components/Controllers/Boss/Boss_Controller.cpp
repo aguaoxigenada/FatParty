@@ -1,8 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Boss_Controller.h"
-
 #include "AIModule/Classes/BehaviorTree/BlackboardComponent.h"
 #include "AIModule/Classes/Perception/AIPerceptionComponent.h"
 #include "AIModule/Classes/Perception/AIPerceptionSystem.h"
@@ -13,8 +9,8 @@
 #include "AIModule/Classes/BehaviorTree/Blackboard/BlackboardKeyType_Int.h"
 #include "AIModule/Classes/BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
 #include "BehaviorTree/Blackboard/BlackboardKeyType_Float.h"
-#include "FatParty/FatPartyCharacter.h"
 #include "FatParty/AI_Components/AI_BossCharacter.h"
+#include "FatParty/Characters/FatPartyCharacter.h"
 #include "FatParty/Components/HealthComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 

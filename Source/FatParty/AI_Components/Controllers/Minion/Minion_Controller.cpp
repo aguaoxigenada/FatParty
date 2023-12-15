@@ -1,8 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Minion_Controller.h"
-
 #include "AIModule/Classes/BehaviorTree/BlackboardComponent.h"
 #include "AIModule/Classes/Perception/AIPerceptionComponent.h"
 #include "AIModule/Classes/Perception/AIPerceptionSystem.h"
@@ -11,9 +7,7 @@
 #include "AIModule/Classes/BehaviorTree/BehaviorTreeComponent.h"
 #include "AIModule/Classes/BehaviorTree/Blackboard/BlackboardKeyType_Object.h"
 #include "AIModule/Classes/BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
-#include "Components/SphereComponent.h"
-#include "FatParty/FatPartyCharacter.h"
-#include "GameFramework/Character.h"
+#include "FatParty/Characters/FatPartyCharacter.h"
 
 
 AMinion_Controller::AMinion_Controller()

@@ -1,14 +1,10 @@
 #include "HealthComponent.h"
-
-#include "Blueprint/WidgetBlueprintLibrary.h"
-#include "FatParty/FatPartyCharacter.h"
-#include "FatParty/FatPartyGameInstance.h"
-#include "FatParty/Characters/KnightCharacter.h"
 #include "Kismet/GameplayStatics.h"
-#include "FatParty/GameMode/FatPartyGameMode.h"
-#include "FatParty/UI/HudWidget.h"
+#include "FatParty/GameModes/FatPartyGameMode.h"
 #include "FatParty/UI/MenuSystem/InGameMenu.h"
-#include "FatParty/FatPartyEnemy.h"
+#include "FatParty/BasicEnemies/FatPartyEnemy.h"
+#include "FatParty/Characters/FatPartyCharacter.h"
+#include "FatParty/GameInstance/FatPartyGameInstance.h"
 
 UHealthComponent::UHealthComponent()
 {

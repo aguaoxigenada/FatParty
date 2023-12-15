@@ -1,12 +1,5 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "AI_BossCharacter.h"
-
 #include "FatParty/Components/HealthComponent.h"
-
-
-
 
 void AAI_BossCharacter::BeginPlay()
 {

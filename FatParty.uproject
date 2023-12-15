@@ -27,14 +27,6 @@
 			"Enabled": true
 		},
 		{
-			"Name": "OnlineSubsystemSteam",
-			"Enabled": true
-		},
-		{
-			"Name": "OnlineSubsystemNull",
-			"Enabled": true
-		},
-		{
 			"Name": "OnlineSubsystemUtils",
 			"Enabled": true
 		},
@@ -52,6 +44,10 @@
 				"IOS",
 				"TVOS"
 			]
+		},
+		{
+			"Name": "OnlineSubsystemSteam",
+			"Enabled": true
 		}
 	]
 }
