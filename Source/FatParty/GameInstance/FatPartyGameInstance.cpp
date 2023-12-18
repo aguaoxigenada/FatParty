@@ -289,14 +289,13 @@ void UFatPartyGameInstance::LoadGameMenu()
 {
 	APlayerController* PlayerController = GetFirstLocalPlayerController();
 	if(!ensure(PlayerController!=nullptr)) return;
-	
-	PlayerController->ClientTravel("/Game/Maps/MainMenu", ETravelType::TRAVEL_Absolute);
 
 	if(PlayerHud != nullptr)
 	{
 		PlayerHud->Teardown();
 	}
 
+	PlayerController->ClientTravel("/Game/Maps/MainMenu", ETravelType::TRAVEL_Absolute);
 }
 
 void UFatPartyGameInstance::LoadNextLevel()
