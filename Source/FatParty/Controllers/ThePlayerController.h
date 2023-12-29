@@ -15,6 +15,8 @@ class FATPARTY_API AThePlayerController : public APlayerController
 
 public:
 	AThePlayerController();
+    
+
 	void SetPlayerEnabledState(bool bPlayerEnabled);
 
 	UClass* GetPlayerPawnClass();
@@ -24,11 +26,18 @@ public:
 	UUserWidget* LoadingWBP;
 	TSubclassOf<class UUserWidget> LoadingWBPClass;
 
+    UUserWidget* HudWBP;
+	TSubclassOf<class UUserWidget> HudWBPClass;
+
 	UFUNCTION(Client, Reliable)
-    void OpenWidget();
+		void OpenWidget();
+
+    UFUNCTION(Client, Reliable)
+		void CheckIfPlayerIsPossesesed();
+
 
     UFUNCTION(NetMulticast, Reliable)
-    void OpenWidgetFromServer();
+		void OpenWidgetFromServer();
 
 	UFUNCTION(Server, Reliable)
 		void SendToNextLevel();
@@ -44,6 +53,7 @@ public:
     void RespawnPlayer(AController* Controller);
 
 	void SpawnPlayer(TSubclassOf<AFatPartyCharacter> ChoosenPawn);
+	//void CreateHud(TSubclassOf<AFatPartyCharacter> PawnForHud);
 
 	UFUNCTION(BlueprintImplementableEvent) 
 	void PlayerRespawned(bool PlayerHasRespawned);
@@ -91,13 +101,22 @@ protected:
         TSubclassOf<AFatPartyCharacter> PawnToUseB;
 
 	
-
+    
 private:
-  
+    UFUNCTION(Client, Reliable)
+		void CreateHudForClient();
+
+	UFUNCTION(Server, Reliable)
+		void CreateHudForClientFromServer();
+
     void RestartPlayer();
-    UWorld* World;
+	void CreateHud();
+	UWorld* World;
     
 	FName CurrentLevelName;
 
     AThePlayerController* PlayerController;
+
+    FTimerHandle TimerHandle;
+    FTimerHandle CreateHudHandle;
 };

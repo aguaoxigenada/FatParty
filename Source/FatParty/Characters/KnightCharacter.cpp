@@ -7,7 +7,6 @@
 AKnightCharacter::AKnightCharacter()
 {
 	Body = GetMesh();
-
 	Weapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Blade"));
 	Weapon->SetupAttachment(Body);
 	
@@ -18,7 +17,6 @@ void AKnightCharacter::BeginPlay()
 	Super::BeginPlay();
 	KnightPlayerController = Cast<APlayerController>(GetController());
 	Weapon->AttachToComponent(Body,FAttachmentTransformRules::KeepRelativeTransform, TEXT("RightHandSocket"));
-
 	Weapon->OnComponentHit.AddDynamic(this, &AKnightCharacter::OnHit);
 }
 

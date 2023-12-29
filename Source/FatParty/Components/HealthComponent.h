@@ -9,6 +9,7 @@ class UHudWidget;
 class AFatPartyGameMode;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHealthChange);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRestartHealth);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnObjectDamaged);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -24,8 +25,17 @@ public:
 	UFUNCTION(BlueprintCallable)
 		float GetHealth();
 
+	UFUNCTION(BlueprintCallable)
+		void RestartHealth();
+
+	UFUNCTION(NetMulticast, Reliable)
+		void CallBroadcastHealthHud();
+
 	UPROPERTY()
 		FOnHealthChange OnHealthChange;
+
+	UPROPERTY()
+		FOnHealthChange OnRestartHealth;
 
 	UPROPERTY()
 		FOnObjectDamaged OnObjectDamaged;

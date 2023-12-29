@@ -1,6 +1,7 @@
 #include "InGameMenu.h"
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
+#include "GameFramework/GameSession.h"
 
 bool UInGameMenu::Initialize()
 {
@@ -65,7 +66,7 @@ void UInGameMenu::RetryLevel()
 {
 	if(MenuInterface != nullptr)
 	{
-			 UE_LOG(LogTemp, Warning, TEXT("Got Pressed"));
+		UE_LOG(LogTemp, Warning, TEXT("Got Pressed"));
 		Teardown();
 		MenuInterface->PlayerRetry();
 	}

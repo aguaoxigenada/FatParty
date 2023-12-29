@@ -49,6 +49,7 @@ void AGamplayGameMode::SpawnPlayerPawn(AThePlayerController* NewPlayer)
 			if(SelectedPawnClass)
 			{
 				NewPlayer->SpawnPlayer(SelectedPawnClass);
+				//
 			}
 		}
     }

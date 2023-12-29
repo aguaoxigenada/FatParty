@@ -35,10 +35,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		UAnimMontage* HitAnim = nullptr;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UTexture2D* HUDImg = nullptr;
-
-
 
 	void HitAnimation();
 
@@ -86,7 +85,11 @@ public:
 	bool bIsometric = false;
 
 
+	UFUNCTION(BlueprintImplementableEvent) 
+		void PlayerIsRespawning();
 
+	UFUNCTION(BlueprintImplementableEvent) 
+		void CreatingPlayerHUD();
 
 protected:
 	virtual void BeginPlay() override;

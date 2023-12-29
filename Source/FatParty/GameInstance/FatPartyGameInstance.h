@@ -41,6 +41,7 @@ public:
 	
 	UFUNCTION(Exec, BlueprintCallable)
 		void LoadHUD();
+		
 
 	UFUNCTION(Exec)
 		virtual void Host(FString ServerName) override;
@@ -77,13 +78,14 @@ public:
 
 	TSubclassOf<class UUserWidget> LoadingClass;
 	TSubclassOf<class UUserWidget>TimerClass;
+	TSubclassOf<class UUserWidget> HudClass;
 
 private:
 
 	TSubclassOf<class UUserWidget> NetworkErrorClass;
 	TSubclassOf<class UUserWidget> MenuClass;
 	TSubclassOf<class UUserWidget> InGameMenuClass;
-	TSubclassOf<class UUserWidget> HudClass;
+
 	
 
 	UMainMenu* Menu;

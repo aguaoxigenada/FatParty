@@ -27,6 +27,7 @@ void UHealthComponent::BeginPlay()
 	FatPartyGameMode = Cast<AFatPartyGameMode>(UGameplayStatics::GetGameMode(this));
 	GameInstance = Cast<UFatPartyGameInstance>(GetWorld()->GetGameInstance());
 
+//	CallBroadcastHealthHud(); // esto se deberoa hacer desde el game instance? en el retty
 }
 
 
@@ -39,6 +40,17 @@ void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 float UHealthComponent::GetHealth()
 {
 	return Health;
+}
+
+void UHealthComponent::RestartHealth()
+{
+	Health = MaxHealth;
+	
+}
+
+void UHealthComponent::CallBroadcastHealthHud_Implementation()
+{
+	OnRestartHealth.Broadcast();
 }
 
 void UHealthComponent::DamageTaken_Implementation(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* Instigator, AActor* DamageCauser)
@@ -79,6 +91,8 @@ void UHealthComponent::DamageTaken_Implementation(AActor* DamagedActor, float Da
 			GetWorld()->GetTimerManager().SetTimer(TimerHandleToOpenInGameMenu, this, &UHealthComponent::OpenInGameMenu, Delay, false );
 
 			bPlayerAlive = false;
+		//	OnRestartHealth.Broadcast();
+			
 		}		
 	}
 

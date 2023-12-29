@@ -18,8 +18,14 @@ public:
 	UFUNCTION()
 		void PlayerDamaged();
 
+	UFUNCTION()
+		void PlayerRestarting();
+
 	UFUNCTION(BlueprintImplementableEvent)
 		void GetHealth();
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void ResetHealth();
 
 protected:
 	virtual void NativeOnInitialized() override;

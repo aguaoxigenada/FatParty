@@ -6,7 +6,6 @@
 void UHudWidget::NativeOnInitialized()
 {
 	Character = Cast<AFatPartyCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
-	//HudTimer = (UTextBlock*)(WidgetTree->FindWidget(FName(TEXT("Timer"))));
 
 	if(AFatPartyCharacter* FatCharacter = Character ? Cast<AFatPartyCharacter>(Character) : nullptr)
 	{
@@ -24,7 +23,7 @@ void UHudWidget::NativeOnInitialized()
 		}
 
 		HealthComp->OnHealthChange.AddDynamic(this, &UHudWidget::PlayerDamaged);
-		//GameTimer();
+		//HealthComp->OnRestartHealth.AddDynamic(this, &UHudWidget::PlayerRestarting);
 	}
 }
 
@@ -76,4 +75,9 @@ void UHudWidget::PlayerLost()
 void UHudWidget::PlayerDamaged()
 {
 	GetHealth();
+}
+
+void UHudWidget::PlayerRestarting()
+{
+	ResetHealth();
 }
