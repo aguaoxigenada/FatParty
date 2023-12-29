@@ -11,7 +11,7 @@ void AGamplayGameMode::BeginPlay()
     TheGameInstance = Cast<UFatPartyGameInstance>(UGameplayStatics::GetGameInstance(this));
 }
 
-void AGamplayGameMode::HandlePlayerControllers() // deberia borrarse
+void AGamplayGameMode::HandlePlayerControllers() // deberia borrarse o usarlo en vez del que tenemos en el player controller.
 {
     // Iterate over all player controllers in the world
     for (auto It = GetWorld()->GetPlayerControllerIterator(); It; ++It)

@@ -1,13 +1,11 @@
 #include "ThePlayerController.h"
 #include "Blueprint/UserWidget.h"
 #include "FatParty/Characters/FatPartyCharacter.h"
-#include "FatParty/Components/HealthComponent.h"
 #include "FatParty/GameInstance/FatPartyGameInstance.h"
 #include "FatParty/PlayerState/FatPartyPlayerState.h"
 #include "FatParty/GameModes/GamplayGameMode.h"
 #include "FatParty/GameModes/LobbyGameMode.h"
 #include "FatParty/GameModes/FatPartyGameMode.h"
-#include "FatParty/UI/HudWidget.h"
 #include "GameFramework/Pawn.h"
 #include "GameFramework/Character.h"
 #include "Net/UnrealNetwork.h"
@@ -82,16 +80,6 @@ void AThePlayerController::CreateHud()
 
 	HudWBP->AddToViewport();
 
-}
-
-void AThePlayerController::CreateHudForClient_Implementation()
-{
-    UHudWidget* HudOfClients = Cast<UHudWidget>(HudWBP);
-    HudOfClients->ResetHealth();
-	//CreateHud();
-
-    // Tendrias que tener un SetHud, usarlo aca
-    // Setearlo al morir.
 }
 
 
@@ -181,8 +169,8 @@ void AThePlayerController::ServerSetPawn_Implementation(TSubclassOf<AFatPartyCha
 void AThePlayerController::RespawnPlayer(AController* Controller)
 {
     AFatPartyGameMode* PlayerGameMode = Cast<AFatPartyGameMode>(GetWorld()->GetAuthGameMode());
-    // Check if the Controller is valid and has a valid pawn
 
+    // Check if the Controller is valid and has a valid pawn
     if (Controller && MyPawnClass)
     {
         // Destroy the existing pawn
@@ -207,34 +195,16 @@ void AThePlayerController::RespawnPlayer(AController* Controller)
             {
                 PlayerRespawned(true);
                 Controller->Possess(NewPawn);
-               //CreateHudForClientFromServer();
 
             	if(HasAuthority())
 			    {
 				    CheckIfPlayerIsPossesesed();
 			    }
-                /*
-            	if(HasAuthority())
-                {
-	                CreateHud();
-                }
-                */
-
-            	//CreateHudForClient();
-                //CreateHudForClient();
-            	//   AFatPartyCharacter* PlayerRespawning = Cast<AFatPartyCharacter>(NewPawn);
-               // PlayerRespawning->PlayerIsRespawning();
-              //  PlayerRespawning->GetComponentByClass(UHealthComponent)
             }
         }
     }
 
  
-}
-
-void AThePlayerController::CreateHudForClientFromServer_Implementation()
-{
-	 CreateHudForClient();
 }
 
  
@@ -248,24 +218,10 @@ void AThePlayerController::SpawnPlayer(TSubclassOf<AFatPartyCharacter> ChoosenPa
     }
 }
 
-
-/*
-void AThePlayerController::CreateHud(TSubclassOf<AFatPartyCharacter> PawnForHud)
-{
-    if (PawnForHud)
-    {
-    	AFatPartyCharacter* CreatePlayerHUD = Cast<AFatPartyCharacter>(PawnForHud);
-        CreatePlayerHUD->CreatingPlayerHUD();
-    }
-}
-*/
-
 void AThePlayerController::ServerRespawnPlayer_Implementation(AController* Controller)
 {
     RespawnPlayer(Controller);
-  
 }
-
 
 void AThePlayerController::SendToNextLevelClientCall()
 {
@@ -278,12 +234,10 @@ void AThePlayerController::SendToNextLevel_Implementation()
 {
     AFatPartyGameMode* PlayerGameMode = Cast<AFatPartyGameMode>(GetWorld()->GetAuthGameMode());
     PlayerGameMode->SendToNextLevel();
-   
 }
 
 void AThePlayerController::OpenWidget_Implementation()
 {
-    
 	// Es la copia inicial del loading WBP
 	UFatPartyGameInstance* GameInstance =  Cast<UFatPartyGameInstance>(GetGameInstance());
 
@@ -297,7 +251,7 @@ void AThePlayerController::OpenWidget_Implementation()
 
 void AThePlayerController::OpenWidgetFromServer_Implementation()
 {
-    // Es la copia inicial del loading WBP
+    // Revisar si se usa
 	UFatPartyGameInstance* GameInstance =  Cast<UFatPartyGameInstance>(GetGameInstance());
 
 	LoadingWBPClass = GameInstance->LoadingClass;

@@ -23,7 +23,6 @@ void UHudWidget::NativeOnInitialized()
 		}
 
 		HealthComp->OnHealthChange.AddDynamic(this, &UHudWidget::PlayerDamaged);
-		//HealthComp->OnRestartHealth.AddDynamic(this, &UHudWidget::PlayerRestarting);
 	}
 }
 
@@ -77,7 +76,9 @@ void UHudWidget::PlayerDamaged()
 	GetHealth();
 }
 
+/*
 void UHudWidget::PlayerRestarting()
 {
 	ResetHealth();
 }
+*/

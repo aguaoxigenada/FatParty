@@ -355,8 +355,6 @@ void UFatPartyGameInstance::PlayerRetry()
 	AController* TestPlayerController = PlayerController;
 	UWorld* World = GetWorld();
 
-	// Aca esta el problema, esta mandando el player controller incorrecto....  tiene que mandar el mismo con el que se inicio
-	// el juego.
     if (World)
     {
         // Check the network mode using IsNetMode
@@ -384,8 +382,6 @@ void UFatPartyGameInstance::PlayerRetry()
 			 UE_LOG(LogTemp, Warning, TEXT("Running on a Client"));
         }
     }
-
-	
 }
 
 void UFatPartyGameInstance::QuitGame()

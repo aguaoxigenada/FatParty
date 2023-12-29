@@ -18,8 +18,8 @@ public:
 	UFUNCTION()
 		void PlayerDamaged();
 
-	UFUNCTION()
-		void PlayerRestarting();
+/*	UFUNCTION()
+		void PlayerRestarting();*/
 
 	UFUNCTION(BlueprintImplementableEvent)
 		void GetHealth();
