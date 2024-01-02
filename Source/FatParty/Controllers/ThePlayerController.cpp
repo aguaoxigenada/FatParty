@@ -249,20 +249,6 @@ void AThePlayerController::OpenWidget_Implementation()
     LoadingWBP->AddToViewport();
 }
 
-void AThePlayerController::OpenWidgetFromServer_Implementation()
-{
-    // Revisar si se usa
-	UFatPartyGameInstance* GameInstance =  Cast<UFatPartyGameInstance>(GetGameInstance());
-
-	LoadingWBPClass = GameInstance->LoadingClass;
-    LoadingWBP = CreateWidget<UUserWidget>(this, LoadingWBPClass);
-
-	if(!ensure(LoadingWBP !=nullptr)) return;
-
-    LoadingWBP->AddToViewport();
-    OpenWidget();
-}
-
 
 
 

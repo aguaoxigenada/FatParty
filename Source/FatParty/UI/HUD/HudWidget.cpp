@@ -76,9 +76,3 @@ void UHudWidget::PlayerDamaged()
 	GetHealth();
 }
 
-/*
-void UHudWidget::PlayerRestarting()
-{
-	ResetHealth();
-}
-*/

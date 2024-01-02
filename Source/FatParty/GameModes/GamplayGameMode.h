@@ -14,9 +14,6 @@ class FATPARTY_API AGamplayGameMode : public AFatPartyGameMode
 public:
 	virtual void BeginPlay() override;
 
-	UFUNCTION(BlueprintCallable, Category = "GamePlayGameMode")
-	void HandlePlayerControllers();
-
 	UFUNCTION(BlueprintCallable, Category = "Gameplay") // Deberia ser desde el server.?
     void SpawnPlayerPawn(AThePlayerController* NewPlayer);
 

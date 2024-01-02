@@ -1,8 +1,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MenuSystem/MenuWidget.h"
-#include "TimerWidget.generated.h"
+#include "FatParty/UI/MenuSystem/MenuWidget.h"
+#include "HudWidget.generated.h"
 
 class UTextBlock;
 class UHealthComponent;
@@ -10,9 +10,19 @@ class AFatPartyCharacter;
 class UProgressBar;
 
 UCLASS()
-class FATPARTY_API UTimerWidget : public UMenuWidget
+class FATPARTY_API UHudWidget : public UMenuWidget
 {
 	GENERATED_BODY()
+
+public:
+	UFUNCTION()
+		void PlayerDamaged();
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void GetHealth();
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void ResetHealth();
 
 protected:
 	virtual void NativeOnInitialized() override;
@@ -36,6 +46,9 @@ private:
 		void UpdateTime(int newTime);
 
 	void GameTimer();
+
+
+	UHealthComponent* HealthComp;
 
 	FTimerHandle TimerHandle;
 	FTimerHandle GameOverTimerHandle;
