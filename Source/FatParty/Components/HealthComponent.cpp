@@ -47,10 +47,6 @@ void UHealthComponent::RestartHealth()
 	
 }
 
-void UHealthComponent::CallBroadcastHealthHud_Implementation()
-{
-	OnRestartHealth.Broadcast();
-}
 
 void UHealthComponent::DamageTaken_Implementation(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* Instigator, AActor* DamageCauser)
 {

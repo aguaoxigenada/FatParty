@@ -34,10 +34,6 @@ public:
     UFUNCTION(Client, Reliable)
 		void CheckIfPlayerIsPossesesed();
 
-
-    UFUNCTION(NetMulticast, Reliable)
-		void OpenWidgetFromServer();
-
 	UFUNCTION(Server, Reliable)
 		void SendToNextLevel();
 
